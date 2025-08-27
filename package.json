@@ -2,9 +2,16 @@
   "name": "vite-react-mui-boilerplate",
   "version": "0.1.0",
   "private": true,
+  "description": "Vite + TypeScript + React + MUI Boilerplate with ESLint, Prettier, and Biome",
   "type": "module",
   "engines": {
-    "node": ">=18.18"
+    "node": ">=18.18",
+    "npm": ">=10.0.0"
+  },
+  "keywords": ["Vite", "TypeScript", "React", "MUI", "Biome", "Boilerplate"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pavel-anisimov/vite-react-mui-boilerplate"
   },
   "scripts": {
     "dev": "vite",
