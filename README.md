@@ -1,5 +1,7 @@
 # Vite + React + TypeScript + MUI Boilerplate
 
+[![CI](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml)
+
 [![CI](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml)
 ![Node](https://img.shields.io/badge/node-20.x-green)
 ![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)
