@@ -1,0 +1,18 @@
+{
+  "app.title": "Бойлерплейт",
+  "nav.home": "Домой",
+  "nav.users": "Пользователи",
+  "nav.forum": "Форум",
+  "nav.toggleTheme": "Переключить тему",
+  "nav.toggleMenu": "Меню",
+  "nav.language": "Язык",
+  "nav.lang.en": "АН",
+  "nav.lang.ru": "РУ",
+  "nav.lang.pl": "ПЛ",
+  "home.welcome": "Добро пожаловать",
+  "home.subtitle": "Минимальный шаблон на Vite + TS + React + MUI.",
+  "users.title": "Пользователи",
+  "forum.title": "Форум",
+  "notfound.title": "404",
+  "notfound.subtitle": "Страница не найдена."
+}

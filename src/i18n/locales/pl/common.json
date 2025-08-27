@@ -1,0 +1,18 @@
+{
+  "app.title": "Szablon",
+  "nav.home": "Strona główna",
+  "nav.users": "Użytkownicy",
+  "nav.forum": "Forum",
+  "nav.toggleTheme": "Przełącz motyw",
+  "nav.toggleMenu": "Menu",
+  "nav.language": "Język",
+  "nav.lang.en": "EN",
+  "nav.lang.ru": "RU",
+  "nav.lang.pl": "PL",
+  "home.welcome": "Witamy",
+  "home.subtitle": "Minimalny szablon na Vite + TS + React + MUI.",
+  "users.title": "Użytkownicy",
+  "forum.title": "Forum",
+  "notfound.title": "404",
+  "notfound.subtitle": "Nie znaleziono strony."
+}

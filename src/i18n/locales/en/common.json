@@ -1,0 +1,18 @@
+{
+  "app.title": "Boilerplate",
+  "nav.home": "Home",
+  "nav.users": "Users",
+  "nav.forum": "Forum",
+  "nav.toggleTheme": "Toggle theme",
+  "nav.toggleMenu": "Toggle menu",
+  "nav.language": "Language",
+  "nav.lang.en": "EN",
+  "nav.lang.ru": "RU",
+  "nav.lang.pl": "PL",
+  "home.welcome": "Welcome",
+  "home.subtitle": "Minimal boilerplate on Vite + TS + React + MUI.",
+  "users.title": "Users",
+  "forum.title": "Forum",
+  "notfound.title": "404",
+  "notfound.subtitle": "Page not found."
+}

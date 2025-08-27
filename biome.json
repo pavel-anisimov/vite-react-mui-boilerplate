@@ -1,0 +1,7 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
+  "formatter": { "enabled": true },
+  "linter": { "enabled": false },
+  "organizeImports": { "enabled": false },
+  "files": { "ignore": ["dist", "coverage", "node_modules", ".husky"] }
+}
