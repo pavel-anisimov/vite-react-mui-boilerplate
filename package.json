@@ -5,8 +5,8 @@
   "description": "Vite + TypeScript + React + MUI Boilerplate with ESLint, Prettier, and Biome",
   "type": "module",
   "engines": {
-    "node": ">=18.18",
-    "npm": ">=10.0.0"
+    "node": ">=22.19",
+    "npm": ">=11.0.0"
   },
   "keywords": ["Vite", "TypeScript", "React", "MUI", "Biome", "Boilerplate"],
   "repository": {

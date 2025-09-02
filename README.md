@@ -1,7 +1,5 @@
 # Vite + React + TypeScript + MUI Boilerplate
 
-[![CI](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml)
-
 [![CI](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml)
 ![Node](https://img.shields.io/badge/node-20.x-green)
 ![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)
@@ -11,7 +9,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Code style: Biome](https://img.shields.io/badge/code%20style-biome-ff69b4)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
-![Bundle size](https://img.shields.io/bundlephobia/minzip/vite-react-mui-boilerplate)
+<!-- ![Bundle size](https://img.shields.io/bundlephobia/minzip/vite-react-mui-boilerplate) -->
 
 A modern boilerplate project built with **Vite 6**, **React 19**, **TypeScript 5**, and **MUI 7**, featuring:
 
