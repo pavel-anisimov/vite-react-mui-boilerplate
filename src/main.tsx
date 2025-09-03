@@ -9,6 +9,7 @@ import { AppQueryProvider } from "@/app/providers/QueryProvider";
 import { AppThemeProvider } from "@/app/providers/ThemeProvider";
 import "@/i18n/i18n"; // internalization i18n
 
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>

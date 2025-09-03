@@ -2,6 +2,7 @@ import { lazy } from "react";
 
 import type { RouteObject } from "react-router-dom";
 
+import Layout from "@/app/layout/Layout";
 import ProtectedRoute from "@/app/routes/ProtectedRoute";
 
 // 📌 lazy imports of public authentication pages
@@ -18,39 +19,26 @@ const Forum = lazy(() => import("@/app/pages/Forum"));
 const NotFound = lazy(() => import("@/app/pages/NotFound"));
 
 export const routes: RouteObject[] = [
-  // --- public auth ---
+  // public auth
   { path: "/auth/sign-in", element: <SignIn /> },
   { path: "/auth/sign-up", element: <SignUp /> },
   { path: "/auth/forgot", element: <ForgotPassword /> },
   { path: "/auth/reset", element: <ResetPassword /> },
-//  { path: "/auth/verify-email", element: <VerifyEmail /> },
 
-  // --- protexted ---
+  // private + layout by one node
   {
     path: "/",
     element: (
       <ProtectedRoute>
-        <Home />
+        <Layout />
       </ProtectedRoute>
     ),
-  },
-  {
-    path: "/users",
-    element: (
-      <ProtectedRoute>
-        <Users />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/forum",
-    element: (
-      <ProtectedRoute>
-        <Forum />
-      </ProtectedRoute>
-    ),
+    children: [
+      { index: true, element: <Home /> },
+      { path: "users", element: <Users /> },
+      { path: "forum", element: <Forum /> },
+    ],
   },
 
-  // --- fallback ---
   { path: "*", element: <NotFound /> },
 ];

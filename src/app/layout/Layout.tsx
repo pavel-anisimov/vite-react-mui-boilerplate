@@ -173,7 +173,7 @@ export default function Layout({ children }: PropsWithChildren) {
           sx={{
             ...(variant === "persistent"
               ? {
-                width: 0, // корень не резервирует место, когда закрыт
+                width: 0, // root does not reserve space when closed
                 flexShrink: 0,
                 "& .MuiDrawer-paper": drawerPaper,
               }

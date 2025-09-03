@@ -39,6 +39,7 @@ export default function SignUp() {
   const onSubmit = form.handleSubmit(async (values) => {
     setError(null);
     setLoading(true);
+
     try {
       await signUp(values.email, values.password, values.name);
       window.location.replace("/auth/sign-in?msg=verify-email");

@@ -1,3 +1,4 @@
+// src/app/providers/AuthProvider.tsx
 import React, {
   createContext,
   useCallback,
@@ -6,8 +7,10 @@ import React, {
   useMemo,
   useState,
 } from "react";
+import { login as apiLogin, me as apiMe } from "@/api/auth";
 
 type User = { id: string; email: string; name?: string | null; roles?: string[] };
+
 type AuthContextValue = {
   user: User | null;
   accessToken: string | null;
@@ -15,6 +18,7 @@ type AuthContextValue = {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name?: string) => Promise<void>;
   signOut: () => Promise<void>;
+  setTokens: (accessToken: string, refreshToken?: string) => void; // for refresh from the interceptor if desired
 };
 
 const AuthReactContext = createContext<AuthContextValue | undefined>(undefined);
@@ -22,51 +26,80 @@ const AuthReactContext = createContext<AuthContextValue | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Reading from localStorage and trying to pull up a profile
   useEffect(() => {
-    const t = localStorage.getItem("accessToken");
-    const u = localStorage.getItem("user");
-    if (t && u) {
-      setAccessToken(t);
+    const raw = localStorage.getItem("auth");
+    if (raw) {
       try {
-        setUser(JSON.parse(u));
+        const parsed = JSON.parse(raw) as { accessToken?: string; refreshToken?: string };
+        if (parsed.accessToken) setAccessToken(parsed.accessToken);
+        if (parsed.refreshToken) setRefreshToken(parsed.refreshToken);
       } catch {
-        /* empty */
+        // invalid JSON - let's clean it up just in case
+        localStorage.removeItem("auth");
       }
     }
-    setIsLoading(false);
+
+    // if there is an accessToken, we try to get the profile
+    (async () => {
+      try {
+        if (localStorage.getItem("auth")) {
+          const u = await apiMe();
+          setUser(u);
+        }
+      } catch {
+        // token is invalid, leave logged out
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, []);
 
-  const persist = useCallback((token: string, usr: User) => {
-    setAccessToken(token);
-    setUser(usr);
-    localStorage.setItem("accessToken", token);
-    localStorage.setItem("user", JSON.stringify(usr));
-  }, []);
+  const persistTokens = useCallback((access: string, refresh?: string) => {
+    const next = {
+      accessToken: access,
+      refreshToken: refresh ?? refreshToken ?? null,
+    };
+    localStorage.setItem("auth", JSON.stringify(next));
+    setAccessToken(next.accessToken);
+    if (refresh ?? null) setRefreshToken(refresh!);
+  }, [refreshToken]);
 
-  // Temporary stubs - replace with requests to FastAPI later
+  const setTokens = useCallback((access: string, refresh?: string) => {
+    persistTokens(access, refresh);
+  }, [persistTokens]);
+
   const signIn = useCallback(async (email: string, password: string) => {
-    void password; // mark as intentionally unused (until backend wired)
-    persist("dev-token", { id: "u1", email, roles: ["user"] });
-  }, [persist]);
+    const { accessToken, refreshToken } = await apiLogin({ email, password });
+    persistTokens(accessToken, refreshToken);
+    const u = await apiMe();
+    setUser(u);
+  }, [persistTokens]);
 
-  const signUp = useCallback(async (email: string, password: string, name?: string) => {
-    void password; // mark as intentionally unused (until backend wired)
-    persist("dev-token", { id: "u1", email, name: name ?? null, roles: ["user"] });
-  }, [persist]);
+  // Заглушка — когда появится /auth/register на Gateway, дерни его здесь
+  const signUp = useCallback(async (_email: string, _password: string, _name?: string) => {
+    throw new Error("Registration is not implemented yet on API-Gateway");
+  }, []);
 
   const signOut = useCallback(async () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("user");
-    setAccessToken(null);
+    localStorage.removeItem("auth");
     setUser(null);
+    setAccessToken(null);
+    setRefreshToken(null);
   }, []);
 
-  const value = useMemo(
-    () => ({ user, accessToken, isLoading, signIn, signUp, signOut }),
-    [user, accessToken, isLoading, signIn, signUp, signOut]
-  );
+  const value = useMemo<AuthContextValue>(() => ({
+    user,
+    accessToken,
+    isLoading,
+    signIn,
+    signUp,
+    signOut,
+    setTokens,
+  }), [user, accessToken, isLoading, signIn, signUp, signOut, setTokens]);
 
   return <AuthReactContext.Provider value={value}>{children}</AuthReactContext.Provider>;
 };
@@ -76,8 +109,3 @@ export const useAuth = () => {
   if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
-
-
-
-
-

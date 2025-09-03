@@ -5,6 +5,7 @@ import PageContainer from "@/components/PageContainer";
 
 export default function Forum() {
   const { t } = useTranslation();
+
   return (
     <PageContainer>
       <Typography variant="h4" gutterBottom>{t("forum.title")}</Typography>

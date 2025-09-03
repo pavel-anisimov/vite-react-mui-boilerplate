@@ -5,6 +5,7 @@ import PageContainer from "@/components/PageContainer";
 
 export default function Home() {
   const { t } = useTranslation();
+
   return (
     <PageContainer>
       <Typography variant="h4" gutterBottom>{t("home.welcome")}</Typography>

@@ -13,7 +13,10 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
   const initial = (): ColorScheme => {
     if (typeof window !== "undefined") {
       const saved = window.localStorage.getItem(STORAGE_KEY) as ColorScheme | null;
-      if (saved === "light" || saved === "dark") return saved;
+
+      if (saved === "light" || saved === "dark") {
+        return saved;
+      }
     }
     return "light";
   };
@@ -50,6 +53,9 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
 
 export function useColorScheme() {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error("useColorScheme must be used within AppThemeProvider");
+  if (!context) {
+    throw new Error("useColorScheme must be used within AppThemeProvider");
+  }
+
   return context;
 }
