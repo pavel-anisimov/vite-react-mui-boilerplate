@@ -18,6 +18,35 @@ const Users = lazy(() => import("@/app/pages/Users"));
 const Forum = lazy(() => import("@/app/pages/Forum"));
 const NotFound = lazy(() => import("@/app/pages/NotFound"));
 
+/**
+ * Array of route objects defining the application routing structure.
+ *
+ * Each object in the array represents a route configuration, specifying
+ * the URL path and the associated React component to render for that path.
+ *
+ * @type {RouteObject[]}
+ * @property {string} path - The URL path for the route.
+ * @property {React.Element} element - React element to render for this route.
+ * @property {RouteObject[]} [children] - Optional nested routes for creating
+ *                                        hierarchical routing structure.
+ *
+ * Routes:
+ * 1. Public Authentication routes:
+ *    - "/auth/sign-in": SignIn component
+ *    - "/auth/sign-up": SignUp component
+ *    - "/auth/forgot": ForgotPassword component
+ *    - "/auth/reset": ResetPassword component
+ *
+ * 2. Private routes with layout:
+ *    - "/": Protected route with Layout as the top-level component
+ *      - Nested routes:
+ *         - Home (index route)
+ *         - "/users": Users component
+ *         - "/forum": Forum component
+ *
+ * 3. Catch-all route:
+ *    - "*": NotFound component, handles unmatched paths.
+ */
 export const routes: RouteObject[] = [
   // public auth
   { path: "/auth/sign-in", element: <SignIn /> },

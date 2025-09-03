@@ -1,9 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoadingButton } from "@mui/lab";
 import { Alert, Box } from "@mui/material";
-import { useState } from "react";
+import { useState} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+
+import type {JSX} from "react";
 
 // import {useAuth} from "@/app/providers/AuthProvider";
 import AuthLayout from "@/components/AuthLayout";
@@ -14,7 +16,14 @@ const schema = z.object({
 });
 type Form = z.infer<typeof schema>;
 
-export default function ForgotPassword() {
+/**
+ * ForgotPassword is a functional component that renders a password reset form.
+ * It allows users to request a reset link by entering their email address. The component validates
+ * the input, handles submission, and provides feedback to the user via alerts and loading state.
+ *
+ * @return {JSX.Element} The rendered Forgot Password form component.
+ */
+export default function ForgotPassword(): JSX.Element {
   const form = useForm<Form>({
     resolver: zodResolver(schema),
     defaultValues: { email: "" },
@@ -25,6 +34,19 @@ export default function ForgotPassword() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /**
+   * An asynchronous function assigned to handle form submission.
+   * Executes a series of operations when the form is submitted, including setting loading states,
+   * handling errors, and simulating sending a letter. Redirects the user upon success.
+   *
+   * This function:
+   * - Resets any previous error state.
+   * - Sets the loading state to true during the operation.
+   * - Simulates an asynchronous request using a timeout.
+   * - Redirects the user to the reset password confirmation page upon successful completion.
+   * - Catches and processes errors, setting an error message if an issue occurred.
+   * - Ensures the loading state is reset regardless of success or failure.
+   */
   const onSubmit = form.handleSubmit(async () => {
     setError(null);
     setLoading(true);

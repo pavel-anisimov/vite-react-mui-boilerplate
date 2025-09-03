@@ -4,9 +4,21 @@ import { Navigate, useLocation } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 
-type Props = { children: React.ReactNode };
+type Properties = { children: React.ReactNode };
 
-export default function ProtectedRoute({ children }: Props) {
+/**
+ * A component that protects routes by checking the authentication state of the user.
+ * Redirects unauthenticated users to the login page.
+ * Displays nothing while authentication state is loading.
+ *
+ * @param {object} props The component props.
+ * @param {React.ReactNode} props.children The child components to render if the user is authenticated.
+ * @return {React.ReactNode|null} The children components if the user is authenticated,
+ *                                a redirect to the login page if not authenticated,
+ *                                or null while loading authentication state.
+ * @constructor
+ */
+export default function ProtectedRoute({ children }: Properties): React.ReactNode | null {
   const { user, isLoading } = useAuth();
 
   // until we know the state, we don't render anything (a spinner is possible)
