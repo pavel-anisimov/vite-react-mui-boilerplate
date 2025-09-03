@@ -26,6 +26,15 @@
     "subtitle": "Minimal boilerplate on Vite + TS + React + MUI."
   },
 
+  "account": {
+    "menu": "Account",
+    "profile": "My profile",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  },
+  
   "auth": {
     "signIn": "Sign in",
     "signUp": "Create account",

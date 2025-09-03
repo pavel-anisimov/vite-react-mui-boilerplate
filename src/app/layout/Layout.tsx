@@ -32,6 +32,7 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 import type { MouseEvent, PropsWithChildren } from "react";
 
 import { useColorScheme } from "@/app/providers/ThemeProvider";
+import UserMenu from "@/components/UserMenu";
 
 const drawerWidth = 240;
 
@@ -153,6 +154,7 @@ export default function Layout({ children }: PropsWithChildren) {
           <IconButton color="inherit" onClick={toggle} aria-label={t("nav.toggleTheme")}>
             {scheme === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
+          <UserMenu />
         </Toolbar>
       </AppBar>
 
