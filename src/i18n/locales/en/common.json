@@ -1,18 +1,49 @@
 {
   "app.title": "Boilerplate",
-  "nav.home": "Home",
-  "nav.users": "Users",
-  "nav.forum": "Forum",
-  "nav.toggleTheme": "Toggle theme",
-  "nav.toggleMenu": "Toggle menu",
-  "nav.language": "Language",
-  "nav.lang.en": "EN",
-  "nav.lang.ru": "RU",
-  "nav.lang.pl": "PL",
-  "home.welcome": "Welcome",
-  "home.subtitle": "Minimal boilerplate on Vite + TS + React + MUI.",
   "users.title": "Users",
   "forum.title": "Forum",
-  "notfound.title": "404",
-  "notfound.subtitle": "Page not found."
+  "notfound": {
+    "title": "404",
+    "subtitle": "Page not found."
+  },
+
+  "nav": {
+    "home": "Home",
+    "users": "Users",
+    "forum": "Forum",
+    "toggleTheme": "Toggle theme",
+    "toggleMenu": "Toggle menu",
+    "language": "Language",
+    "lang": {
+      "en": "EN",
+      "ru": "RU",
+      "pl": "PL"
+    }
+  },
+
+  "home": {
+    "welcome": "Welcome",
+    "subtitle": "Minimal boilerplate on Vite + TS + React + MUI."
+  },
+
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Create account",
+    "forgot": "Forgot password",
+    "reset": "Reset password",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "name": "Full name",
+    "sendResetLink": "Send reset link",
+    "updatePassword": "Update password",
+    "haveAccount": "Have an account? Sign in",
+    "createAccount": "Create account",
+    "welcomeBack": "Welcome back",
+    "checkEmail": "Check your email",
+    "weSentReset": "We sent you a password reset link.",
+    "weSentVerify": "We sent you a verification link.",
+    "twoFactor": "Two-factor verification",
+    "otp": "One-time password"
+  }
 }

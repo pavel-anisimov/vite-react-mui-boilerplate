@@ -1,14 +1,32 @@
 {
   "name": "vite-react-mui-boilerplate",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
+  "author": {
+    "name": "Pavel Anisimov",
+    "email": "pavel.n.anisimov@gmail.com",
+    "url": "https://pavel.us"
+  },
+  "homepage": "https:/pavel.us",
+  "license": "MIT",
   "description": "Vite + TypeScript + React + MUI Boilerplate with ESLint, Prettier, and Biome",
   "type": "module",
   "engines": {
-    "node": ">=22.19",
+    "node": ">=22.19.0",
     "npm": ">=11.0.0"
   },
-  "keywords": ["Vite", "TypeScript", "React", "MUI", "Biome", "Boilerplate"],
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "keywords": [
+    "Vite",
+    "TypeScript",
+    "React",
+    "MUI",
+    "Biome",
+    "Boilerplate"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/pavel-anisimov/vite-react-mui-boilerplate"
@@ -30,7 +48,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^5.2.1",
     "@mui/icons-material": "^7.3.1",
+    "@mui/lab": "^7.0.0-beta.17",
     "@mui/material": "^7.3.1",
     "@tanstack/react-query": "^5.85.5",
     "@tanstack/react-query-devtools": "^5.85.5",
@@ -39,8 +59,10 @@
     "react": "^19.1.1",
     "react-country-flag": "^3.1.0",
     "react-dom": "^19.1.1",
+    "react-hook-form": "^7.62.0",
     "react-i18next": "^15.7.2",
-    "react-router-dom": "^7.8.2"
+    "react-router-dom": "^7.8.2",
+    "zod": "^4.1.5"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.2",

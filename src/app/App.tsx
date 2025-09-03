@@ -6,7 +6,6 @@ import { routes } from "./routes";
 
 import Layout from "@/app/layout/Layout";
 
-
 export default function App() {
   const element = useRoutes(routes);
   return (
@@ -15,4 +14,3 @@ export default function App() {
     </Layout>
   );
 }
-
