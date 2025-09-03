@@ -1,10 +1,9 @@
-import { Logout, Settings, Person } from "@mui/icons-material";
+import { AccountCircle, Logout, Person, Settings, Login, PersonAdd } from "@mui/icons-material";
 import {
   Avatar, Box, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography,
 } from "@mui/material";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
-
 import { useAuth } from "@/app/providers/AuthProvider";
 
 function initials(nameOrEmail?: string) {
@@ -26,91 +25,83 @@ export default function UserMenu() {
 
   if (isLoading) return null;
 
-  // If the user is not logged in, we will show quick actions
-  if (!accessToken) {
-    return (
-      <Box sx={{ display: "flex", gap: 1 }}>
-        <Typography
-          variant="body2"
-          component="a"
-          href="/auth/sign-in"
-          style={{ textDecoration: "none" }}
-        >
-          Sign in
-        </Typography>
-        <Typography
-          variant="body2"
-          component="a"
-          href="/auth/sign-up"
-          style={{ textDecoration: "none" }}
-        >
-          Sign up
-        </Typography>
-      </Box>
-    );
-  }
-
   const handleOpen = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget);
   const handleClose = () => setAnchorEl(null);
 
-  const handleProfile = () => {
-    handleClose();
-    navigate("/profile"); // we will create a profile page later
-  };
-  const handleSettings = () => {
-    handleClose();
-    navigate("/settings"); // we will create it later «Account Settings»
-  };
-  const handleSignOut = async () => {
-    handleClose();
-    await signOut();
-    navigate("/auth/sign-in");
-  };
+  const handleSignIn = () => { handleClose(); navigate("/auth/sign-in"); };
+  const handleSignUp = () => { handleClose(); navigate("/auth/sign-up"); };
+  const handleProfile = () => { handleClose(); navigate("/profile"); };
+  const handleSettings = () => { handleClose(); navigate("/settings"); };
+  const handleSignOut = async () => { handleClose(); await signOut(); navigate("/auth/sign-in"); };
 
   const label = user?.name || user?.email || "User";
+
+  const Trigger = accessToken
+    ? <Avatar sx={{ width: 32, height: 32 }}>{initials(label)}</Avatar>
+    : <AccountCircle fontSize="large" />;
 
   return (
     <>
       <Tooltip title="Account">
-        <IconButton onClick={handleOpen} size="small" sx={{ ml: 1 }} aria-controls={open ? "account-menu" : undefined} aria-haspopup="true" aria-expanded={open ? "true" : undefined}>
-          <Avatar sx={{ width: 32, height: 32 }}>{initials(user?.name || user?.email)}</Avatar>
+        <IconButton
+          onClick={handleOpen}
+          size="small"
+          sx={{ ml: 1 }}
+          aria-controls={open ? "account-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+        >
+          {Trigger}
         </IconButton>
       </Tooltip>
+
       <Menu
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        PaperProps={{
-          elevation: 3,
-          sx: { mt: 1.5, minWidth: 220, "& .MuiMenuItem-root": { py: 1 } },
-        }}
+        PaperProps={{ elevation: 3, sx: { mt: 1.5, minWidth: 220, "& .MuiMenuItem-root": { py: 1 } } }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Box sx={{ px: 2, py: 1.5 }}>
-          <Typography variant="subtitle2">{label}</Typography>
-          {user?.roles?.length ? (
-            <Typography variant="caption" color="text.secondary">
-              {user.roles.join(", ")}
-            </Typography>
-          ) : null}
-        </Box>
-        <Divider />
-        <MenuItem onClick={handleProfile}>
-          <ListItemIcon><Person fontSize="small" /></ListItemIcon>
-          My profile
-        </MenuItem>
-        <MenuItem onClick={handleSettings}>
-          <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
-          Settings
-        </MenuItem>
-        <Divider />
-        <MenuItem onClick={handleSignOut}>
-          <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
-          Sign out
-        </MenuItem>
+        {accessToken ? (
+          <>
+            <Box sx={{ px: 2, py: 1.5 }}>
+              <Typography variant="subtitle2">{label}</Typography>
+              {user?.roles?.length ? (
+                <Typography variant="caption" color="text.secondary">
+                  {user.roles.join(", ")}
+                </Typography>
+              ) : null}
+            </Box>
+            <Divider />
+            <MenuItem onClick={handleProfile}>
+              <ListItemIcon><Person fontSize="small" /></ListItemIcon>
+              My profile
+            </MenuItem>
+            <MenuItem onClick={handleSettings}>
+              <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
+              Settings
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleSignOut}>
+              <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
+              Sign out
+            </MenuItem>
+          </>
+        ) : (
+          <>
+            <MenuItem onClick={handleSignIn}>
+              <ListItemIcon><Login fontSize="small" /></ListItemIcon>
+              Sign in
+            </MenuItem>
+            <MenuItem onClick={handleSignUp}>
+              <ListItemIcon><PersonAdd fontSize="small" /></ListItemIcon>
+              Sign up
+            </MenuItem>
+          </>
+        )}
       </Menu>
     </>
   );

@@ -31,8 +31,10 @@ import { Link as RouterLink, useLocation } from "react-router-dom";
 
 import type { MouseEvent, PropsWithChildren } from "react";
 
+import { useAuth } from "@/app/providers/AuthProvider";
 import { useColorScheme } from "@/app/providers/ThemeProvider";
 import UserMenu from "@/components/UserMenu";
+import { LANG_TO_FLAG, SUPPORTED_LANGS, DEFAULT_LANGUAGE } from "@/i18n/langConfig"; // ⬅
 
 const drawerWidth = 240;
 
@@ -42,12 +44,6 @@ const NAV = [
   { to: "/forum", labelKey: "nav.forum", icon: <ForumIcon /> },
 ] as const;
 
-const LANG_TO_FLAG = new Map<"en" | "ru" | "pl", string>([
-  ["en", "US"], // or "GB"
-  ["ru", "RU"],
-  ["pl", "PL"],
-]);
-
 export default function Layout({ children }: PropsWithChildren) {
   const theme = useTheme();
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
@@ -56,19 +52,23 @@ export default function Layout({ children }: PropsWithChildren) {
   const { t, i18n } = useTranslation("common");
   const loc = useLocation();
 
+  const { accessToken, isLoading } = useAuth();
+  const showSidebar = Boolean(accessToken);
+
   const [langAnchor, setLangAnchor] = useState<null | HTMLElement>(null);
   const langOpen = Boolean(langAnchor);
 
   const handleLangClick = (event: MouseEvent<HTMLElement>) => setLangAnchor(event.currentTarget);
   const handleLangClose = () => setLangAnchor(null);
 
-  const changeLang = async (lng: "en" | "ru" | "pl") => {
-    await i18n.changeLanguage(lng); // satisfy no-floating-promises with await
+  const changeLang = async (lng: typeof SUPPORTED_LANGS[number]) => {
+    await i18n.changeLanguage(lng);
     handleLangClose();
   };
 
   const currentTitle = useMemo(() => t("app.title"), [t]);
   const variant = mdDown ? "temporary" : "persistent";
+  const drawerPaper = { width: drawerWidth, boxSizing: "border-box" };
 
   const drawer = (
     <div>
@@ -91,21 +91,25 @@ export default function Layout({ children }: PropsWithChildren) {
     </div>
   );
 
+  if (isLoading) return null;
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar position="fixed" color="primary" sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={t("nav.toggleMenu")}
-          >
-            <MenuIcon />
-          </IconButton>
+          {showSidebar && (
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={t("nav.toggleMenu")}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
 
-          <Typography variant="h6" sx={{ flexGrow: 1, ml: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, ml: showSidebar ? 1 : 0 }}>
             {currentTitle}
           </Typography>
 
@@ -127,9 +131,9 @@ export default function Layout({ children }: PropsWithChildren) {
             anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
             transformOrigin={{ vertical: "top", horizontal: "right" }}
           >
-            {(["en", "ru", "pl"] as const).map((lng) => {
+            {SUPPORTED_LANGS.map((lng) => {
               const selected = i18n.language.startsWith(lng);
-              const flagCode = LANG_TO_FLAG.get(lng) ?? "US";
+              const flagCode = LANG_TO_FLAG.get(lng) ?? DEFAULT_LANGUAGE;
               return (
                 <MenuItem key={lng} onClick={() => void changeLang(lng)} selected={selected}>
                   <ListItemIcon>
@@ -154,29 +158,40 @@ export default function Layout({ children }: PropsWithChildren) {
           <IconButton color="inherit" onClick={toggle} aria-label={t("nav.toggleTheme")}>
             {scheme === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
+
           <UserMenu />
         </Toolbar>
       </AppBar>
 
-      <Drawer
-        variant={variant}
-        open={open}
-        onClose={() => setOpen(false)}
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
-        }}
-      >
-        {drawer}
-      </Drawer>
+      {/* Sidebar for logged in users only */}
+      {showSidebar && (
+        <Drawer
+          variant={variant}
+          open={open}
+          onClose={() => setOpen(false)}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            ...(variant === "persistent"
+              ? {
+                width: 0, // корень не резервирует место, когда закрыт
+                flexShrink: 0,
+                "& .MuiDrawer-paper": drawerPaper,
+              }
+              : {
+                "& .MuiDrawer-paper": drawerPaper,
+              }),
+          }}
+        >
+          {drawer}
+        </Drawer>
+      )}
 
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          ml: !mdDown && open ? `${drawerWidth}px` : 0,
+          ml: showSidebar && !mdDown && open ? `${drawerWidth}px` : 0,
           transition: (t) =>
             t.transitions.create(["margin"], {
               duration: t.transitions.duration.enteringScreen,
