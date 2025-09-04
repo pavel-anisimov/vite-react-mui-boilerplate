@@ -10,7 +10,6 @@ import PageContainer from "@/components/PageContainer";
  * It utilizes translations for the welcome message and subtitle.
  *
  * @constructor
- *
  * @return {JSX.Element} The JSX structure for the Home page, including
  * typography elements displaying translated text wrapped within a container.
  */

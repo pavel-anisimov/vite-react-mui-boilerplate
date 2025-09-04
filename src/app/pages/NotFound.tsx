@@ -7,7 +7,7 @@ import PageContainer from "@/components/PageContainer";
 
 /**
  * NotFound is a functional React component that renders a page indicating that the requested resource was not found.
- * It utilizes translations for displaying localized text.
+ * It uses translations for displaying localized text.
  *
  * @constructor
  *

@@ -1,33 +1,43 @@
 // src/app/routes/ProtectedRoute.tsx
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
+import { Box, LinearProgress } from "@mui/material";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 
-type Properties = { children: React.ReactNode };
+type Properties = {
+  children: React.ReactNode;
+  /** Allowed roles (any from the list is enough). Absence means it is enough to be logged in. */
+  roles?: readonly string[];
+};
 
-/**
- * A component that protects routes by checking the authentication state of the user.
- * Redirects unauthenticated users to the login page.
- * Displays nothing while the authentication state is loading.
- *
- * @param {object} props The component props.
- * @param {React.ReactNode} props.children The child components to render if the user is authenticated.
- * @return {React.ReactNode|null} The children components if the user is authenticated,
- *                                a redirect to the login page if not authenticated,
- *                                or null while loading authentication state.
- * @constructor
- */
-export default function ProtectedRoute({ children }: Properties): React.ReactNode | null {
+export default function ProtectedRoute({ children, roles }: Properties): React.ReactNode | null {
   const { user, isLoading } = useAuth();
   const location = useLocation();
 
+  // While loading the auth state, we show a simple indicator (so that there is no emptiness)
   if (isLoading) {
-    return null;
+    return (
+      <Box sx={{ p: 2 }}>
+        <LinearProgress />
+      </Box>
+    );
   }
 
+  // Not logged in → on sign-in, with return after login
   if (!user) {
     return <Navigate to="/auth/sign-in" replace state={{ from: location }} />;
+  }
+
+  // Если указаны роли — проверяем, что есть хотя бы одна совпадающая
+  if (roles && roles.length > 0) {
+    const have = (user.roles ?? []).map((r) => r.toLowerCase());
+    const need = roles.map((r) => r.toLowerCase());
+    const allowed = need.some((r) => have.includes(r));
+    if (!allowed) {
+      // no access → to the main page (or we will do /403 if desired)
+      return <Navigate to="/" replace state={{ forbidden: true }} />;
+    }
   }
 
   return <>{children}</>;

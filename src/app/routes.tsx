@@ -16,6 +16,7 @@ const ResetPassword = lazy(() => import("@/app/pages/auth/ResetPassword"));
 const Home = lazy(() => import("@/app/pages/Home"));
 const Users = lazy(() => import("@/app/pages/Users"));
 const Forum = lazy(() => import("@/app/pages/Forum"));
+//const Profile = lazy(() => import("@/app/pages/profile/Profile"));
 const NotFound = lazy(() => import("@/app/pages/NotFound"));
 
 /**
@@ -57,15 +58,28 @@ export const routes: RouteObject[] = [
   // private + layout by one node
   {
     path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
+    element: <Layout />,
     children: [
+      // Главная — публичная
       { index: true, element: <Home /> },
-      { path: "users", element: <Users /> },
-      { path: "forum", element: <Forum /> },
+      // Форум — только для залогиненных
+      {
+        path: "forum",
+        element: (
+          <ProtectedRoute>
+            <Forum />
+          </ProtectedRoute>
+        )
+      },
+      // Users — только для admin ИЛИ manager
+      {
+        path: "users",
+        element: (
+          <ProtectedRoute roles={["admin", "manager"]}>
+            <Users />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 
