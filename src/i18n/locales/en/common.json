@@ -1,10 +1,9 @@
 {
-  "app.title": "Boilerplate",
-  "users.title": "Users",
-  "forum.title": "Forum",
-  "notfound": {
-    "title": "404",
-    "subtitle": "Page not found."
+  "app": {
+    "title": "Boilerplate",
+    "subtitle": "Vite + React + MUI",
+    "description": "Minimal starter with Vite, TypeScript, React, and MUI.",
+    "version": "Version"
   },
 
   "nav": {
@@ -32,9 +31,10 @@
     "settings": "Settings",
     "signOut": "Sign out",
     "signIn": "Sign in",
-    "signUp": "Sign up"
+    "signUp": "Sign up",
+    "roles": "Roles"
   },
-  
+
   "auth": {
     "signIn": "Sign in",
     "signUp": "Create account",
@@ -53,6 +53,204 @@
     "weSentReset": "We sent you a password reset link.",
     "weSentVerify": "We sent you a verification link.",
     "twoFactor": "Two-factor verification",
-    "otp": "One-time password"
+    "otp": "One-time password",
+    "rememberMe": "Remember me",
+    "orContinue": "Or continue with",
+    "agreeTo": "I agree to the",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy"
+  },
+
+  "users": {
+    "title": "Users",
+    "create": "Create user",
+    "edit": "Edit user",
+    "details": "User details",
+    "delete": "Delete user",
+    "searchPlaceholder": "Search users…",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "createdAt": "Created",
+      "updatedAt": "Updated",
+      "actions": "Actions"
+    },
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "role": "Role",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "active": "Active"
+    }
+  },
+
+  "forum": {
+    "title": "Forum",
+    "posts": "Posts",
+    "post": "Post",
+    "newPost": "New post",
+    "createPost": "Create post",
+    "editPost": "Edit post",
+    "deletePost": "Delete post",
+    "comments": "Comments",
+    "comment": "Comment",
+    "addComment": "Add comment",
+    "reply": "Reply",
+    "by": "by",
+    "updated": "updated",
+    "empty": "No posts yet.",
+    "tags": "Tags"
+  },
+
+  "notfound": {
+    "title": "404",
+    "subtitle": "Page not found.",
+    "cta": "Go to Home"
+  },
+
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "create": "Create",
+    "update": "Update",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "copy": "Copy",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "submit": "Submit",
+    "upload": "Upload",
+    "download": "Download",
+    "search": "Search",
+    "apply": "Apply",
+    "clear": "Clear",
+    "reset": "Reset"
+  },
+
+  "status": {
+    "loading": "Loading…",
+    "saving": "Saving…",
+    "deleting": "Deleting…",
+    "success": "Success",
+    "error": "Error",
+    "empty": "Nothing to show"
+  },
+
+  "validation": {
+    "required": "{{field}} is required",
+    "invalid": "{{field}} is invalid",
+    "minLength": "{{field}} must be at least {{min}} characters",
+    "maxLength": "{{field}} must be at most {{max}} characters",
+    "email": "Enter a valid email address",
+    "passwordsMustMatch": "Passwords must match"
+  },
+
+  "errors": {
+    "unknown": "Something went wrong.",
+    "network": "Network error. Please check your connection.",
+    "unauthorized": "You need to sign in.",
+    "forbidden": "You don't have permission to do this.",
+    "notFound": "Resource not found.",
+    "server": "Server error. Please try again later."
+  },
+
+  "pagination": {
+    "rowsPerPage": "Rows per page",
+    "of": "of",
+    "page": "Page",
+    "perPage": "per page",
+    "next": "Next",
+    "prev": "Previous",
+    "first": "First",
+    "last": "Last"
+  },
+
+  "table": {
+    "noData": "No data",
+    "totalRows": "Total: {{count}}"
+  },
+
+  "search": {
+    "placeholder": "Search…"
+  },
+
+  "filters": {
+    "title": "Filters",
+    "apply": "Apply filters",
+    "reset": "Reset filters"
+  },
+
+  "dialog": {
+    "confirmDeleteTitle": "Delete item?",
+    "confirmDeleteMessage": "This action cannot be undone.",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
+  },
+
+  "toast": {
+    "saved": "Saved",
+    "updated": "Updated",
+    "deleted": "Deleted",
+    "copied": "Copied",
+    "signedIn": "Signed in",
+    "signedOut": "Signed out",
+    "passwordChanged": "Password updated",
+    "emailSent": "Email sent"
+  },
+
+  "upload": {
+    "dropHere": "Drop files here or click to upload",
+    "maxSize": "Max size: {{size}}",
+    "accepted": "Accepted types: {{types}}"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "appearance": "Appearance",
+    "language": "Language",
+    "security": "Security",
+    "notifications": "Notifications"
+  },
+
+  "profile": {
+    "title": "Profile",
+    "editProfile": "Edit profile",
+    "personalInfo": "Personal information",
+    "changePassword": "Change password",
+    "avatar": "Avatar",
+    "uploadNew": "Upload new",
+    "remove": "Remove"
+  },
+
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+
+  "footer": {
+    "copyright": "© {{year}} Your Company",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact"
+  },
+
+  "rbac": {
+    "admin": "Admin",
+    "user": "User",
+    "moderator": "Moderator"
   }
 }

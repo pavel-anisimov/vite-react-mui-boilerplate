@@ -1,18 +1,233 @@
 {
-  "app.title": "Бойлерплейт",
-  "nav.home": "Домой",
-  "nav.users": "Пользователи",
-  "nav.forum": "Форум",
-  "nav.toggleTheme": "Переключить тему",
-  "nav.toggleMenu": "Меню",
-  "nav.language": "Язык",
-  "nav.lang.en": "АНГ",
-  "nav.lang.ru": "РУС",
-  "nav.lang.pl": "ПОЛ",
-  "home.welcome": "Добро пожаловать",
-  "home.subtitle": "Минимальный шаблон на Vite + TS + React + MUI.",
-  "users.title": "Пользователи",
-  "forum.title": "Форум",
-  "notfound.title": "404",
-  "notfound.subtitle": "Страница не найдена."
+  "app": {
+    "title": "Бойлерплейт",
+    "subtitle": "Vite + React + MUI",
+    "description": "Минимальный стартер на Vite, TypeScript, React и MUI.",
+    "version": "Версия"
+  },
+  "nav": {
+    "home": "Главная",
+    "users": "Пользователи",
+    "forum": "Форум",
+    "toggleTheme": "Переключить тему",
+    "toggleMenu": "Показать/скрыть меню",
+    "language": "Язык",
+    "lang": {
+      "en": "EN",
+      "ru": "RU",
+      "pl": "PL"
+    }
+  },
+  "home": {
+    "welcome": "Добро пожаловать",
+    "subtitle": "Минимальный бойлерплейт на Vite + TS + React + MUI."
+  },
+  "account": {
+    "menu": "Аккаунт",
+    "profile": "Мой профиль",
+    "settings": "Настройки",
+    "signOut": "Выйти",
+    "signIn": "Войти",
+    "signUp": "Создать аккаунт",
+    "roles": "Роли"
+  },
+  "auth": {
+    "signIn": "Войти",
+    "signUp": "Создать аккаунт",
+    "forgot": "Забыли пароль",
+    "reset": "Сброс пароля",
+    "email": "E-mail",
+    "password": "Пароль",
+    "confirmPassword": "Подтвердите пароль",
+    "name": "Полное имя",
+    "sendResetLink": "Отправить ссылку для сброса",
+    "updatePassword": "Обновить пароль",
+    "haveAccount": "Уже есть аккаунт? Войти",
+    "createAccount": "Создать аккаунт",
+    "welcomeBack": "С возвращением",
+    "checkEmail": "Проверьте почту",
+    "weSentReset": "Мы отправили вам ссылку для сброса пароля.",
+    "weSentVerify": "Мы отправили вам ссылку для подтверждения.",
+    "twoFactor": "Двухфакторная проверка",
+    "otp": "Одноразовый код",
+    "rememberMe": "Запомнить меня",
+    "orContinue": "Или продолжить с",
+    "agreeTo": "Я принимаю",
+    "terms": "Условия обслуживания",
+    "privacy": "Политику конфиденциальности"
+  },
+  "users": {
+    "title": "Пользователи",
+    "create": "Создать пользователя",
+    "edit": "Редактировать пользователя",
+    "details": "Детали пользователя",
+    "delete": "Удалить пользователя",
+    "searchPlaceholder": "Поиск пользователей…",
+    "table": {
+      "name": "Имя",
+      "email": "E-mail",
+      "role": "Роль",
+      "status": "Статус",
+      "createdAt": "Создано",
+      "updatedAt": "Обновлено",
+      "actions": "Действия"
+    },
+    "form": {
+      "name": "Полное имя",
+      "email": "E-mail",
+      "role": "Роль",
+      "password": "Пароль",
+      "confirmPassword": "Подтвердите пароль",
+      "active": "Активен"
+    }
+  },
+  "forum": {
+    "title": "Форум",
+    "posts": "Посты",
+    "post": "Пост",
+    "newPost": "Новый пост",
+    "createPost": "Создать пост",
+    "editPost": "Редактировать пост",
+    "deletePost": "Удалить пост",
+    "comments": "Комментарии",
+    "comment": "Комментарий",
+    "addComment": "Добавить комментарий",
+    "reply": "Ответить",
+    "by": "от",
+    "updated": "обновлено",
+    "empty": "Постов пока нет.",
+    "tags": "Теги"
+  },
+  "notfound": {
+    "title": "404",
+    "subtitle": "Страница не найдена.",
+    "cta": "На главную"
+  },
+  "actions": {
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "close": "Закрыть",
+    "create": "Создать",
+    "update": "Обновить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "view": "Просмотр",
+    "back": "Назад",
+    "next": "Далее",
+    "previous": "Предыдущий",
+    "retry": "Повторить",
+    "refresh": "Обновить",
+    "copy": "Копировать",
+    "confirm": "Подтвердить",
+    "yes": "Да",
+    "no": "Нет",
+    "ok": "ОК",
+    "submit": "Отправить",
+    "upload": "Загрузить",
+    "download": "Скачать",
+    "search": "Поиск",
+    "apply": "Применить",
+    "clear": "Очистить",
+    "reset": "Сбросить"
+  },
+  "status": {
+    "loading": "Загрузка…",
+    "saving": "Сохранение…",
+    "deleting": "Удаление…",
+    "success": "Успешно",
+    "error": "Ошибка",
+    "empty": "Нечего отображать"
+  },
+  "validation": {
+    "required": "{{field}} обязательно",
+    "invalid": "{{field}} некорректно",
+    "minLength": "{{field}} должно быть не менее {{min}} символов",
+    "maxLength": "{{field}} должно быть не более {{max}} символов",
+    "email": "Введите корректный адрес e-mail",
+    "passwordsMustMatch": "Пароли должны совпадать"
+  },
+  "errors": {
+    "unknown": "Что-то пошло не так.",
+    "network": "Ошибка сети. Проверьте подключение.",
+    "unauthorized": "Нужно войти в систему.",
+    "forbidden": "У вас нет прав для этого действия.",
+    "notFound": "Ресурс не найден.",
+    "server": "Ошибка сервера. Повторите позже."
+  },
+  "pagination": {
+    "rowsPerPage": "Строк на странице",
+    "of": "из",
+    "page": "Страница",
+    "perPage": "на странице",
+    "next": "Вперёд",
+    "prev": "Назад",
+    "first": "Первая",
+    "last": "Последняя"
+  },
+  "table": {
+    "noData": "Нет данных",
+    "totalRows": "Всего: {{count}}"
+  },
+  "search": {
+    "placeholder": "Поиск…"
+  },
+  "filters": {
+    "title": "Фильтры",
+    "apply": "Применить фильтры",
+    "reset": "Сбросить фильтры"
+  },
+  "dialog": {
+    "confirmDeleteTitle": "Удалить запись?",
+    "confirmDeleteMessage": "Это действие нельзя отменить.",
+    "confirm": "Подтвердить",
+    "cancel": "Отмена"
+  },
+  "toast": {
+    "saved": "Сохранено",
+    "updated": "Обновлено",
+    "deleted": "Удалено",
+    "copied": "Скопировано",
+    "signedIn": "Вход выполнен",
+    "signedOut": "Выход выполнен",
+    "passwordChanged": "Пароль обновлён",
+    "emailSent": "Письмо отправлено"
+  },
+  "upload": {
+    "dropHere": "Перетащите файлы сюда или нажмите для загрузки",
+    "maxSize": "Макс. размер: {{size}}",
+    "accepted": "Допустимые типы: {{types}}"
+  },
+  "settings": {
+    "title": "Настройки",
+    "profile": "Профиль",
+    "appearance": "Внешний вид",
+    "language": "Язык",
+    "security": "Безопасность",
+    "notifications": "Уведомления"
+  },
+  "profile": {
+    "title": "Профиль",
+    "editProfile": "Редактировать профиль",
+    "personalInfo": "Персональные данные",
+    "changePassword": "Сменить пароль",
+    "avatar": "Аватар",
+    "uploadNew": "Загрузить новый",
+    "remove": "Удалить"
+  },
+  "theme": {
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "system": "Системная"
+  },
+  "footer": {
+    "copyright": "© {{year}} Ваша компания",
+    "privacy": "Конфиденциальность",
+    "terms": "Условия",
+    "contact": "Контакты"
+  },
+  "rbac": {
+    "admin": "Администратор",
+    "user": "Пользователь",
+    "moderator": "Модератор"
+  }
 }

@@ -1,18 +1,233 @@
 {
-  "app.title": "Szablon",
-  "nav.home": "Strona główna",
-  "nav.users": "Użytkownicy",
-  "nav.forum": "Forum",
-  "nav.toggleTheme": "Przełącz motyw",
-  "nav.toggleMenu": "Menu",
-  "nav.language": "Język",
-  "nav.lang.en": "EN",
-  "nav.lang.ru": "RU",
-  "nav.lang.pl": "PL",
-  "home.welcome": "Witamy",
-  "home.subtitle": "Minimalny szablon na Vite + TS + React + MUI.",
-  "users.title": "Użytkownicy",
-  "forum.title": "Forum",
-  "notfound.title": "404",
-  "notfound.subtitle": "Nie znaleziono strony."
+  "app": {
+    "title": "Boilerplate",
+    "subtitle": "Vite + React + MUI",
+    "description": "Minimalny starter na Vite, TypeScript, React i MUI.",
+    "version": "Wersja"
+  },
+  "nav": {
+    "home": "Strona główna",
+    "users": "Użytkownicy",
+    "forum": "Forum",
+    "toggleTheme": "Przełącz motyw",
+    "toggleMenu": "Przełącz menu",
+    "language": "Język",
+    "lang": {
+      "en": "EN",
+      "ru": "RU",
+      "pl": "PL"
+    }
+  },
+  "home": {
+    "welcome": "Witamy",
+    "subtitle": "Minimalny boilerplate na Vite + TS + React + MUI."
+  },
+  "account": {
+    "menu": "Konto",
+    "profile": "Mój profil",
+    "settings": "Ustawienia",
+    "signOut": "Wyloguj się",
+    "signIn": "Zaloguj się",
+    "signUp": "Załóż konto",
+    "roles": "Role"
+  },
+  "auth": {
+    "signIn": "Zaloguj się",
+    "signUp": "Utwórz konto",
+    "forgot": "Nie pamiętasz hasła",
+    "reset": "Resetuj hasło",
+    "email": "E-mail",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "name": "Imię i nazwisko",
+    "sendResetLink": "Wyślij link resetujący",
+    "updatePassword": "Zmień hasło",
+    "haveAccount": "Masz konto? Zaloguj się",
+    "createAccount": "Utwórz konto",
+    "welcomeBack": "Witaj ponownie",
+    "checkEmail": "Sprawdź pocztę",
+    "weSentReset": "Wysłaliśmy link do resetu hasła.",
+    "weSentVerify": "Wysłaliśmy link weryfikacyjny.",
+    "twoFactor": "Weryfikacja dwuetapowa",
+    "otp": "Jednorazowy kod",
+    "rememberMe": "Zapamiętaj mnie",
+    "orContinue": "Lub kontynuuj przez",
+    "agreeTo": "Akceptuję",
+    "terms": "Regulamin",
+    "privacy": "Politykę prywatności"
+  },
+  "users": {
+    "title": "Użytkownicy",
+    "create": "Utwórz użytkownika",
+    "edit": "Edytuj użytkownika",
+    "details": "Szczegóły użytkownika",
+    "delete": "Usuń użytkownika",
+    "searchPlaceholder": "Szukaj użytkowników…",
+    "table": {
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "role": "Rola",
+      "status": "Status",
+      "createdAt": "Utworzono",
+      "updatedAt": "Zaktualizowano",
+      "actions": "Akcje"
+    },
+    "form": {
+      "name": "Imię i nazwisko",
+      "email": "E-mail",
+      "role": "Rola",
+      "password": "Hasło",
+      "confirmPassword": "Potwierdź hasło",
+      "active": "Aktywny"
+    }
+  },
+  "forum": {
+    "title": "Forum",
+    "posts": "Wpisy",
+    "post": "Wpis",
+    "newPost": "Nowy wpis",
+    "createPost": "Utwórz wpis",
+    "editPost": "Edytuj wpis",
+    "deletePost": "Usuń wpis",
+    "comments": "Komentarze",
+    "comment": "Komentarz",
+    "addComment": "Dodaj komentarz",
+    "reply": "Odpowiedz",
+    "by": "autor",
+    "updated": "zaktualizowano",
+    "empty": "Brak wpisów.",
+    "tags": "Tagi"
+  },
+  "notfound": {
+    "title": "404",
+    "subtitle": "Nie znaleziono strony.",
+    "cta": "Przejdź na stronę główną"
+  },
+  "actions": {
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "close": "Zamknij",
+    "create": "Utwórz",
+    "update": "Zaktualizuj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "view": "Zobacz",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "previous": "Poprzedni",
+    "retry": "Ponów",
+    "refresh": "Odśwież",
+    "copy": "Kopiuj",
+    "confirm": "Potwierdź",
+    "yes": "Tak",
+    "no": "Nie",
+    "ok": "OK",
+    "submit": "Wyślij",
+    "upload": "Prześlij",
+    "download": "Pobierz",
+    "search": "Szukaj",
+    "apply": "Zastosuj",
+    "clear": "Wyczyść",
+    "reset": "Resetuj"
+  },
+  "status": {
+    "loading": "Ładowanie…",
+    "saving": "Zapisywanie…",
+    "deleting": "Usuwanie…",
+    "success": "Sukces",
+    "error": "Błąd",
+    "empty": "Brak danych do wyświetlenia"
+  },
+  "validation": {
+    "required": "{{field}} jest wymagane",
+    "invalid": "{{field}} jest nieprawidłowe",
+    "minLength": "{{field}} musi mieć co najmniej {{min}} znaków",
+    "maxLength": "{{field}} może mieć maksymalnie {{max}} znaków",
+    "email": "Wprowadź prawidłowy adres e-mail",
+    "passwordsMustMatch": "Hasła muszą być identyczne"
+  },
+  "errors": {
+    "unknown": "Coś poszło nie tak.",
+    "network": "Błąd sieci. Sprawdź połączenie.",
+    "unauthorized": "Musisz się zalogować.",
+    "forbidden": "Brak uprawnień do tej operacji.",
+    "notFound": "Nie znaleziono zasobu.",
+    "server": "Błąd serwera. Spróbuj ponownie później."
+  },
+  "pagination": {
+    "rowsPerPage": "Wierszy na stronę",
+    "of": "z",
+    "page": "Strona",
+    "perPage": "na stronę",
+    "next": "Następna",
+    "prev": "Poprzednia",
+    "first": "Pierwsza",
+    "last": "Ostatnia"
+  },
+  "table": {
+    "noData": "Brak danych",
+    "totalRows": "Razem: {{count}}"
+  },
+  "search": {
+    "placeholder": "Szukaj…"
+  },
+  "filters": {
+    "title": "Filtry",
+    "apply": "Zastosuj filtry",
+    "reset": "Resetuj filtry"
+  },
+  "dialog": {
+    "confirmDeleteTitle": "Usunąć element?",
+    "confirmDeleteMessage": "Tej operacji nie można cofnąć.",
+    "confirm": "Potwierdź",
+    "cancel": "Anuluj"
+  },
+  "toast": {
+    "saved": "Zapisano",
+    "updated": "Zaktualizowano",
+    "deleted": "Usunięto",
+    "copied": "Skopiowano",
+    "signedIn": "Zalogowano",
+    "signedOut": "Wylogowano",
+    "passwordChanged": "Hasło zmienione",
+    "emailSent": "Wiadomość wysłana"
+  },
+  "upload": {
+    "dropHere": "Upuść pliki tutaj lub kliknij, aby przesłać",
+    "maxSize": "Maks. rozmiar: {{size}}",
+    "accepted": "Obsługiwane typy: {{types}}"
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "profile": "Profil",
+    "appearance": "Wygląd",
+    "language": "Język",
+    "security": "Zabezpieczenia",
+    "notifications": "Powiadomienia"
+  },
+  "profile": {
+    "title": "Profil",
+    "editProfile": "Edytuj profil",
+    "personalInfo": "Dane osobowe",
+    "changePassword": "Zmień hasło",
+    "avatar": "Avatar",
+    "uploadNew": "Prześlij nowy",
+    "remove": "Usuń"
+  },
+  "theme": {
+    "light": "Jasny",
+    "dark": "Ciemny",
+    "system": "Systemowy"
+  },
+  "footer": {
+    "copyright": "© {{year}} Twoja firma",
+    "privacy": "Prywatność",
+    "terms": "Regulamin",
+    "contact": "Kontakt"
+  },
+  "rbac": {
+    "admin": "Administrator",
+    "user": "Użytkownik",
+    "moderator": "Moderator"
+  }
 }

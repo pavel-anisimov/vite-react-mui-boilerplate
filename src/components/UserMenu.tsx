@@ -6,6 +6,8 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
+import type { JSX } from "react";
+import {useTranslation} from "react-i18next";
 
 /**
  * Generates initials from a given name or email address.
@@ -37,7 +39,8 @@ function initials(nameOrEmail?: string): string {
  * @return {JSX.Element | null} The UserMenu component that displays interactions based on the user's authentication state.
  * Returns null if the loading state is active.
  */
-export default function UserMenu() {
+export default function UserMenu(): JSX.Element | null {
+  const { t } = useTranslation("common");
   const { user, isLoading, signOut, accessToken } = useAuth();
   const navigate = useNavigate();
   const [anchorElement, setAnchorElement] = React.useState<null | HTMLElement>(null);
@@ -54,7 +57,7 @@ export default function UserMenu() {
    * @param {React.MouseEvent<HTMLElement>} event - The mouse event containing information about the user interaction.
    * @returns {void}
    */
-  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleOpen = (event: React.MouseEvent<HTMLElement>): void => {
     setAnchorElement(event.currentTarget);
   };
   const handleClose = () => setAnchorElement(null);
@@ -106,16 +109,16 @@ export default function UserMenu() {
     <Divider key="div-1" />,
     <MenuItem key="profile" onClick={handleProfile}>
       <ListItemIcon><Person fontSize="small" /></ListItemIcon>
-      My profile
+      {t("account.profile") /* My profile */ }
     </MenuItem>,
     <MenuItem key="settings" onClick={handleSettings}>
       <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
-      Settings
+      {t("account.settings") /* Settings */ }
     </MenuItem>,
     <Divider key="div-2" />,
     <MenuItem key="logout" onClick={handleSignOut}>
       <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
-      Sign out
+      {t("account.signOut") /* Sign out */ }
     </MenuItem>,
   ];
 
@@ -132,7 +135,7 @@ export default function UserMenu() {
   const guestItems = [
     <MenuItem key="signin" onClick={handleSignIn}>
       <ListItemIcon><Login fontSize="small" /></ListItemIcon>
-      Sign in
+      {t("account.signIn") /* Sign In */ }
     </MenuItem>,
     <MenuItem key="signup" onClick={handleSignUp}>
       <ListItemIcon><PersonAdd fontSize="small" /></ListItemIcon>
@@ -142,7 +145,7 @@ export default function UserMenu() {
 
   return (
     <div>
-      <Tooltip title="Account">
+      <Tooltip title={t("account.menu")}>
         <IconButton
           onClick={handleOpen}
           size="small"
