@@ -34,7 +34,8 @@ export async function me(): Promise<User> {
 /**
  * Refreshes the access token using the provided refresh token.
  *
- * @param {string} refreshToken - The refresh token used to obtain a new access*/
+ * @param {string} refreshToken - The refresh token used to get new access
+ * */
 export async function refresh(refreshToken: string): Promise<{ accessToken: string }> {
   return http
     .post<{ accessToken: string }>("/auth/refresh", { refreshToken })

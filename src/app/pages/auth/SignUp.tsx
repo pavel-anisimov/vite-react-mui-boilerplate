@@ -5,7 +5,7 @@ import { useState} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import type {JSX} from "react";
+import type { JSX } from "react";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import AuthLayout from "@/components/AuthLayout";
@@ -80,8 +80,6 @@ export default function SignUp(): JSX.Element {
    * - Redirects the user to the sign-in page with a query parameter prompting email verification upon successful registration.
    * - Handles any errors encountered during the process, updating the error state with an appropriate message.
    * - Resets the loading state once the process is complete.
-   *
-   * @type {function} Asynchronous function handling user signup and form submission state management.
    */
   const onSubmit = form.handleSubmit(async (values) => {
     setError(null);

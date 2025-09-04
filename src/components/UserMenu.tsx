@@ -71,7 +71,6 @@ export default function UserMenu() {
     ? <Avatar sx={{ width: 32, height: 32 }}>{initials(label)}</Avatar>
     : <AccountCircle fontSize="large" />;
 
-  // Собираем контент как массив валидных элементов для MenuList
   /**
    * An array representing menu items for an authenticated user interface.
    *
@@ -93,6 +92,7 @@ export default function UserMenu() {
    * - `sx`: Custom styles applied to the menu item using the `sx` property.
    */
   const authedItems = [
+    // Collect content as an array of valid elements for MenuList
     <MenuItem key="header" disabled disableRipple sx={{ py: 1.25, cursor: "default" }}>
       <div>
         <Typography variant="subtitle2">{label}</Typography>
@@ -161,7 +161,7 @@ export default function UserMenu() {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        // v6: используем slotProps вместо PaperProps
+        // v6: use slotProps instead of PaperProps
         slotProps={{
           paper: {
             elevation: 3,

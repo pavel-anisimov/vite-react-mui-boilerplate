@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-import type {JSX} from "react";
+import type { JSX } from "react";
 
 import PageContainer from "@/components/PageContainer";
 

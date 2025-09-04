@@ -17,7 +17,7 @@ import { useAuth } from "@/app/providers/AuthProvider";
  *                              otherwise navigates to the login page.
  * @constructor
  */
-export const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode; }): React.ReactNode => {
   const { user } = useAuth();
   const location = useLocation();
 

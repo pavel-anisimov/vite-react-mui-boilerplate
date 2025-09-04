@@ -2,7 +2,7 @@ import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Typography } from
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 
-import type {JSX} from "react";
+import type { JSX } from "react";
 
 import PageContainer from "@/components/PageContainer";
 

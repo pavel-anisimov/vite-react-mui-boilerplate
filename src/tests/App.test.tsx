@@ -32,19 +32,19 @@ describe("App",
   /**
    * Test to ensure that the navigation items are rendered correctly in the application.
    *
-   * This test checks if a button with the name "menu" or "меню" is present in the
+   * This test checks if a button with the name "menu" is present in the
    * document after rendering the application with the provided test utilities.
    */
   () => {
   it("renders nav items",
     /**
      * Asynchronous test function to render the application component using the `renderWithProviders` utility function.
-     * It asserts that a button with the role "button" and a name matching "menu" or "меню" (case-insensitive)
+     * It asserts that a button with the role "button" and a name matching "menu" (case-insensitive)
      * is present in the document.
      */
     async () => {
       renderWithProviders(<App />);
-      expect(await screen.findByRole("button", { name: /menu|меню/i })).toBeInTheDocument();
+      expect(await screen.findByRole("button", { name: /menu/i })).toBeInTheDocument();
     }
   );
 });

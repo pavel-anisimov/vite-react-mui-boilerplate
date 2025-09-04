@@ -11,7 +11,11 @@ import AuthLayout from "../../../components/AuthLayout";
 import ControlledTextField from "../../../components/form/ControlledTextField";
 import { useAuth } from "../../providers/AuthProvider";
 
-import type {JSX} from "react";
+import type { JSX } from "react";
+
+import type { Location } from "react-router-dom";
+
+type RouteState = { from?: { pathname?: string } } | null | undefined;
 
 /**
  * Schema for user authentication input.
@@ -32,20 +36,31 @@ const schema = z.object({
 type Form = z.infer<typeof schema>;
 
 /**
- * Extracts an error message from the provided error object when possible.
+ * Extracts and returns an error message from the provided error object.
  *
- * @param {unknown} error - The error object to extract the message from. This could be any unknown type.
- * @return {string} The extracted error message if available, otherwise a default error message is returned.
+ * If the error object contains a recognizable structure with a message, it will attempt to
+ * retrieve and return that message. If no suitable message can be determined, a default
+ * fallback message will be returned.
+ *
+ * @param error The error object from which to extract the message. It can be of any type.
+ * @return The extracted error message as a string, or a default fallback message if the error is unparseable.
  */
 function getErrorMessage(error: unknown): string {
-  // Пытаемся достать сообщение из ответа бэка (axios)
   if (typeof error === "object" && error !== null) {
-    const anyError = error as any;
-    const message =
-      anyError?.response?.data?.message ??
-      anyError?.response?.data?.error ??
-      anyError?.message;
-    if (typeof message === "string" && message.trim()) return message;
+    // the minimum required "form" of error
+    type MaybeAxios = {
+      response?: { data?: { message?: unknown; error?: unknown } };
+      message?: unknown;
+    };
+    const e = error as MaybeAxios;
+
+    const messageFromData =
+      (typeof e.response?.data?.message === "string" && e.response.data.message) ||
+      (typeof e.response?.data?.error === "string" && e.response.data.error) ||
+      null;
+
+    const message = messageFromData || (typeof e.message === "string" ? e.message : null);
+    if (message && message.trim()) return message;
   }
   return "Failed to sign in";
 }
@@ -66,13 +81,13 @@ export default function SignIn(): JSX.Element {
 
   const { signIn } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation() as never;
+  const location = useLocation() as Location & { state: RouteState };
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // приоритет: state.from (защищённый редирект) → ?next= → "/"
-  const nextFromState = location?.state?.from?.pathname as string | undefined;
+  // priority: state.from (protected redirect) → ?next= → "/"
+  const nextFromState = (location.state as RouteState)?.from?.pathname;
   const nextFromQuery = new URLSearchParams(window.location.search).get("next") || undefined;
   const redirectTo = nextFromState || nextFromQuery || "/";
 
@@ -81,16 +96,14 @@ export default function SignIn(): JSX.Element {
    * Invokes the `signIn` method with the provided email and password from form values.
    * Redirects to the specified route upon success or sets an error message upon failure.
    * Manages loading state and error state to provide feedback to the user.
-   *
-   * @type {function} Form submission handler function.
    */
   const onSubmit = form.handleSubmit(async (values) => {
     setError(null);
     setLoading(true);
     try {
       await signIn(values.email, values.password);
-      // используем клиентский роутинг вместо window.location.replace
-      await navigate(redirectTo, { replace: true });
+      // use client routing instead of window.location.replace
+      navigate(redirectTo, { replace: true });
     } catch (e) {
       setError(getErrorMessage(e));
     } finally {

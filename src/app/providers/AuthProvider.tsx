@@ -7,10 +7,31 @@ import React, {
   useMemo,
   useState,
 } from "react";
+
 import { login as apiLogin, me as apiMe } from "@/api/auth";
 
-type User = { id: string; email: string; name?: string | null; roles?: string[] };
+type User = {
+  id: string;
+  email: string;
+  name?: string | null;
+  roles?: string[];
+};
 
+/**
+ * Represents the authentication context value typically used in an authentication provider or context within an application.
+ * It contains the current user details, authentication tokens, and utility methods for managing authentication.
+ *
+ * Properties:
+ * - user: The current authenticated user or null if no user is logged in.
+ * - accessToken: The access token for authenticating API requests or null if no token is available.
+ * - isLoading: Indicates whether an authentication-related operation is in progress.
+ *
+ * Methods:
+ * - signIn: Authenticates the user using their email and password.
+ * - signUp: Registers a new user with an email, password, and optionally a name.
+ * - signOut: Logs out the current user, removing authentication tokens and user data.
+ * - setTokens: Updates the current authentication tokens, used for token refresh scenarios or other updates to tokens.
+ */
 type AuthContextValue = {
   user: User | null;
   accessToken: string | null;
@@ -144,7 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * - setUser: A function to update the application state with user data.
    *
    * This function relies on the `persistTokens` dependency and
-   * reinitializes when `persistTokens` changes.
+   * reinitialized when `persistTokens` changes.
    *
    * @param {string} email - The email address of the user attempting to sign in.
    * @param {string} password - The password associated with the provided email address.
@@ -153,8 +174,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = useCallback(async (email: string, password: string) => {
     const { accessToken, refreshToken } = await apiLogin({ email, password });
     persistTokens(accessToken, refreshToken);
-    const u = await apiMe();
-    setUser(u);
+    const user = await apiMe();
+    setUser(user);
   }, [persistTokens]);
 
   /**
@@ -226,13 +247,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
  *
  * This hook retrieves the authentication context from the AuthReactContext.
  * It ensures that the hook is used within the appropriate context provider (AuthProvider).
- * If used outside of the context provider, it will throw an error.
+ * If used outside the context provider, it will throw an error.
  *
- * @returns {Object} The authentication context value.
+ * @returns {AuthContextValue} The authentication context value.
  * @throws {Error} Throws an error if the hook is not used within AuthProvider.
  */
-export const useAuth = () => {
+export const useAuth = (): AuthContextValue => {
   const context = useContext(AuthReactContext);
-  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+
   return context;
 };

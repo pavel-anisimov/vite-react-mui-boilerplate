@@ -1,7 +1,7 @@
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-import type { PropsWithChildren} from "react";
+import type { PropsWithChildren } from "react";
 
 export type ColorScheme = "light" | "dark";
 interface Context { scheme: ColorScheme; toggle: () => void; }
@@ -21,7 +21,7 @@ const STORAGE_KEY = "bp_color_scheme";
  *                              including the provided children and context.
  * @constructor
  */
-export function AppThemeProvider({ children }: PropsWithChildren) {
+export function AppThemeProvider({ children }: PropsWithChildren): React.ReactElement {
   const initial = (): ColorScheme => {
     if (typeof window !== "undefined") {
       const saved = window.localStorage.getItem(STORAGE_KEY) as ColorScheme | null;
@@ -72,11 +72,11 @@ export function AppThemeProvider({ children }: PropsWithChildren) {
    *
    * @type {Context}
    */
-  const value = useMemo<Context>(
+  const value: Context = useMemo<Context>(
     () => ({
       scheme,
       toggle: () => setScheme(
-        (s) => (s === "light" ? "dark" : "light")
+        (scheme) => (scheme === "light" ? "dark" : "light")
       )
     }),
     [scheme]

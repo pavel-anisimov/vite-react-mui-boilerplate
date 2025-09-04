@@ -2,7 +2,7 @@ import { TextField } from "@mui/material";
 import { Controller } from "react-hook-form";
 
 import type { TextFieldProps } from "@mui/material";
-import type {JSX} from "react";
+import type { JSX } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
 /**

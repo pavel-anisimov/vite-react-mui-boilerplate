@@ -29,8 +29,6 @@ export default function ForgotPassword(): JSX.Element {
     defaultValues: { email: "" },
   });
 
-  // const { signIn } = useAuth(); // there is no real challenge, just simulating success
-
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 

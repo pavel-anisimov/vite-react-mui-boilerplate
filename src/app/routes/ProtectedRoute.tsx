@@ -9,7 +9,7 @@ type Properties = { children: React.ReactNode };
 /**
  * A component that protects routes by checking the authentication state of the user.
  * Redirects unauthenticated users to the login page.
- * Displays nothing while authentication state is loading.
+ * Displays nothing while the authentication state is loading.
  *
  * @param {object} props The component props.
  * @param {React.ReactNode} props.children The child components to render if the user is authenticated.
@@ -20,13 +20,13 @@ type Properties = { children: React.ReactNode };
  */
 export default function ProtectedRoute({ children }: Properties): React.ReactNode | null {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
-  // until we know the state, we don't render anything (a spinner is possible)
-  if (isLoading) return null;
+  if (isLoading) {
+    return null;
+  }
 
-  // no user - send to login page
   if (!user) {
-    const location = useLocation();
     return <Navigate to="/auth/sign-in" replace state={{ from: location }} />;
   }
 

@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import type { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
+
+import type { JSX } from "react";
 
 const client = new QueryClient();
 
@@ -15,7 +17,7 @@ const client = new QueryClient();
  *
  * @constructor
  */
-export function AppQueryProvider({ children }: PropsWithChildren) {
+export function AppQueryProvider({ children }: PropsWithChildren): JSX.Element {
   return (
     <QueryClientProvider client={client}>
       {children}

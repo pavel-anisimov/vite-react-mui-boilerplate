@@ -4,7 +4,7 @@ import { useRoutes } from "react-router-dom";
 
 import { routes } from "./routes";
 
-import type {JSX} from "react";
+import type { JSX } from "react";
 
 /**
  * The App component initializes the application's routing system and wraps the routes

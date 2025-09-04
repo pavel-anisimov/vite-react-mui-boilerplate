@@ -24,12 +24,12 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useMemo, useState} from "react";
+import React, { useMemo, useState} from "react";
 import ReactCountryFlag from "react-country-flag";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
-import type { MouseEvent, PropsWithChildren, JSX } from "react";
+import type { MouseEvent, PropsWithChildren ,JSX} from "react";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useColorScheme } from "@/app/providers/ThemeProvider";
@@ -64,10 +64,10 @@ const NAV = [
  * It includes a responsive sidebar, header with language and theme toggles, and a main content area for rendering children components.
  *
  * @param {Object} props - The props passed to the `Layout` component.
- * @param {React.ReactNode} props.children - The children components to be rendered inside the main content area of the layout.
+ * @param {JSX.ReactNode} props.children - The children components to be rendered inside the main content area of the layout.
  * @return {JSX.Element} Returns a JSX element representing the layout structure of the application.
  */
-export default function Layout({ children }: PropsWithChildren): React.JSX.Element | null {
+export default function Layout({ children }: PropsWithChildren): JSX.Element | null {
   const theme = useTheme();
   const mdDown = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = useState(!mdDown);
@@ -97,7 +97,7 @@ export default function Layout({ children }: PropsWithChildren): React.JSX.Eleme
    * @returns {Promise<void>} A promise that resolves when the language change is complete
    * and subsequent operations have been handled.
    */
-  const changeLang = async (lng: typeof SUPPORTED_LANGS[number]) => {
+  const changeLang = async (lng: typeof SUPPORTED_LANGS[number]): Promise<void> => {
     await i18n.changeLanguage(lng);
     handleLangClose();
   };
@@ -201,7 +201,7 @@ export default function Layout({ children }: PropsWithChildren): React.JSX.Eleme
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar for logged in users only */}
+      {/* Sidebar for logged-in users only */}
       {showSidebar && (
         <Drawer
           variant={variant}
@@ -230,9 +230,9 @@ export default function Layout({ children }: PropsWithChildren): React.JSX.Eleme
           flexGrow: 1,
           p: 3,
           ml: showSidebar && !mdDown && open ? `${drawerWidth}px` : 0,
-          transition: (t) =>
-            t.transitions.create(["margin"], {
-              duration: t.transitions.duration.enteringScreen,
+          transition: (theme) =>
+            theme.transitions.create(["margin"], {
+              duration: theme.transitions.duration.enteringScreen,
             }),
         }}
       >

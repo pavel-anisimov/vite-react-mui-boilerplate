@@ -1,4 +1,9 @@
-import axios from "axios";
+import axios, {
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+  AxiosError,
+  AxiosHeaders,
+} from "axios";
 
 /**
  * An Axios instance pre-configured with custom settings for making HTTP requests.
@@ -11,77 +16,49 @@ import axios from "axios";
  * The `http` instance can be used to perform various HTTP operations such as GET, POST, PUT, DELETE, etc.
  */
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_URL, // take из .env.local
+  baseURL: import.meta.env.VITE_API_URL ?? "/api",
   withCredentials: true, // useful for refresh-cookie or CSRF
 });
 
 // === REQUEST INTERCEPTOR ===
 http.interceptors.request.use(
-  /**
-   * Middleware function to attach an authorization token to the request headers.
-   *
-   * This function reads the access token from the local storage (or another potential store, e.g., Zustand in the future).
-   * If the access token is found, it adds an `Authorization` header with `Bearer <token>`*/
-  (config) => {
-  // read the token from localStorage (or later - from the zustand store)
-  const raw = localStorage.getItem("auth");
-  if (raw) {
-    const { accessToken } = JSON.parse(raw);
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-  }
-  return config;
-});
-
-// === RESPONSE INTERCEPTOR (401 → refresh) ===
-let isRefreshing = false;
-
-http.interceptors.response.use(
-  /**
-   * A function that directly returns the given response.
-   *
-   * @param {*} response - The input data to be returned as is.
-   * @returns {*} - The same value provided as the input parameter.
-   */
-  (response) => response,
-  async (error) => {
-    const status = error?.response?.status;
-
-    if (status === 401 && !isRefreshing) {
+  (config: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
+    const raw = localStorage.getItem("auth");
+    if (raw) {
       try {
-        isRefreshing = true;
-        const raw = localStorage.getItem("auth");
-        const { refreshToken } = raw ? JSON.parse(raw) : {};
-
-        if (!refreshToken) {
-          throw new Error("No refresh token");
+        const { accessToken } = JSON.parse(raw) as { accessToken?: string };
+        if (accessToken) {
+          // Unify Headers → AxiosHeaders
+          const headers = AxiosHeaders.from(config.headers);
+          headers.set("Authorization", `Bearer ${accessToken}`);
+          config.headers = headers;
         }
-
-        // direct query to avoid interceptors recursively
-        const { data } = await axios.post(
-          `${import.meta.env.VITE_API_URL}/auth/refresh`,
-          { refreshToken }
-        );
-
-        // update stored accessToken
-        localStorage.setItem(
-          "auth",
-          JSON.stringify({ ...JSON.parse(raw || "{}"), accessToken: data.accessToken })
-        );
-
-        isRefreshing = false;
-
-        // repeat the original request
-        return http(error.config);
-      } catch (e) {
-        isRefreshing = false;
-        localStorage.removeItem("auth");
-        // optional: redirect to /login
+      } catch {
+        // ignore bad JSON
       }
     }
-    return Promise.reject(error);
-  }
+    return config;
+  },
+  (error: AxiosError) => Promise.reject(error),
 );
+
+http.interceptors.response.use(
+  (response: AxiosResponse<unknown>): AxiosResponse<unknown> => response,
+
+  // Here you can deploy/log/refresh - without any
+  async (error: AxiosError<unknown>) => {
+    // Example of a refresh blank:
+    // if (error.response?.status === 401) {
+    //   try {
+    //     await refreshToken();
+    //     return api.request(error.config as InternalAxiosRequestConfig<unknown>);
+    //   } catch (_) {
+    //     // if the refresh fails, we fall further
+    //   }
+    // }
+    return Promise.reject(error);
+  },
+);
+
 
 export default http;
