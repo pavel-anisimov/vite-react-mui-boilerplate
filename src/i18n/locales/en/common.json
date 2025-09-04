@@ -21,8 +21,82 @@
   },
 
   "home": {
-    "welcome": "Welcome",
-    "subtitle": "Minimal boilerplate on Vite + TS + React + MUI."
+    "title": "Home",
+    "subtitle": "A clean home screen for quick navigation and a concise snapshot of changes and status.",
+    "quickActions": {
+      "title": "Quick actions",
+      "openUsers": "Users",
+      "forum": "Forum",
+      "settings": "Settings"
+    },
+    "whatsNew": {
+      "title": "What’s new",
+      "versions": [
+        "v0.1.0",
+        "v0.7.2",
+        "v1.3.0",
+        "v1.8.5",
+        "v2.0.0",
+        "v2.4.1",
+        "v3.0.9",
+        "v3.6.0",
+        "v4.0.2",
+        "v4.15.4"
+      ],
+      "items": [
+        "Polished login flow, session handling and token expiry messages for a smoother first-run experience.",
+        "Users table with roles, status chips, quick filter and action buttons for common tasks.",
+        "Navigation simplified with RBAC; menu items automatically hide based on permissions.",
+        "API Gateway integration with request IDs and trace propagation for better observability.",
+        "Demo mode with mock data to showcase the UI without external services.",
+        "Unified copy and translations, improved spacing and consistent typographic hierarchy.",
+        "Service layer + integrations scaffolding for User/Auth and Forum microservices.",
+        "Initial Kafka support: event publishing and safe retries with backoff.",
+        "A curated home screen with quick actions, system status and recent changes.",
+        "Example tests and linter config; minor performance and accessibility tweaks."
+      ]
+    },
+    "placeholder": {
+      "title": "Demo content",
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere urna mi, eu porta arcu bibendum id.\nCras sed felis quis augue suscipit facilisis. Phasellus ac nibh eget nisl gravida tincidunt.\nVestibulum at nulla id nunc fermentum finibus. Donec non arcu non nisl bibendum dapibus.\nInteger in urna at turpis sollicitudin elementum. Suspendisse potenti et sapien.\nCurabitur lacinia, erat eget dictum faucibus, mi lorem feugiat elit, nec laoreet ipsum justo a nisl.\nAliquam gravida mauris id velit dapibus, quis dictum orci posuere. Vivamus dictum laoreet sapien.\nMaecenas luctus mi nec mi rutrum, a tristique felis fringilla. Etiam a justo ut nibh dictum faucibus.\nMorbi consequat magna at massa sagittis, sed feugiat nunc blandit. Pellentesque habitant morbi tristique.\nSed vulputate orci a facilisis interdum. Nam ut urna id ante aliquam pretium non non lorem.\nQuisque vitae nisi nec urna volutpat vulputate. Nunc efficitur magna at nisl facilisis efficitur."
+    },
+    "tasks": {
+      "title": "Tasks",
+      "items": [
+        { "title": "Invite new users to the workspace", "due": "2025-09-10", "status": "in_progress" },
+        { "title": "Configure roles and permissions (RBAC)", "due": "2025-09-15", "status": "todo" },
+        { "title": "Wire the Forum module (demo path)", "due": "2025-09-20", "status": "in_progress" },
+        { "title": "Add KPI tiles to the home screen", "due": "2025-09-25", "status": "todo" },
+        { "title": "Prepare event schemas for Kafka", "due": "2025-09-30", "status": "todo" },
+        { "title": "E2E tests for login and users list", "due": "2025-10-05", "status": "todo" }
+      ]
+    },
+    "system": {
+      "title": "System status",
+      "status": { "ok": "OK", "off": "disabled", "degraded": "degraded" },
+      "systems": [
+        { "name": "User Core", "status": "ok" },
+        { "name": "Auth Gateway", "status": "ok" },
+        { "name": "Forum Broker", "status": "degraded" },
+        { "name": "Analytics", "status": "ok" },
+        { "name": "Payments Sandbox", "status": "off" },
+        { "name": "Email Worker", "status": "ok" },
+        { "name": "Search Indexer", "status": "degraded" }
+      ]
+    },
+    "progress": {
+      "title": "Progress update",
+      "items": [
+        { "label": "Users module", "percent": 94 },
+        { "label": "Forum integration", "percent": 82 },
+        { "label": "Kafka events", "percent": 67 },
+        { "label": "UI polish", "percent": 91 },
+        { "label": "Documentation", "percent": 73 }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2025 Lorem Ipsum LLC. All content is fictitious and for demonstration purposes only."
+    }
   },
 
   "account": {

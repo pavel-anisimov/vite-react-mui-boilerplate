@@ -19,8 +19,86 @@
     }
   },
   "home": {
-    "welcome": "Witamy",
-    "subtitle": "Minimalny boilerplate na Vite + TS + React + MUI."
+    "title": "Strona główna",
+    "subtitle": "Lekki ekran startowy do szybkiej nawigacji i krótkiego podglądu zmian.",
+    "quickActions": {
+      "title": "Szybkie akcje",
+      "openUsers": "Użytkownicy",
+      "forum": "Forum",
+      "settings": "Ustawienia"
+    },
+    "whatsNew": {
+      "title": "Co nowego",
+      "versions": [
+        "v0.1.0",
+        "v0.7.2",
+        "v1.3.0",
+        "v1.8.5",
+        "v2.0.0",
+        "v2.4.1",
+        "v3.0.9",
+        "v3.6.0",
+        "v4.0.2",
+        "v4.15.4"
+      ],
+      "items": [
+        "Stabilne logowanie i przechowywanie sesji; poprawione komunikaty błędów i obsługa wygasłych tokenów.",
+        "Nowa tabela użytkowników z rolami i statusami, szybkim filtrem oraz akcjami kontekstowymi.",
+        "Uproszczona nawigacja z RBAC — elementy menu ukrywają się automatycznie według uprawnień.",
+        "Integracja z bramką API; lepsze nagłówki, identyfikator żądania i propagacja traceparent.",
+        "Tryb demo z danymi mock umożliwia przegląd UI bez połączenia z usługami zewnętrznymi.",
+        "Ujednolicone komunikaty i tłumaczenia; poprawione odstępy i hierarchia typograficzna.",
+        "Szkielet pod mikroserwisy (User/Auth, Forum) z warstwą services i integrations.",
+        "Wstępne wsparcie dla Kafka: publikacja zdarzeń i bezpieczne opóźnienia wysyłki.",
+        "Strona domowa z szybkim podglądem zmian, skrótami i statusem systemów.",
+        "Przykładowe testy i konfiguracja lintera; drobne poprawki wydajności."
+      ]
+    },
+    "placeholder": {
+      "title": "Treść demonstracyjna",
+      "text": "Żwawy jeleń przeskakuje leniwą rzekę, a makietowy interfejs oddycha szerokim marginesem.\nSymulowany tekst pomaga ocenić rytm akapitów, wysokość linii i przełamywanie długich słów.\nWersje demo różnią się długością zdań, aby sprawdzić spójność siatki i siłę kontrastu.\nKlikalne elementy wyglądają naturalnie obok neutralnych bloków opisów i podpisów.\nFikcyjny kontent nie odzwierciedla danych produkcyjnych, ale imituje ich rozkład i ton.\nDiakrytyki polskie i znaki specjalne są tu świadomie wplecione: ą, ć, ę, ł, ń, ó, ś, ź, ż.\nWąskie kolumny powinny zachować czytelność dzięki właściwemu kerningowi i interlinii.\nNagłówki wyróżniają sekcje, a drobne detale wzmacniają hierarchię wizualną.\nResponsywna karta rozszerza się płynnie, zachowując spójne odstępy i proporcje.\nTo jedynie ryba — proszę nie traktować jej poważnie; służy do testów wyglądu i działania."
+    },
+    "tasks": {
+      "title": "Zadania",
+      "items": [
+        { "title": "Przygotować zaproszenie dla nowych użytkowników", "due": "2025-09-10", "status": "in_progress" },
+        { "title": "Skonfigurować role i uprawnienia (RBAC)", "due": "2025-09-15", "status": "todo" },
+        { "title": "Podłączyć moduł Forum (ścieżka demo)", "due": "2025-09-20", "status": "in_progress" },
+        { "title": "Dodać wskaźniki KPI na stronie głównej", "due": "2025-09-25", "status": "todo" },
+        { "title": "Przygotować schematy zdarzeń dla Kafka", "due": "2025-09-30", "status": "todo" },
+        { "title": "Testy E2E dla logowania i listy użytkowników", "due": "2025-10-05", "status": "todo" }
+      ]
+    },
+    "system": {
+      "title": "Status systemu",
+      "status": {
+        "ok": "OK",
+        "off": "wyłączone",
+        "degraded": "degradowany"
+      },
+      "systems": [
+        { "name": "User Core", "status": "ok" },
+        { "name": "Auth Gateway", "status": "ok" },
+        { "name": "Forum Broker", "status": "degraded" },
+        { "name": "Analytics", "status": "ok" },
+        { "name": "Payments Sandbox", "status": "off" },
+        { "name": "Email Worker", "status": "ok" },
+        { "name": "Search Indexer", "status": "degraded" }
+      ]
+    },
+    "progress": {
+      "title": "Postęp prac",
+      "items": [
+        { "label": "Moduł użytkowników", "percent": 94 },
+        { "label": "Integracja forum", "percent": 82 },
+        { "label": "Kafka – zdarzenia", "percent": 67 },
+        { "label": "Polerowanie UI", "percent": 91 },
+        { "label": "Dokumentacja", "percent": 73 }
+      ]
+    },
+    "footer": {
+      "copyright": "© 2025 Lorem Ipsum Sp. z o.o. Wszystkie treści są fikcyjne i służą wyłącznie celom demonstracyjnym."
+    }
   },
   "account": {
     "menu": "Konto",

@@ -5,6 +5,32 @@ import axios, {
   AxiosHeaders,
 } from "axios";
 
+
+const TOKENS_KEY = "auth.tokens";
+
+export type Tokens = {
+  accessToken: string;
+  refreshToken?: string;
+};
+
+export function setAuthTokens(tokens: Tokens | null) {
+  if (tokens) localStorage.setItem(TOKENS_KEY, JSON.stringify(tokens));
+  else localStorage.removeItem(TOKENS_KEY);
+}
+
+export function getAccessToken(): string | null {
+  const raw = localStorage.getItem(TOKENS_KEY);
+  if (!raw) return null;
+  try {
+    const parsed = JSON.parse(raw) as Tokens;
+    return parsed.accessToken ?? null;
+  } catch {
+    return null;
+  }
+}
+
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+
 /**
  * An Axios instance pre-configured with custom settings for making HTTP requests.
  *
