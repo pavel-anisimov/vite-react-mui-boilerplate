@@ -8,8 +8,9 @@ import { useAuth } from "@/app/providers/AuthProvider";
  * A higher-order component that restricts access to specific parts of the application
  * based on the user's authentication status. If the user is not authenticated,
  * they are redirected to the login route.
- *
- * @typedef {React.FC} RequireAuth
+ */
+type RequireAuth = React.FC<{ children: React.ReactNode }>;
+/**
  * @param {Object} props - React component props.
  * @param {React.ReactNode} props.children - The child components to be rendered
  *                                           if the user is authenticated.
@@ -17,7 +18,7 @@ import { useAuth } from "@/app/providers/AuthProvider";
  *                              otherwise navigates to the login page.
  * @constructor
  */
-export const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }: { children: React.ReactNode; }): React.ReactNode => {
+export const RequireAuth= ({ children }: { children: React.ReactNode; }): React.ReactNode => {
   const { user } = useAuth();
   const location = useLocation();
 

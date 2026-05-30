@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoadingButton } from "@mui/lab";
-import { Alert, Box } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
 import { useMemo, useState} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -125,7 +124,7 @@ export default function ResetPassword(): JSX.Element {
           </Alert>
         )}
         <Box sx={{ mt: 2 }}>
-          <LoadingButton
+          <Button
             type="submit"
             fullWidth
             variant="contained"
@@ -133,7 +132,7 @@ export default function ResetPassword(): JSX.Element {
             disabled={tokenMissing}
           >
             Update password
-          </LoadingButton>
+          </Button>
         </Box>
       </form>
     </AuthLayout>

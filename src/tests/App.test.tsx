@@ -7,6 +7,7 @@ import { describe, it, expect } from "vitest";
 import type { RenderResult} from "@testing-library/react";
 
 import App from "@/app/App";
+import { AuthProvider } from "@/app/providers/AuthProvider";
 import { AppQueryProvider } from "@/app/providers/QueryProvider";
 import { AppThemeProvider } from "@/app/providers/ThemeProvider";
 import "@/i18n/i18n";
@@ -22,7 +23,9 @@ function renderWithProviders(ui: React.ReactElement): RenderResult {
   return render(
     <BrowserRouter>
       <AppQueryProvider>
-        <AppThemeProvider>{ui}</AppThemeProvider>
+        <AuthProvider>
+          <AppThemeProvider>{ui}</AppThemeProvider>
+        </AuthProvider>
       </AppQueryProvider>
     </BrowserRouter>
   );
@@ -36,16 +39,16 @@ describe("App",
    * document after rendering the application with the provided test utilities.
    */
   () => {
-  it("renders nav items",
+  it("renders the app shell",
     /**
      * Asynchronous test function to render the application component using the `renderWithProviders` utility function.
-     * It asserts that a button with the role "button" and a name matching "menu" (case-insensitive)
-     * is present in the document.
+     * It asserts that the top bar renders for a logged-out user.
      */
     async () => {
       renderWithProviders(<App />);
-      expect(await screen.findByRole("button", { name: /menu/i })).toBeInTheDocument();
+      expect(await screen.findByText("Boilerplate")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /language/i })).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: /toggle theme/i })).toBeInTheDocument();
     }
   );
 });
-

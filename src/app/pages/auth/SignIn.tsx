@@ -1,7 +1,6 @@
 // src/app/pages/auth/SignIn.tsx
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoadingButton } from "@mui/lab";
-import { Alert, Box, Link, Stack } from "@mui/material";
+import { Alert, Box, Button, Link, Stack } from "@mui/material";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -99,7 +98,7 @@ export default function SignIn(): JSX.Element {
       <form onSubmit={onSubmit} noValidate>
         <ControlledTextField form={form} name="email" label={t("auth.email")} type="email" autoFocus />
         <ControlledTextField form={form} name="password" label={t("auth.password")} type="password" />
-        <Stack direction="row" justifyContent="space-between" sx={{ mt: 0.5 }}>
+        <Stack direction="row" sx={{ mt: 0.5, justifyContent: "space-between" }}>
           <Link href="/auth/forgot" underline="hover">
             {t("auth.forgot") /* Forgot password? */ }
           </Link>
@@ -113,9 +112,9 @@ export default function SignIn(): JSX.Element {
           </Alert>
         )}
         <Box sx={{ mt: 2 }}>
-          <LoadingButton type="submit" fullWidth variant="contained" loading={loading}>
+          <Button type="submit" fullWidth variant="contained" loading={loading}>
             {t("auth.signIn") /* Sign in */ }
-          </LoadingButton>
+          </Button>
         </Box>
       </form>
     </AuthLayout>

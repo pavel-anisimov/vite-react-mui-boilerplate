@@ -29,7 +29,7 @@ describe("ThemeProvider",
    */
   () => {
     it("toggles color scheme and persists to localStorage", () => {
-      const { result } = renderHook((): Context => useColorScheme(), { wrapper });
+      const { result } = renderHook(() => useColorScheme(), { wrapper });
       const initial = result.current.scheme;
 
       act(() => result.current.toggle());

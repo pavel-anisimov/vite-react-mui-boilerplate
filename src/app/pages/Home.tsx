@@ -36,11 +36,11 @@ export default function Home(): JSX.Element {
         </Typography>
       </Stack>
 
-      <Grid container spacing={2} alignItems="stretch">
+      <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
         {/* ===== Left column (≈70%) ===== */}
-        <Grid item xs={12} md={8} sx={{
-          flex: 1,          // ← берём оставшуюся ширину
-          minWidth: 0,      // ← разрешаем сжатие
+        <Grid size={{ xs: 12, md: 8 }} sx={{
+          flex: 1,          // take remaining width
+          minWidth: 0,      // allow shrinking
           wordBreak: "break-word",
           overflowWrap: "anywhere"
         }}>
@@ -50,10 +50,10 @@ export default function Home(): JSX.Element {
               <CardHeader title={t("home.whatsNew.title")} />
               <CardContent sx={{ pt: 0 }}>
                 <Stack spacing={1.2}>
-                  {(whatsNewItems ?? []).slice(0, 10).map((text, i) => {
-                    const version = whatsNewVersions?.[i % (whatsNewVersions?.length || 1)] ?? "v0.1.0";
+                  {(whatsNewItems ?? []).slice(0, 10).map((text, index) => {
+                    const version = whatsNewVersions?.[index % (whatsNewVersions?.length || 1)] ?? "v0.1.0";
                     return (
-                      <Stack key={i} direction="row" spacing={1} alignItems="center">
+                      <Stack key={index} direction="row" spacing={1} sx={{ alignItems: "center" }}>
                         <Chip size="small" label={version} />
                         <Typography variant="body2">{text}</Typography>
                       </Stack>
@@ -78,8 +78,13 @@ export default function Home(): JSX.Element {
               <CardHeader title={t("home.tasks.title")} />
               <CardContent sx={{ pt: 0 }}>
                 <Stack spacing={1.2}>
-                  {(tasks ?? []).map((task, i) => (
-                    <Stack key={i} direction="row" spacing={1} alignItems="center" justifyContent="space-between">
+                  {(tasks ?? []).map((task, index) => (
+                    <Stack
+                      key={index}
+                      direction="row"
+                      spacing={1}
+                      sx={{ alignItems: "center", justifyContent: "space-between" }}
+                    >
                       <Box sx={{ minWidth: 0 }}>
                         <Typography variant="body2" noWrap title={task.title}>{task.title}</Typography>
                         <Typography variant="caption" color="text.secondary">{task.due}</Typography>
@@ -94,13 +99,13 @@ export default function Home(): JSX.Element {
         </Grid>
 
         {/* ===== Right column (≈30%) ===== */}
-        <Grid item xs={12} md={4}>
+        <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2} sx={{ height: "100%" }}>
             {/* Quick actions */}
             <Card sx={{ display: "flex", flexDirection: "column" }}>
               <CardHeader title={t("home.quickActions.title")} />
               <CardContent sx={{ pt: 0 }}>
-                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+                <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
                   <Button component={RouterLink} to="/users" variant="contained" size="small">
                     {t("home.quickActions.openUsers")}
                   </Button>
@@ -119,9 +124,9 @@ export default function Home(): JSX.Element {
               <CardHeader title={t("home.system.title")} />
               <CardContent sx={{ pt: 0 }}>
                 <Stack spacing={1.2}>
-                  {(systems ?? []).slice(0, 7).map((s, i) => (
+                  {(systems ?? []).slice(0, 7).map((s, index) => (
                     <Row
-                      key={i}
+                      key={index}
                       label={s.name}
                       value={<Chip size="small" label={statusLabel(t, s.status)} color={statusColor(s.status)} />}
                     />
@@ -135,8 +140,8 @@ export default function Home(): JSX.Element {
               <CardHeader title={t("home.progress.title")} />
               <CardContent sx={{ pt: 0 }}>
                 <Stack spacing={1.5}>
-                  {(progressItems ?? []).map((p, i) => (
-                    <ProgressRow key={i} label={p.label} percent={p.percent} />
+                  {(progressItems ?? []).map((p, index) => (
+                    <ProgressRow key={index} label={p.label} percent={p.percent} />
                   ))}
                 </Stack>
               </CardContent>
@@ -145,7 +150,7 @@ export default function Home(): JSX.Element {
         </Grid>
       </Grid>
 
-      {/* Footer / Copyright — в самом низу */}
+      {/* Footer / Copyright - at the very bottom */}
       <Box component="footer" sx={{ mt: 3, textAlign: "center" }}>
         <Typography variant="caption" color="text.secondary">
           {t("home.footer.copyright")}
@@ -159,7 +164,7 @@ export default function Home(): JSX.Element {
 
 function Row({ label, value }: { label: string; value: JSX.Element }) {
   return (
-    <Box display="flex" alignItems="center" justifyContent="space-between" gap={2}>
+    <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 2 }}>
       <Typography variant="body2" color="text.secondary" noWrap title={label}>
         {label}
       </Typography>
@@ -201,7 +206,7 @@ function ProgressRow({ label, percent }: { label: string; percent: number }) {
   const color = barColor(percent);
   return (
     <Stack spacing={0.5}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
+      <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="body2">{label}</Typography>
         <Typography variant="caption" color="text.secondary">
           {Math.round(percent)}%

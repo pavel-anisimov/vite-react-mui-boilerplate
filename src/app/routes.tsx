@@ -60,9 +60,9 @@ export const routes: RouteObject[] = [
     path: "/",
     element: <Layout />,
     children: [
-      // Главная — публичная
+      // Home — public
       { index: true, element: <Home /> },
-      // Форум — только для залогиненных
+      // Forum — signed-in users only
       {
         path: "forum",
         element: (
@@ -71,7 +71,7 @@ export const routes: RouteObject[] = [
           </ProtectedRoute>
         )
       },
-      // Users — только для admin ИЛИ manager
+      // Users — admin or manager only
       {
         path: "users",
         element: (

@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoadingButton } from "@mui/lab";
-import { Alert, Box, Link, Stack } from "@mui/material";
+import { Alert, Box, Button, Link, Stack } from "@mui/material";
 import { useState} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,7 +29,7 @@ import ControlledTextField from "@/components/form/ControlledTextField";
  * - Password:
  *   - "Min 8 characters" if it does not meet the minimum length.
  *   - "Add a number" if it does not contain a numeric character.
- *   - "Add an uppercase" if it does not contain an uppercase letter.
+ *   - "Add uppercase" if it does not contain an uppercase letter.
  * - Confirm Password: "Passwords do not match" if it does not match the `password` field.
  */
 const schema = z
@@ -102,7 +101,7 @@ export default function SignUp(): JSX.Element {
         <ControlledTextField form={form} name="email" label="Email" type="email" autoComplete="email" />
         <ControlledTextField form={form} name="password" label="Password" type="password" autoComplete="new-password" />
         <ControlledTextField form={form} name="confirmPassword" label="Confirm password" type="password" autoComplete="new-password" />
-        <Stack direction="row" justifyContent="flex-end" sx={{ mt: 0.5 }}>
+        <Stack direction="row" sx={{ mt: 0.5, justifyContent: "flex-end" }}>
           <Link href="/auth/sign-in" underline="hover">
             Have an account? Sign in
           </Link>
@@ -113,9 +112,9 @@ export default function SignUp(): JSX.Element {
           </Alert>
         )}
         <Box sx={{ mt: 2 }}>
-          <LoadingButton type="submit" fullWidth variant="contained" loading={loading}>
+          <Button type="submit" fullWidth variant="contained" loading={loading}>
             Create account
-          </LoadingButton>
+          </Button>
         </Box>
       </form>
     </AuthLayout>

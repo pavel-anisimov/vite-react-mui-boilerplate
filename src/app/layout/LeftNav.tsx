@@ -4,7 +4,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import {
   Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar,
 } from "@mui/material";
-import React from "react";
+import React, {JSX} from "react";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
@@ -39,7 +39,7 @@ type SideNavProps = {
  */
 export default function SideNav({
                                   open, onClose, variant, mdDown, canSeeUsers,
-                                }: SideNavProps) {
+                                }: SideNavProps): JSX.Element {
   const { t } = useTranslation("common");
   const loc = useLocation();
 

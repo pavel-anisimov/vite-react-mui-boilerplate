@@ -16,7 +16,7 @@ import {
   Typography,
   Tooltip,
 } from "@mui/material";
-import { DataGrid, GridColDef, GridToolbarQuickFilter } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, QuickFilter, QuickFilterControl, Toolbar } from "@mui/x-data-grid";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
@@ -24,7 +24,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-// ---------- Типы ----------
+// ---------- Types ----------
 type User = {
   id: string;
   name: string;
@@ -73,17 +73,84 @@ async function fetchUsers(): Promise<User[]> {
   const res = await fetch(`${base}/api/users`, { headers });
   if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
 
-  const payload = await res.json() as any;
-  const items: any[] = Array.isArray(payload) ? payload : payload?.items ?? [];
+  const payload = (await res.json()) as unknown;
+  const items = Array.isArray(payload)
+    ? payload
+    : (typeof payload === "object" &&
+      payload !== null &&
+      "items" in payload &&
+      Array.isArray(payload.items)
+      ? payload.items
+      : []);
 
   return items.map((u) => ({
-    id: u.id ?? u.email,
-    name: u.name ?? "",
-    email: u.email ?? "",
-    roles: Array.isArray(u.roles) ? u.roles : (u.role ? [u.role] : []),
-    status: u.status ?? "active",
-    emailVerified: u.emailVerified ?? true,
+    id:
+      typeof u === "object" &&
+      u !== null &&
+      "id" in u &&
+      typeof u.id === "string"
+        ? u.id
+        : (
+          typeof u === "object" &&
+          u !== null &&
+          "email" in u &&
+          typeof u.email === "string"
+            ? u.email
+            : ""
+        ),
+    name:
+      typeof u === "object" &&
+      u !== null &&
+      "name" in u &&
+      typeof u.name === "string"
+        ? u.name
+        : "",
+    email:
+      typeof u === "object" &&
+      u !== null &&
+      "email" in u &&
+      typeof u.email === "string"
+        ? u.email
+        : "",
+    roles:
+      typeof u === "object" &&
+      u !== null &&
+      "roles" in u &&
+      Array.isArray(u.roles)
+        ? u.roles.filter((role: unknown): role is string => typeof role === "string")
+        : (
+          typeof u === "object" &&
+          u !== null &&
+          "role" in u &&
+          typeof u.role === "string"
+            ? [u.role]
+            : []
+        ),
+    status:
+      typeof u === "object" &&
+      u !== null &&
+      "status" in u &&
+      (u.status === "active" || u.status === "blocked" || u.status === "pending_verification")
+        ? u.status
+        : "active",
+    emailVerified:
+      typeof u === "object" &&
+      u !== null &&
+      "emailVerified" in u &&
+      typeof u.emailVerified === "boolean"
+        ? u.emailVerified
+        : true,
   })) as User[];
+}
+
+function UsersToolbar(): JSX.Element {
+  return (
+    <Toolbar>
+      <QuickFilter debounceMs={300}>
+        <QuickFilterControl />
+      </QuickFilter>
+    </Toolbar>
+  );
 }
 
 export default function Users(): JSX.Element {
@@ -97,7 +164,7 @@ export default function Users(): JSX.Element {
   } = useQuery({
     queryKey: ["users"],
     queryFn: fetchUsers,
-    // ВАЖНО: placeholderData, а НЕ initialData → запрос идёт сразу
+    // NOTE: placeholderData, а НЕ initialData → запрос идёт сразу
     placeholderData: FALLBACK,
     staleTime: 0,
     refetchOnMount: "always",
@@ -119,7 +186,7 @@ export default function Users(): JSX.Element {
         minWidth: 240,
         sortable: true,
         renderCell: (params) => (
-          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ overflow: "hidden" }}>
+          <Stack direction="row" spacing={1.5} sx={{ overflow: "hidden", alignItems: "center" }}>
             <Avatar sx={{ width: 28, height: 28 }}>
               {params.row?.name?.charAt(0)?.toUpperCase() || "U"}
             </Avatar>
@@ -132,7 +199,7 @@ export default function Users(): JSX.Element {
           </Stack>
         ),
         // Защита от undefined
-        valueGetter: (p) => p.row?.name ?? "",
+        valueGetter: (_value, row) => row.name ?? "",
       },
       {
         field: "roles",
@@ -149,7 +216,7 @@ export default function Users(): JSX.Element {
           }[role] || 'error';
           return <Chip key={role} color={color as Colors} label={role} size="small" />;
         }),
-        valueGetter: (p) => (p.row?.roles ?? []).join(", "),
+        valueGetter: (_value, row) => (row.roles ?? []).join(", "),
       },
       {
         field: "status",
@@ -159,9 +226,9 @@ export default function Users(): JSX.Element {
         renderCell: (params) => {
           const status = (params.row?.status ?? "active") as User["status"];
           const label = status === "pending_verification" ? "pending" : status;
-          const color =
+          const color: "success" | "error" | "warning" =
             status === "active" ? "success" : status === "blocked" ? "error" : "warning";
-          return <Chip size="small" color={color as any} label={label} />;
+          return <Chip size="small" color={color} label={label} />;
         },
       },
       {
@@ -170,8 +237,10 @@ export default function Users(): JSX.Element {
         flex: 0.6,
         minWidth: 140,
         renderCell: (params) => {
-          const [ color, label ] = params.row?.emailVerified ? [ 'success', 'Yes'] : [ 'error', 'No']
-          return <Chip size="small" color={color as any} label={label} />;
+          const [color, label]: ["success" | "error", "Yes" | "No"] = params.row?.emailVerified
+            ? ["success", "Yes"]
+            : ["error", "No"];
+          return <Chip size="small" color={color} label={label} />;
         }
       },
       {
@@ -240,8 +309,7 @@ export default function Users(): JSX.Element {
               // сортировку можно оставить, теперь valueGetter защищён
               sorting: { sortModel: [{ field: "name", sort: "asc" }] },
             }}
-            slots={{ toolbar: GridToolbarQuickFilter }}
-            slotProps={{ toolbar: { quickFilterProps: { debounceMs: 300 } } }}
+            slots={{ toolbar: UsersToolbar }}
           />
         </Box>
       </Paper>

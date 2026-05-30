@@ -222,7 +222,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    *
    * Dependencies:
    * - user: The current authenticated user.
-   * - accessToken: The token used for API authentication.
+   * - accessToken: The token is used for API authentication.
    * - isLoading: A boolean indicating if an authentication-related process is in progress.
    * - signIn: A method to handle user sign-in.
    * - signUp: A method to handle user sign-up.

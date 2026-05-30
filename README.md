@@ -11,7 +11,7 @@
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 <!-- ![Bundle size](https://img.shields.io/bundlephobia/minzip/vite-react-mui-boilerplate) -->
 
-A modern boilerplate project built with **Vite 6**, **React 19**, **TypeScript 5**, and **MUI 7**, featuring:
+A modern boilerplate project built with **Vite 8**, **React 19**, **TypeScript 6**, and **MUI 9**, featuring:
 
 - **ESLint v9 flat config** (strict rules: `unicorn`, `regexp`, `security`, `import-x`)
 - **Biome** (formatter-only, fast replacement for Prettier)

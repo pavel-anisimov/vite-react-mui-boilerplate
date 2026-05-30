@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoadingButton } from "@mui/lab";
-import { Alert, Box } from "@mui/material";
+import { Alert, Box, Button } from "@mui/material";
 import { useState} from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -65,9 +64,9 @@ export default function ForgotPassword(): JSX.Element {
         <ControlledTextField form={form} name="email" label="Email" type="email" />
         {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
         <Box sx={{ mt: 2 }}>
-          <LoadingButton type="submit" fullWidth variant="contained" loading={loading}>
+          <Button type="submit" fullWidth variant="contained" loading={loading}>
             Send reset link
-          </LoadingButton>
+          </Button>
         </Box>
       </form>
     </AuthLayout>

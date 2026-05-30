@@ -5,10 +5,18 @@ import type { TextFieldProps } from "@mui/material";
 import type { JSX } from "react";
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
+type ControlledTextFieldProps<T extends FieldValues> = {
+  form: UseFormReturn<T>;
+  name: Path<T>;
+  label: string;
+  type?: string;
+} & TextFieldProps;
+
 /**
  * ControlledTextField is a wrapper component for a text field that integrates with React Hook Form's `Controller`.
  * It provides controlled form handling with added validation and helper text display.
  *
+ * @template T
  * @param {Object} param0 The props for the ControlledTextField component.
  * @param {UseFormReturn<T>} param0.form The instance of React Hook Form's `useForm` return object, containing form control and methods.
  * @param {Path<T>} param0.name The name of the field as defined in the form's schema.
@@ -21,7 +29,7 @@ import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
  * @constructor
  */
 export default function ControlledTextField<T extends FieldValues>(
-  {form, name, label, type = "text", ...props}: { form: UseFormReturn<T>; name: Path<T>; label: string; type?: string } & TextFieldProps
+  { form, name, label, type = "text", ...props }: ControlledTextFieldProps<T>,
 ): JSX.Element {
   return (
     <Controller
