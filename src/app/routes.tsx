@@ -16,7 +16,7 @@ const ResetPassword = lazy(() => import("@/app/pages/auth/ResetPassword"));
 const Home = lazy(() => import("@/app/pages/Home"));
 const Users = lazy(() => import("@/app/pages/Users"));
 const Forum = lazy(() => import("@/app/pages/Forum"));
-//const Profile = lazy(() => import("@/app/pages/profile/Profile"));
+const Profile = lazy(() => import("@/app/pages/profile/Profile"));
 const NotFound = lazy(() => import("@/app/pages/NotFound"));
 
 /**
@@ -77,6 +77,22 @@ export const routes: RouteObject[] = [
         element: (
           <ProtectedRoute roles={["admin", "manager"]}>
             <Users />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "users/:userId/profile",
+        element: (
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         ),
       },

@@ -29,8 +29,6 @@ export function getAccessToken(): string | null {
   }
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
-
 /**
  * An Axios instance pre-configured with custom settings for making HTTP requests.
  *

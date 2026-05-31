@@ -150,6 +150,53 @@
       "updatedAt": "Zaktualizowano",
       "actions": "Akcje"
     },
+    "columns": {
+      "name": "Imię i nazwisko",
+      "roles": "Role",
+      "status": "Status",
+      "verified": "Zweryfikowany",
+      "actions": "Akcje"
+    },
+    "statuses": {
+      "active": "Aktywny",
+      "blocked": "Zablokowany",
+      "deleted": "Usunięty",
+      "suspended": "Zawieszony",
+      "pending_verification": "Oczekuje na weryfikację"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "manager": "Menedżer",
+      "user": "Użytkownik"
+    },
+    "actions": {
+      "view": "Zobacz",
+      "ban": "Zablokuj",
+      "delete": "Usuń",
+      "restore": "Przywróć",
+      "suspend": "Zawieś",
+      "unsuspend": "Cofnij zawieszenie"
+    },
+    "tooltips": {
+      "adminOnlyProfiles": "Tylko administratorzy mogą przeglądać profile",
+      "deletedCannotBeSuspended": "Usuniętych użytkowników nie można zawieszać",
+      "deleteNotAllowed": "Nie masz uprawnień, aby usunąć tego użytkownika",
+      "suspendNotAllowed": "Nie masz uprawnień, aby zawiesić tego użytkownika"
+    },
+    "confirm": {
+      "deleteTitle": "Usunąć użytkownika?",
+      "deleteMessage": "Czy na pewno chcesz usunąć {{name}}? Użytkownik pozostanie w tabeli jako usunięty.",
+      "restoreTitle": "Przywrócić użytkownika?",
+      "restoreMessage": "Czy na pewno chcesz przywrócić {{name}}?",
+      "suspendTitle": "Zawiesić użytkownika?",
+      "suspendMessage": "Czy na pewno chcesz zawiesić {{name}}?",
+      "unsuspendTitle": "Cofnąć zawieszenie?",
+      "unsuspendMessage": "Czy na pewno chcesz cofnąć zawieszenie użytkownika {{name}}?"
+    },
+    "errors": {
+      "load": "Nie udało się załadować użytkowników",
+      "update": "Nie udało się zaktualizować użytkownika"
+    },
     "form": {
       "name": "Imię i nazwisko",
       "email": "E-mail",
@@ -290,7 +337,109 @@
     "changePassword": "Zmień hasło",
     "avatar": "Avatar",
     "uploadNew": "Prześlij nowy",
-    "remove": "Usuń"
+    "remove": "Usuń",
+    "loadingOwn": "Ładowanie Twojego profilu",
+    "loadingUser": "Ładowanie profilu użytkownika {{userId}}",
+    "incomplete": "Odpowiedź profilu jest niepełna. Brakuje: {{fields}}.",
+    "errors": {
+      "load": "Nie udało się załadować profilu",
+      "update": "Nie udało się zaktualizować profilu",
+      "deleteAccount": "Nie udało się usunąć konta"
+    },
+    "deleteAccount": {
+      "title": "Usuń konto",
+      "description": "Konto zostanie oznaczone jako usunięte, a bieżąca sesja zostanie zakończona. Do przywrócenia dostępu będzie potrzebny administrator.",
+      "button": "Usuń moje konto",
+      "confirmTitle": "Usunąć Twoje konto?",
+      "confirmMessage": "Czy na pewno chcesz usunąć swoje konto? Zostaniesz natychmiast wylogowany.",
+      "confirmButton": "Usuń konto"
+    },
+    "sections": {
+      "account": "Konto",
+      "profile": "Profil",
+      "security": "Zabezpieczenia",
+      "preferences": "Preferencje",
+      "connectedAccounts": "Połączone konta",
+      "compliance": "Zgody"
+    },
+    "labels": {
+      "accounts": "Konta",
+      "avatarUrl": "URL avatara",
+      "bio": "Bio",
+      "city": "Miasto",
+      "country": "Kraj",
+      "created": "Utworzono",
+      "dateOfBirth": "Data urodzenia",
+      "displayName": "Nazwa wyświetlana",
+      "email": "E-mail",
+      "emailNotifications": "Powiadomienia e-mail",
+      "emailPrivacy": "Prywatność e-maila",
+      "featureGates": "Flagi funkcji",
+      "firstName": "Imię",
+      "gender": "Płeć",
+      "language": "Język",
+      "lastFailedLogin": "Ostatnie nieudane logowanie",
+      "lastLogin": "Ostatnie logowanie",
+      "lastLoginIp": "IP ostatniego logowania",
+      "lastName": "Nazwisko",
+      "linkedinUrl": "URL LinkedIn",
+      "location": "Lokalizacja",
+      "lockedUntil": "Zablokowany do",
+      "marketing": "Marketing",
+      "passwordUpdated": "Hasło zaktualizowano",
+      "phone": "Telefon",
+      "preferredLanguage": "Preferowany język",
+      "privacyAccepted": "Prywatność zaakceptowana",
+      "roles": "Role",
+      "signupIp": "IP rejestracji",
+      "smsNotifications": "Powiadomienia SMS",
+      "state": "Region",
+      "statusChanged": "Status zmieniono",
+      "tenant": "Tenant",
+      "termsAccepted": "Regulamin zaakceptowany",
+      "termsVersion": "Wersja regulaminu",
+      "theme": "Motyw",
+      "timezone": "Strefa czasowa",
+      "twoFactor": "Dwuetapowe uwierzytelnianie",
+      "updated": "Zaktualizowano",
+      "userAgent": "User agent",
+      "userId": "ID użytkownika",
+      "zip": "Kod pocztowy"
+    },
+    "values": {
+      "authProvider": "Dostawca logowania: {{provider}}",
+      "changedBy": "{{date}} przez {{actor}}",
+      "disabled": "Wyłączone",
+      "emailNotVerified": "E-mail niezweryfikowany",
+      "emailVerified": "E-mail zweryfikowany",
+      "enabled": "Włączone",
+      "failedAttempts": "Nieudane próby logowania: {{count}}",
+      "noBio": "Nie podano bio.",
+      "noPreference": "Brak preferencji",
+      "none": "Brak",
+      "noneConnected": "Brak połączonych kont",
+      "notConnected": "Nie połączono",
+      "off": "Wył.",
+      "on": "Wł.",
+      "twoFactorDisabled": "2FA wyłączone",
+      "twoFactorEnabled": "2FA włączone",
+      "totalLogins": "Łączna liczba logowań: {{count}}",
+      "unknown": "Nieznane",
+      "unverified": "Niezweryfikowano",
+      "verified": "Zweryfikowano"
+    },
+    "gender": {
+      "female": "Kobieta",
+      "male": "Mężczyzna",
+      "notSpecified": "Nie podano",
+      "other": "Inna",
+      "preferNotToSay": "Wolę nie podawać"
+    },
+    "privacy": {
+      "private": "Prywatny",
+      "public": "Publiczny",
+      "workspace": "W obszarze roboczym"
+    }
   },
   "theme": {
     "light": "Jasny",

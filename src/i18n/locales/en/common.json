@@ -151,6 +151,53 @@
       "updatedAt": "Updated",
       "actions": "Actions"
     },
+    "columns": {
+      "name": "Name",
+      "roles": "Roles",
+      "status": "Status",
+      "verified": "Verified",
+      "actions": "Actions"
+    },
+    "statuses": {
+      "active": "Active",
+      "blocked": "Blocked",
+      "deleted": "Deleted",
+      "suspended": "Suspended",
+      "pending_verification": "Pending"
+    },
+    "roles": {
+      "admin": "Admin",
+      "manager": "Manager",
+      "user": "User"
+    },
+    "actions": {
+      "view": "View",
+      "ban": "Ban",
+      "delete": "Delete",
+      "restore": "Restore",
+      "suspend": "Suspend",
+      "unsuspend": "Unsuspend"
+    },
+    "tooltips": {
+      "adminOnlyProfiles": "Only admins can view profiles",
+      "deletedCannotBeSuspended": "Deleted users cannot be suspended",
+      "deleteNotAllowed": "You do not have permission to delete this user",
+      "suspendNotAllowed": "You do not have permission to suspend this user"
+    },
+    "confirm": {
+      "deleteTitle": "Delete user?",
+      "deleteMessage": "Are you sure you want to delete {{name}}? The user will stay in the table as deleted.",
+      "restoreTitle": "Restore user?",
+      "restoreMessage": "Are you sure you want to restore {{name}}?",
+      "suspendTitle": "Suspend user?",
+      "suspendMessage": "Are you sure you want to suspend {{name}}?",
+      "unsuspendTitle": "Unsuspend user?",
+      "unsuspendMessage": "Are you sure you want to unsuspend {{name}}?"
+    },
+    "errors": {
+      "load": "Failed to load users",
+      "update": "Failed to update user"
+    },
     "form": {
       "name": "Full name",
       "email": "Email",
@@ -306,7 +353,109 @@
     "changePassword": "Change password",
     "avatar": "Avatar",
     "uploadNew": "Upload new",
-    "remove": "Remove"
+    "remove": "Remove",
+    "loadingOwn": "Loading your profile",
+    "loadingUser": "Loading profile for user ID {{userId}}",
+    "incomplete": "Profile response is incomplete. Missing: {{fields}}.",
+    "errors": {
+      "load": "Failed to load profile",
+      "update": "Failed to update profile",
+      "deleteAccount": "Failed to delete account"
+    },
+    "deleteAccount": {
+      "title": "Delete account",
+      "description": "Soft delete your account and end the current session. You will need an administrator to restore access.",
+      "button": "Delete my account",
+      "confirmTitle": "Delete your account?",
+      "confirmMessage": "Are you sure you want to delete your account? You will be signed out immediately.",
+      "confirmButton": "Delete account"
+    },
+    "sections": {
+      "account": "Account",
+      "profile": "Profile",
+      "security": "Security",
+      "preferences": "Preferences",
+      "connectedAccounts": "Connected accounts",
+      "compliance": "Compliance"
+    },
+    "labels": {
+      "accounts": "Accounts",
+      "avatarUrl": "Avatar URL",
+      "bio": "Bio",
+      "city": "City",
+      "country": "Country",
+      "created": "Created",
+      "dateOfBirth": "Date of birth",
+      "displayName": "Display name",
+      "email": "Email",
+      "emailNotifications": "Email notifications",
+      "emailPrivacy": "Email privacy",
+      "featureGates": "Feature gates",
+      "firstName": "First name",
+      "gender": "Gender",
+      "language": "Language",
+      "lastFailedLogin": "Last failed login",
+      "lastLogin": "Last login",
+      "lastLoginIp": "Last login IP",
+      "lastName": "Last name",
+      "linkedinUrl": "LinkedIn URL",
+      "location": "Location",
+      "lockedUntil": "Locked until",
+      "marketing": "Marketing",
+      "passwordUpdated": "Password updated",
+      "phone": "Phone",
+      "preferredLanguage": "Preferred language",
+      "privacyAccepted": "Privacy accepted",
+      "roles": "Roles",
+      "signupIp": "Signup IP",
+      "smsNotifications": "SMS notifications",
+      "state": "State",
+      "statusChanged": "Status changed",
+      "tenant": "Tenant",
+      "termsAccepted": "Terms accepted",
+      "termsVersion": "Terms version",
+      "theme": "Theme",
+      "timezone": "Timezone",
+      "twoFactor": "Two-factor",
+      "updated": "Updated",
+      "userAgent": "User agent",
+      "userId": "User ID",
+      "zip": "Zip"
+    },
+    "values": {
+      "authProvider": "Auth provider: {{provider}}",
+      "changedBy": "{{date}} by {{actor}}",
+      "disabled": "Disabled",
+      "emailNotVerified": "Email not verified",
+      "emailVerified": "Email verified",
+      "enabled": "Enabled",
+      "failedAttempts": "{{count}} failed login attempts",
+      "noBio": "No bio provided.",
+      "noPreference": "No preference",
+      "none": "None",
+      "noneConnected": "None connected",
+      "notConnected": "Not connected",
+      "off": "Off",
+      "on": "On",
+      "twoFactorDisabled": "2FA disabled",
+      "twoFactorEnabled": "2FA enabled",
+      "totalLogins": "{{count}} total logins",
+      "unknown": "Unknown",
+      "unverified": "Unverified",
+      "verified": "Verified"
+    },
+    "gender": {
+      "female": "Female",
+      "male": "Male",
+      "notSpecified": "Not specified",
+      "other": "Other",
+      "preferNotToSay": "Prefer not to say"
+    },
+    "privacy": {
+      "private": "Private",
+      "public": "Public",
+      "workspace": "Workspace"
+    }
   },
 
   "theme": {

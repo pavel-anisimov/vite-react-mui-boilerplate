@@ -1,11 +1,11 @@
 # Vite + React + TypeScript + MUI Boilerplate
 
 [![CI](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/pavel-anisimov/vite-react-mui-boilerplate/actions/workflows/ci.yml)
-![Node](https://img.shields.io/badge/node-20.x-green)
-![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)
+![Node](https://img.shields.io/badge/node-22.x-green)
+![TypeScript](https://img.shields.io/badge/typescript-6.x-blue)
 ![React](https://img.shields.io/badge/react-19.x-61dafb)
-![Vite](https://img.shields.io/badge/vite-6.x-646cff)
-![MUI](https://img.shields.io/badge/mui-7.x-007FFF)
+![Vite](https://img.shields.io/badge/vite-8.x-646cff)
+![MUI](https://img.shields.io/badge/mui-9.x-007FFF)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Code style: Biome](https://img.shields.io/badge/code%20style-biome-ff69b4)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
@@ -24,8 +24,8 @@ A modern boilerplate project built with **Vite 8**, **React 19**, **TypeScript 6
 ---
 
 ## 🔧 Requirements
-- Node.js **20.x** (see `.nvmrc`)
-- npm 10+
+- Node.js **22.x** (see `.nvmrc`)
+- npm 11+
 
 ---
 
@@ -80,3 +80,4 @@ MIT — see [LICENSE](LICENSE).
 - [ ] CRUD example (e.g., posts) with MUI DataGrid + forms
 - [ ] OpenAPI → TypeScript client generation
 - [ ] Deployment configs (Docker Compose, optional Kubernetes)
+

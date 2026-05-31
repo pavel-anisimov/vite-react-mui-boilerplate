@@ -146,6 +146,53 @@
       "updatedAt": "Обновлено",
       "actions": "Действия"
     },
+    "columns": {
+      "name": "Имя",
+      "roles": "Роли",
+      "status": "Статус",
+      "verified": "Подтверждён",
+      "actions": "Действия"
+    },
+    "statuses": {
+      "active": "Активен",
+      "blocked": "Заблокирован",
+      "deleted": "Удалён",
+      "suspended": "Приостановлен",
+      "pending_verification": "Ожидает подтверждения"
+    },
+    "roles": {
+      "admin": "Администратор",
+      "manager": "Менеджер",
+      "user": "Пользователь"
+    },
+    "actions": {
+      "view": "Просмотр",
+      "ban": "Заблокировать",
+      "delete": "Удалить",
+      "restore": "Восстановить",
+      "suspend": "Приостановить",
+      "unsuspend": "Снять приостановку"
+    },
+    "tooltips": {
+      "adminOnlyProfiles": "Только администраторы могут просматривать профили",
+      "deletedCannotBeSuspended": "Удалённых пользователей нельзя приостанавливать",
+      "deleteNotAllowed": "У вас нет прав удалить этого пользователя",
+      "suspendNotAllowed": "У вас нет прав приостановить этого пользователя"
+    },
+    "confirm": {
+      "deleteTitle": "Удалить пользователя?",
+      "deleteMessage": "Вы уверены, что хотите удалить {{name}}? Пользователь останется в таблице как удалённый.",
+      "restoreTitle": "Восстановить пользователя?",
+      "restoreMessage": "Вы уверены, что хотите восстановить {{name}}?",
+      "suspendTitle": "Приостановить пользователя?",
+      "suspendMessage": "Вы уверены, что хотите приостановить {{name}}?",
+      "unsuspendTitle": "Снять приостановку?",
+      "unsuspendMessage": "Вы уверены, что хотите снять приостановку с {{name}}?"
+    },
+    "errors": {
+      "load": "Не удалось загрузить пользователей",
+      "update": "Не удалось обновить пользователя"
+    },
     "form": {
       "name": "Полное имя",
       "email": "E-mail",
@@ -286,7 +333,109 @@
     "changePassword": "Сменить пароль",
     "avatar": "Аватар",
     "uploadNew": "Загрузить новый",
-    "remove": "Удалить"
+    "remove": "Удалить",
+    "loadingOwn": "Загрузка вашего профиля",
+    "loadingUser": "Загрузка профиля пользователя {{userId}}",
+    "incomplete": "Ответ профиля неполный. Отсутствует: {{fields}}.",
+    "errors": {
+      "load": "Не удалось загрузить профиль",
+      "update": "Не удалось обновить профиль",
+      "deleteAccount": "Не удалось удалить аккаунт"
+    },
+    "deleteAccount": {
+      "title": "Удалить аккаунт",
+      "description": "Аккаунт будет помечен как удалённый, а текущая сессия завершится. Для восстановления доступа потребуется администратор.",
+      "button": "Удалить мой аккаунт",
+      "confirmTitle": "Удалить ваш аккаунт?",
+      "confirmMessage": "Вы уверены, что хотите удалить свой аккаунт? Вы сразу выйдете из системы.",
+      "confirmButton": "Удалить аккаунт"
+    },
+    "sections": {
+      "account": "Аккаунт",
+      "profile": "Профиль",
+      "security": "Безопасность",
+      "preferences": "Предпочтения",
+      "connectedAccounts": "Подключённые аккаунты",
+      "compliance": "Согласия"
+    },
+    "labels": {
+      "accounts": "Аккаунты",
+      "avatarUrl": "URL аватара",
+      "bio": "О себе",
+      "city": "Город",
+      "country": "Страна",
+      "created": "Создано",
+      "dateOfBirth": "Дата рождения",
+      "displayName": "Отображаемое имя",
+      "email": "E-mail",
+      "emailNotifications": "Уведомления по e-mail",
+      "emailPrivacy": "Приватность e-mail",
+      "featureGates": "Фичи",
+      "firstName": "Имя",
+      "gender": "Пол",
+      "language": "Язык",
+      "lastFailedLogin": "Последняя неудачная попытка входа",
+      "lastLogin": "Последний вход",
+      "lastLoginIp": "IP последнего входа",
+      "lastName": "Фамилия",
+      "linkedinUrl": "URL LinkedIn",
+      "location": "Местоположение",
+      "lockedUntil": "Заблокирован до",
+      "marketing": "Маркетинг",
+      "passwordUpdated": "Пароль обновлён",
+      "phone": "Телефон",
+      "preferredLanguage": "Предпочитаемый язык",
+      "privacyAccepted": "Приватность принята",
+      "roles": "Роли",
+      "signupIp": "IP регистрации",
+      "smsNotifications": "SMS-уведомления",
+      "state": "Регион",
+      "statusChanged": "Статус изменён",
+      "tenant": "Тенант",
+      "termsAccepted": "Условия приняты",
+      "termsVersion": "Версия условий",
+      "theme": "Тема",
+      "timezone": "Часовой пояс",
+      "twoFactor": "Двухфакторная защита",
+      "updated": "Обновлено",
+      "userAgent": "User agent",
+      "userId": "ID пользователя",
+      "zip": "Индекс"
+    },
+    "values": {
+      "authProvider": "Провайдер входа: {{provider}}",
+      "changedBy": "{{date}}, {{actor}}",
+      "disabled": "Отключено",
+      "emailNotVerified": "E-mail не подтверждён",
+      "emailVerified": "E-mail подтверждён",
+      "enabled": "Включено",
+      "failedAttempts": "Неудачных попыток входа: {{count}}",
+      "noBio": "Описание не указано.",
+      "noPreference": "Без предпочтений",
+      "none": "Нет",
+      "noneConnected": "Нет подключённых аккаунтов",
+      "notConnected": "Не подключено",
+      "off": "Выкл.",
+      "on": "Вкл.",
+      "twoFactorDisabled": "2FA отключена",
+      "twoFactorEnabled": "2FA включена",
+      "totalLogins": "Всего входов: {{count}}",
+      "unknown": "Неизвестно",
+      "unverified": "Не подтверждён",
+      "verified": "Подтверждён"
+    },
+    "gender": {
+      "female": "Женский",
+      "male": "Мужской",
+      "notSpecified": "Не указано",
+      "other": "Другое",
+      "preferNotToSay": "Предпочитаю не указывать"
+    },
+    "privacy": {
+      "private": "Приватно",
+      "public": "Публично",
+      "workspace": "В рабочем пространстве"
+    }
   },
   "theme": {
     "light": "Светлая",
