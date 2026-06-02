@@ -39,7 +39,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import type { PaginatedResponse, User as ApiUser, UserStatus } from "@/api/types";
 
 // ---------- Types ----------
-type UserRowStatus = Exclude<UserStatus, "deleted">;
+type UserRowStatus = Extract<UserStatus, "active" | "blocked" | "pending" | "pending_verification" | "suspended" | "deactivated" | "deleted">;
 
 type UserRow = {
   id: string;
@@ -168,9 +168,8 @@ export default function Users(): JSX.Element {
         flex: 0.7,
         minWidth: 160,
         renderCell: (params) => {
-          const status: UserRowStatus = params.row.suspended ? "suspended" : params.row.status;
-          const color: "success" | "error" | "warning" =
-            status === "active" ? "success" : status === "blocked" || status === "suspended" ? "error" : "warning";
+          const status = params.row.status;
+          const color = statusColor(status);
           return (
             <Stack
               direction="row"
@@ -179,7 +178,6 @@ export default function Users(): JSX.Element {
               sx={{ height: "100%", flexWrap: "wrap", alignItems: "center", alignContent: "center" }}
             >
               <Chip size="small" color={color} label={userStatusLabel(status, t11n)} />
-              {params.row.deleted && <Chip size="small" variant="outlined" color="default" label={t11n("users.statuses.deleted")} />}
             </Stack>
           );
         },
@@ -382,7 +380,7 @@ function normalizeUser(value: ApiUser): UserRow {
     name,
     email: value.email,
     roles: value.roles ?? [],
-    status: userStatusField(value.status, suspended),
+    status: userStatusField(value.status, suspended, deleted),
     emailVerified: value.emailVerified ?? value.email_verified ?? false,
     deleted,
     suspended,
@@ -393,13 +391,29 @@ function isNonEmptyString(value: string | null | undefined): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function userStatusField(status: UserStatus | undefined, suspended: boolean): UserRowStatus {
+function userStatusField(status: UserStatus | undefined, suspended: boolean, deleted: boolean): UserRowStatus {
+  if (deleted) return "deleted";
   if (suspended) return "suspended";
-  if (status === "active" || status === "blocked" || status === "pending_verification" || status === "suspended") {
+  if (
+    status === "active" ||
+    status === "blocked" ||
+    status === "pending" ||
+    status === "pending_verification" ||
+    status === "suspended" ||
+    status === "deactivated" ||
+    status === "deleted"
+  ) {
     return status;
   }
 
   return "active";
+}
+
+function statusColor(status: UserRowStatus): "default" | "success" | "error" | "warning" {
+  if (status === "active") return "success";
+  if (status === "pending" || status === "pending_verification") return "warning";
+  if (status === "deleted" || status === "deactivated") return "default";
+  return "error";
 }
 
 function suspendTooltip(user: UserRow, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {

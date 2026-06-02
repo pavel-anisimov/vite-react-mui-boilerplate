@@ -150,7 +150,7 @@
       "name": "Имя",
       "roles": "Роли",
       "status": "Статус",
-      "verified": "Подтверждён",
+      "verified": "Подтверждение",
       "actions": "Действия"
     },
     "statuses": {
@@ -158,6 +158,8 @@
       "blocked": "Заблокирован",
       "deleted": "Удалён",
       "suspended": "Приостановлен",
+      "pending": "Ожидает",
+      "deactivated": "Деактивирован",
       "pending_verification": "Ожидает подтверждения"
     },
     "roles": {

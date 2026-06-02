@@ -296,7 +296,7 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
                   <Typography variant="h4" sx={{ wordBreak: "break-word" }}>
                     {user.display_name || fullName || user.email || t("profile.title")}
                   </Typography>
-                  <StatusChip status={user.status} />
+                  <StatusChip status={user.status} t={t} />
                   {user.email_verified ? (
                     <Chip size="small" color="success" icon={<CheckCircleOutlined />} label={t("profile.values.emailVerified")} />
                   ) : (
@@ -782,11 +782,11 @@ function DetailRow({ icon, label, value }: { icon: ReactNode; label: string; val
   );
 }
 
-function StatusChip({ status = "active" }: { status?: UserStatus }): JSX.Element {
+function StatusChip({ status = "active", t }: { status?: UserStatus; t: TFunction<"common"> }): JSX.Element {
   const color: "default" | "error" | "success" | "warning" =
     status === "active" ? "success" : status === "pending_verification" ? "warning" : "error";
 
-  return <Chip size="small" color={color} label={titleCase(status.replaceAll("_", " "))} />;
+  return <Chip size="small" color={color} label={t(`users.statuses.${status}`, { defaultValue: titleCase(status.replaceAll("_", " ")) })} />;
 }
 
 function ChipList({ values }: { values: string[] }): JSX.Element {

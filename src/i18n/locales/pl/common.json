@@ -162,6 +162,8 @@
       "blocked": "Zablokowany",
       "deleted": "Usunięty",
       "suspended": "Zawieszony",
+      "pending": "Oczekuje",
+      "deactivated": "Dezaktywowany",
       "pending_verification": "Oczekuje na weryfikację"
     },
     "roles": {
