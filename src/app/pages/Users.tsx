@@ -172,7 +172,12 @@ export default function Users(): JSX.Element {
           const color: "success" | "error" | "warning" =
             status === "active" ? "success" : status === "blocked" || status === "suspended" ? "error" : "warning";
           return (
-            <Stack direction="row" spacing={0.75} useFlexGap sx={{ flexWrap: "wrap", alignItems: "center" }}>
+            <Stack
+              direction="row"
+              spacing={0.75}
+              useFlexGap
+              sx={{ height: "100%", flexWrap: "wrap", alignItems: "center", alignContent: "center" }}
+            >
               <Chip size="small" color={color} label={userStatusLabel(status, t11n)} />
               {params.row.deleted && <Chip size="small" variant="outlined" color="default" label={t11n("users.statuses.deleted")} />}
             </Stack>
