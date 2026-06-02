@@ -9,10 +9,11 @@ export type User = {
   first_name?: string | null;
   last_name?: string | null;
   status?: UserStatus;
+  deleted?: boolean;
+  deleted_at?: string | null;
   emailVerified?: boolean;
   email_verified?: boolean;
   roles?: string[];
-  deleted?: boolean;
   is_deleted?: boolean;
   suspended?: boolean;
   is_suspended?: boolean;
@@ -24,12 +25,14 @@ export type UserProfile = User & {
   first_name: string;
   last_name: string;
   status: UserStatus;
-  status_changed_at: string;
-  status_changed_by: string;
+  deleted: boolean;
+  deleted_at: string | null;
+  status_changed_at: string | null;
+  status_changed_by: string | null;
   email_verified: boolean;
   email_verified_at: string | null;
   roles: string[];
-  tenant_id: string;
+  tenant_id: string | null;
   created_at: string;
   updated_at: string;
   last_login_at: string;
@@ -41,8 +44,8 @@ export type UserProfile = User & {
     locked_until: string | null;
   };
   profile: {
-    gender: string;
-    date_of_birth: string;
+    gender: string | null;
+    date_of_birth: string | null;
     location: {
       city: string;
       state: string;
@@ -67,10 +70,10 @@ export type UserProfile = User & {
     privacy: Record<string, string>;
   };
   metadata: {
-    signup_ip: string;
-    last_login_ip: string;
+    signup_ip: string | null;
+    last_login_ip: string | null;
     login_count: number;
-    user_agent: string;
+    user_agent: string | null;
   };
   external_ids: Record<string, string | null>;
   auth_provider: string;

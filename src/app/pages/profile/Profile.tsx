@@ -92,77 +92,6 @@ type ProfileFormValues = {
   email_privacy: string;
 };
 
-const MOCK_USER_PROFILE: UserProfile = {
-  id: "u18",
-  email: "rita@example.com",
-  username: "rita",
-  display_name: "Riri",
-  first_name: "Rita",
-  last_name: "Costa",
-  status: "suspended",
-  status_changed_at: "2025-09-01T12:00:00Z",
-  status_changed_by: "system",
-  email_verified: false,
-  email_verified_at: null,
-  roles: ["user"],
-  tenant_id: "t1",
-  created_at: "2025-09-01T10:00:00Z",
-  updated_at: "2025-09-02T14:00:00Z",
-  last_login_at: "2025-09-03T12:30:00Z",
-  security: {
-    two_factor_enabled: true,
-    failed_login_count: 0,
-    last_failed_login_at: null,
-    password_updated_at: "2025-09-01T10:00:00Z",
-    locked_until: null,
-  },
-  profile: {
-    gender: "female",
-    date_of_birth: "1998-01-10",
-    location: {
-      city: "Lisbon",
-      state: "LX",
-      country: "Portugal",
-      zip: "1000-001",
-    },
-    language: "pt",
-    timezone: "Europe/Lisbon",
-    avatar_url: "https://example.com/avatars/rita.png",
-    bio: "Bio for Rita.",
-    social: {
-      linkedin: "https://linkedin.com/in/rita",
-    },
-    phone_number: "+1-202-555-0118",
-    phone_verified: true,
-  },
-  preferences: {
-    theme: "dark",
-    notifications: {
-      email: true,
-      sms: true,
-      marketing: true,
-    },
-    privacy: {
-      email: "private",
-    },
-  },
-  metadata: {
-    signup_ip: "192.168.18.10",
-    last_login_ip: "192.168.18.11",
-    login_count: 90,
-    user_agent: "Mozilla/5.0",
-  },
-  external_ids: {
-    google: null,
-    github: null,
-  },
-  auth_provider: "password",
-  terms_version: "v1.2",
-  terms_accepted_at: "2025-09-01T10:00:05Z",
-  privacy_accepted_at: "2025-09-01T10:00:05Z",
-  feature_gates: [],
-};
-
 const EMPTY_FORM_VALUES: ProfileFormValues = {
   display_name: "",
   first_name: "",
@@ -234,7 +163,6 @@ export default function Profile(): JSX.Element {
     queryKey: isOwnProfile ? ["user-profile", "me"] : ["user-profile", requestedUserId],
     queryFn: () => (isOwnProfile ? getMyProfile() : getUserProfile(requestedUserId!)),
     enabled: canViewRequestedProfile,
-    placeholderData: requestedUserId === MOCK_USER_PROFILE.id ? MOCK_USER_PROFILE : undefined,
     refetchOnMount: "always",
     refetchOnReconnect: "always",
     refetchOnWindowFocus: false,
@@ -1040,7 +968,7 @@ function trimToNull(value: string): string | null {
   return trimmed ? trimmed : null;
 }
 
-function toGenderValue(value?: string): GenderValue {
+function toGenderValue(value?: string | null): GenderValue {
   if (value === "male" || value === "female" || value === "other" || value === "prefer_not_to_say") {
     return value;
   }
@@ -1048,7 +976,7 @@ function toGenderValue(value?: string): GenderValue {
   return "";
 }
 
-function toPreferredLanguageValue(value?: string): PreferredLanguageValue {
+function toPreferredLanguageValue(value?: string | null): PreferredLanguageValue {
   if (value === "en" || value === "ru" || value === "pl") {
     return value;
   }
