@@ -54,7 +54,7 @@ import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
-import { deleteMyAccount, getMyProfile, getUserProfile, updateMyProfile } from "@/api/profile";
+import { deleteMyAccount, getAdminUserProfile, getCurrentUserProfile, updateCurrentUserProfile } from "@/api/profile";
 import PageContainer from "@/components/PageContainer";
 import ControlledTextField from "@/components/form/ControlledTextField";
 import { LANG_LABELS, SUPPORTED_LANGS } from "@/i18n/langConfig";
@@ -116,19 +116,23 @@ const EMPTY_FORM_VALUES: ProfileFormValues = {
   email_privacy: "private",
 };
 
-export default function Profile(): JSX.Element {
+type FullProfileMode = "own" | "admin";
+
+export default function MyProfilePage(): JSX.Element {
+  return <FullUserProfilePage mode="own" />;
+}
+
+export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.Element {
   const { t } = useTranslation("common");
   const { refreshUser, signOut, user: authUser } = useAuth();
-  const { userId } = useParams<{ userId?: string }>();
+  const { id } = useParams<{ id?: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [editMode, setEditMode] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const authRoles = (authUser?.roles ?? []).map((role) => role.toLowerCase());
-  const isAdmin = authRoles.includes("admin");
-  const isOwnProfile = !userId;
-  const requestedUserId = userId ?? authUser?.id;
-  const canViewRequestedProfile = isOwnProfile || Boolean(userId && isAdmin);
+  const isOwnProfile = mode === "own";
+  const requestedUserId = isOwnProfile ? authUser?.id : id;
+  const canViewRequestedProfile = isOwnProfile || Boolean(id);
   const canEditProfile = isOwnProfile;
   const form = useForm<ProfileFormValues>({
     defaultValues: EMPTY_FORM_VALUES,
@@ -141,7 +145,7 @@ export default function Profile(): JSX.Element {
     isFetching,
   } = useQuery({
     queryKey: isOwnProfile ? ["user-profile", "me"] : ["user-profile", requestedUserId],
-    queryFn: () => (isOwnProfile ? getMyProfile() : getUserProfile(requestedUserId!)),
+    queryFn: () => (isOwnProfile ? getCurrentUserProfile() : getAdminUserProfile(requestedUserId!)),
     enabled: canViewRequestedProfile,
     refetchOnMount: "always",
     refetchOnReconnect: "always",
@@ -150,7 +154,7 @@ export default function Profile(): JSX.Element {
   });
 
   const updateMutation = useMutation({
-    mutationFn: updateMyProfile,
+    mutationFn: updateCurrentUserProfile,
     onSuccess: (updatedProfile) => {
       queryClient.setQueryData(["user-profile", "me"], updatedProfile);
       void refreshUser().catch(() => undefined);
@@ -422,7 +426,7 @@ export default function Profile(): JSX.Element {
 
           <Grid size={{ xs: 12, md: 6 }}>
             <InfoCard title={t("profile.sections.connectedAccounts")} icon={<LinkOutlined />}>
-              {Object.entries(user.profile?.social ?? {}).map(([provider, href]) => (
+              {recordEntries(user.profile?.social).map(([provider, href]) => (
                 <DetailRow
                   key={provider}
                   icon={<LinkOutlined />}
@@ -430,7 +434,7 @@ export default function Profile(): JSX.Element {
                   value={href ? <ExternalLink href={href} label={href} /> : t("profile.values.notConnected")}
                 />
               ))}
-              {Object.entries(user.external_ids ?? {}).map(([provider, id]) => (
+              {recordEntries(user.external_ids).map(([provider, id]) => (
                 <DetailRow
                   key={provider}
                   icon={<FingerprintOutlined />}
@@ -438,7 +442,7 @@ export default function Profile(): JSX.Element {
                   value={id ?? t("profile.values.notConnected")}
                 />
               ))}
-              {!Object.keys(user.profile?.social ?? {}).length && !Object.keys(user.external_ids ?? {}).length ? (
+              {!recordEntries(user.profile?.social).length && !recordEntries(user.external_ids).length ? (
                 <DetailRow icon={<LinkOutlined />} label={t("profile.labels.accounts")} value={t("profile.values.noneConnected")} />
               ) : null}
             </InfoCard>
@@ -795,6 +799,10 @@ function ChipList({ values }: { values: string[] }): JSX.Element {
   );
 }
 
+function recordEntries(record: Record<string, string | null> | undefined): Array<[string, string | null]> {
+  return Object.entries(record ?? {});
+}
+
 function ExternalLink({ href, label }: { href: string; label: string }): JSX.Element {
   return (
     <Tooltip title={href}>
@@ -809,7 +817,7 @@ function booleanChip(value: boolean | undefined, trueLabel: string, falseLabel: 
   return <Chip size="small" color={value ? "success" : "default"} label={value ? trueLabel : falseLabel} />;
 }
 
-function withVerification(value: string | undefined, verified: boolean | undefined, t: TFunction<"common">): JSX.Element {
+function withVerification(value: string | null | undefined, verified: boolean | undefined, t: TFunction<"common">): JSX.Element {
   return (
     <Stack direction="row" spacing={1} useFlexGap sx={{ alignItems: "center", flexWrap: "wrap" }}>
       <Typography variant="body2">{value ?? t("profile.values.unknown")}</Typography>

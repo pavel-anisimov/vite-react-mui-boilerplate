@@ -1,4 +1,11 @@
-export type UserStatus = "active" | "blocked" | "pending_verification" | "suspended" | "deleted";
+export type UserStatus =
+  | "active"
+  | "blocked"
+  | "pending"
+  | "pending_verification"
+  | "suspended"
+  | "deactivated"
+  | "deleted";
 
 export type User = {
   id: string;
@@ -19,7 +26,29 @@ export type User = {
   is_suspended?: boolean;
 };
 
-export type UserProfile = User & {
+export type PublicUserProfile = {
+  id: string;
+  username: string;
+  display_name: string;
+  avatar_url: string | null;
+  bio: string | null;
+  public_location: {
+    city: string | null;
+    country: string | null;
+  } | null;
+  public_social: {
+    linkedin: string | null;
+    github: string | null;
+    x: string | null;
+    website: string | null;
+  };
+  badges: string[];
+  member_since: string;
+  last_seen_at: string | null;
+  profile_visibility: "public" | "private";
+};
+
+export type AdminUserProfile = User & {
   username: string;
   display_name: string;
   first_name: string;
@@ -35,29 +64,29 @@ export type UserProfile = User & {
   tenant_id: string | null;
   created_at: string;
   updated_at: string;
-  last_login_at: string;
+  last_login_at: string | null;
   security: {
     two_factor_enabled: boolean;
     failed_login_count: number;
     last_failed_login_at: string | null;
-    password_updated_at: string;
+    password_updated_at: string | null;
     locked_until: string | null;
   };
   profile: {
     gender: string | null;
     date_of_birth: string | null;
     location: {
-      city: string;
-      state: string;
-      country: string;
-      zip: string;
+      city: string | null;
+      state: string | null;
+      country: string | null;
+      zip: string | null;
     };
-    language: string;
-    timezone: string;
-    avatar_url: string;
-    bio: string;
+    language: string | null;
+    timezone: string | null;
+    avatar_url: string | null;
+    bio: string | null;
     social: Record<string, string | null>;
-    phone_number: string;
+    phone_number: string | null;
     phone_verified: boolean;
   };
   preferences: {
@@ -76,12 +105,15 @@ export type UserProfile = User & {
     user_agent: string | null;
   };
   external_ids: Record<string, string | null>;
-  auth_provider: string;
-  terms_version: string;
-  terms_accepted_at: string;
-  privacy_accepted_at: string;
+  auth_provider: "password" | "google" | "github" | string;
+  terms_version: string | null;
+  terms_accepted_at: string | null;
+  privacy_accepted_at: string | null;
   feature_gates: string[];
 };
+
+export type OwnUserProfile = AdminUserProfile;
+export type UserProfile = AdminUserProfile;
 
 export type PaginatedResponse<T> = {
   items: T[];

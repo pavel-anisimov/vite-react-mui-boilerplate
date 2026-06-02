@@ -1,8 +1,8 @@
 import http from "@/api/http";
 
-import type { UserProfile, UserStatus } from "@/api/types";
+import type { AdminUserProfile, OwnUserProfile, PublicUserProfile, UserProfile, UserStatus } from "@/api/types";
 
-export type { UserProfile, UserStatus };
+export type { AdminUserProfile, OwnUserProfile, PublicUserProfile, UserProfile, UserStatus };
 
 export type UpdateMyProfilePayload = {
   display_name?: string;
@@ -37,16 +37,32 @@ export type UpdateMyProfilePayload = {
   };
 };
 
+export async function getCurrentUserProfile(): Promise<OwnUserProfile> {
+  return http.get<OwnUserProfile>("/auth/me").then(({ data }) => data);
+}
+
+export async function updateCurrentUserProfile(payload: UpdateMyProfilePayload): Promise<OwnUserProfile> {
+  return http.patch<OwnUserProfile>("/auth/me/profile", payload).then(({ data }) => data);
+}
+
+export async function getPublicUserProfile(userId: string): Promise<PublicUserProfile> {
+  return http.get<PublicUserProfile>(`/users/${encodeURIComponent(userId)}/public`).then(({ data }) => data);
+}
+
+export async function getAdminUserProfile(userId: string): Promise<AdminUserProfile> {
+  return http.get<AdminUserProfile>(`/users/${encodeURIComponent(userId)}/profile`).then(({ data }) => data);
+}
+
 export async function getUserProfile(userId: string): Promise<UserProfile> {
-  return http.get<UserProfile>(`/users/${encodeURIComponent(userId)}/profile`).then(({ data }) => data);
+  return getAdminUserProfile(userId);
 }
 
-export async function getMyProfile(): Promise<UserProfile> {
-  return http.get<UserProfile>("/auth/me").then(({ data }) => data);
+export async function getMyProfile(): Promise<OwnUserProfile> {
+  return getCurrentUserProfile();
 }
 
-export async function updateMyProfile(payload: UpdateMyProfilePayload): Promise<UserProfile> {
-  return http.patch<UserProfile>("/auth/me/profile", payload).then(({ data }) => data);
+export async function updateMyProfile(payload: UpdateMyProfilePayload): Promise<OwnUserProfile> {
+  return updateCurrentUserProfile(payload);
 }
 
 export async function deleteMyAccount(userId: string): Promise<UserProfile> {

@@ -1,5 +1,7 @@
 import { lazy } from "react";
 
+import { Navigate } from "react-router-dom";
+
 import type { RouteObject } from "react-router-dom";
 
 import Layout from "@/app/layout/Layout";
@@ -16,7 +18,9 @@ const ResetPassword = lazy(() => import("@/app/pages/auth/ResetPassword"));
 const Home = lazy(() => import("@/app/pages/Home"));
 const Users = lazy(() => import("@/app/pages/Users"));
 const Forum = lazy(() => import("@/app/pages/Forum"));
-const Profile = lazy(() => import("@/app/pages/profile/Profile"));
+const MyProfilePage = lazy(() => import("@/app/pages/profile/Profile"));
+const PublicUserProfilePage = lazy(() => import("@/app/pages/profile/PublicUserProfilePage"));
+const AdminUserProfilePage = lazy(() => import("@/app/pages/profile/AdminUserProfilePage"));
 const NotFound = lazy(() => import("@/app/pages/NotFound"));
 
 /**
@@ -82,17 +86,29 @@ export const routes: RouteObject[] = [
       },
       {
         path: "profile",
+        element: <Navigate to="/me/profile" replace />,
+      },
+      {
+        path: "me/profile",
         element: (
           <ProtectedRoute>
-            <Profile />
+            <MyProfilePage />
           </ProtectedRoute>
         ),
       },
       {
-        path: "users/:userId/profile",
+        path: "users/:id/profile",
         element: (
           <ProtectedRoute>
-            <Profile />
+            <PublicUserProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "admin/users/:id/profile",
+        element: (
+          <ProtectedRoute roles={["admin", "manager"]}>
+            <AdminUserProfilePage />
           </ProtectedRoute>
         ),
       },

@@ -78,7 +78,7 @@ export default function Users(): JSX.Element {
   const userRoles = useMemo(() => (user?.roles ?? []).map((role) => role.toLowerCase()), [user?.roles]);
   const isAdmin = userRoles.includes("admin");
   const isManager = userRoles.includes("manager");
-  const canViewProfiles = isAdmin;
+  const canViewProfiles = isAdmin || isManager;
   const page = paginationModel.page + 1;
   const limit = paginationModel.pageSize;
   const q = searchQuery.trim();
@@ -207,7 +207,7 @@ export default function Users(): JSX.Element {
           const canSuspend = (isAdmin || isManager) && !row.deleted;
           const handleView = async () => {
             if (userId && canViewProfiles) {
-              await navigate(`/users/${encodeURIComponent(userId)}/profile`);
+              await navigate(`/admin/users/${encodeURIComponent(userId)}/profile`);
             }
           };
           const handleSuspend = () => {

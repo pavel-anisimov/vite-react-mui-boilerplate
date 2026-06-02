@@ -64,7 +64,7 @@ export default function UserMenu(): JSX.Element | null {
 
   const handleSignIn = async () => { handleClose(); await navigate("/auth/sign-in"); };
   const handleSignUp = async () => { handleClose(); await navigate("/auth/sign-up"); };
-  const handleProfile = async () => { handleClose(); await navigate("/profile"); };
+  const handleProfile = async () => { handleClose(); await navigate("/me/profile"); };
   const handleSettings = async () => { handleClose(); await navigate("/settings"); };
   const handleSignOut = async () => { handleClose(); await signOut(); await navigate("/auth/sign-in"); };
 
