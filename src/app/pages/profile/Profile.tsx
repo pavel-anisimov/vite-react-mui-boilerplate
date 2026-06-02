@@ -58,6 +58,7 @@ import { deleteMyAccount, getMyProfile, getUserProfile, updateMyProfile } from "
 import PageContainer from "@/components/PageContainer";
 import ControlledTextField from "@/components/form/ControlledTextField";
 import { LANG_LABELS, SUPPORTED_LANGS } from "@/i18n/langConfig";
+import { formatTimezoneLabel, TIMEZONE_OPTIONS } from "@/utils/timezones";
 
 import { useEffect, useState } from "react";
 
@@ -114,27 +115,6 @@ const EMPTY_FORM_VALUES: ProfileFormValues = {
   notify_marketing: false,
   email_privacy: "private",
 };
-
-const FALLBACK_TIMEZONES = [
-  "UTC",
-  "America/Los_Angeles",
-  "America/Denver",
-  "America/Chicago",
-  "America/New_York",
-  "Europe/London",
-  "Europe/Lisbon",
-  "Europe/Warsaw",
-  "Europe/Berlin",
-  "Europe/Paris",
-  "Europe/Moscow",
-  "Asia/Tokyo",
-  "Asia/Seoul",
-  "Asia/Shanghai",
-  "Asia/Singapore",
-  "Australia/Sydney",
-] as const;
-
-const TIMEZONE_OPTIONS = getTimezoneOptions();
 
 export default function Profile(): JSX.Element {
   const { t } = useTranslation("common");
@@ -404,7 +384,11 @@ export default function Profile(): JSX.Element {
               <DetailRow icon={<PhoneOutlined />} label={t("profile.labels.phone")} value={withVerification(user.profile?.phone_number, user.profile?.phone_verified, t)} />
               <DetailRow icon={<LocationOnOutlined />} label={t("profile.labels.location")} value={location || t("profile.values.unknown")} />
               <DetailRow icon={<LanguageOutlined />} label={t("profile.labels.language")} value={user.profile?.language?.toUpperCase() ?? t("profile.values.unknown")} />
-              <DetailRow icon={<PublicOutlined />} label={t("profile.labels.timezone")} value={user.profile?.timezone ?? t("profile.values.unknown")} />
+              <DetailRow
+                icon={<PublicOutlined />}
+                label={t("profile.labels.timezone")}
+                value={user.profile?.timezone ? formatTimezoneLabel(user.profile.timezone) : t("profile.values.unknown")}
+              />
               <DetailRow icon={<CalendarMonthOutlined />} label={t("profile.labels.dateOfBirth")} value={formatDate(user.profile?.date_of_birth)} />
               <DetailRow
                 icon={<LinkOutlined />}
@@ -645,8 +629,8 @@ function EditableProfileCard({
                 <TextField {...field} select fullWidth margin="normal" label={t("profile.labels.timezone")} disabled={saving}>
                   <MenuItem value="">{t("profile.values.noPreference")}</MenuItem>
                   {TIMEZONE_OPTIONS.map((timezone) => (
-                    <MenuItem key={timezone} value={timezone}>
-                      {timezone}
+                    <MenuItem key={timezone.value} value={timezone.value}>
+                      {timezone.label}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -982,12 +966,4 @@ function toPreferredLanguageValue(value?: string | null): PreferredLanguageValue
   }
 
   return "";
-}
-
-function getTimezoneOptions(): string[] {
-  if (typeof Intl.supportedValuesOf === "function") {
-    return Intl.supportedValuesOf("timeZone");
-  }
-
-  return [...FALLBACK_TIMEZONES];
 }
