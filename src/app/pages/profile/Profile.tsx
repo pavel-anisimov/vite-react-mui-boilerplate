@@ -209,7 +209,7 @@ const TIMEZONE_OPTIONS = getTimezoneOptions();
 
 export default function Profile(): JSX.Element {
   const { t } = useTranslation("common");
-  const { signOut, user: authUser } = useAuth();
+  const { refreshUser, signOut, user: authUser } = useAuth();
   const { userId } = useParams<{ userId?: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -245,6 +245,7 @@ export default function Profile(): JSX.Element {
     mutationFn: updateMyProfile,
     onSuccess: (updatedProfile) => {
       queryClient.setQueryData(["user-profile", "me"], updatedProfile);
+      void refreshUser().catch(() => undefined);
       form.reset(toProfileFormValues(updatedProfile));
       setEditMode(false);
     },

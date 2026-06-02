@@ -1,19 +1,31 @@
 // src/api/auth.ts
 import http from "@/api/http";
 
-export type LoginDto = { email: string; password: string };
-export type Tokens = { accessToken: string; refreshToken: string };
-export type User = { id: string; email: string; name?: string; roles?: string[] };
+import type {
+  AuthLoginPayload,
+  AuthLoginResponse,
+  AuthRefreshResponse,
+  User,
+} from "@/api/types";
+
+export type LoginDto = AuthLoginPayload;
+export type Tokens = Pick<AuthLoginResponse, "accessToken" | "refreshToken">;
+export type {
+  AuthLoginPayload,
+  AuthLoginResponse,
+  AuthRefreshResponse,
+  User,
+};
 
 /**
  * Authenticates a user and retrieves authentication tokens.
  *
  * @param {LoginDto} dto - The login data transfer object containing user credentials.
- * @return {Promise<Tokens>} A promise that resolves with the authentication tokens.
+ * @return {Promise<AuthLoginResponse>} A promise that resolves with tokens and the login user payload.
  */
-export async function login(dto: LoginDto): Promise<Tokens> {
+export async function login(dto: AuthLoginPayload): Promise<AuthLoginResponse> {
   return http
-    .post<Tokens>("/auth/login", dto)
+    .post<AuthLoginResponse>("/auth/login", dto)
     .then(({ data }) => data);
 }
 
@@ -36,8 +48,17 @@ export async function me(): Promise<User> {
  *
  * @param {string} refreshToken - The refresh token used to get new access
  * */
-export async function refresh(refreshToken: string): Promise<{ accessToken: string }> {
+export async function refresh(refreshToken: string): Promise<AuthRefreshResponse> {
   return http
-    .post<{ accessToken: string }>("/auth/refresh", { refreshToken })
+    .post<AuthRefreshResponse>("/auth/refresh", { refreshToken })
     .then(({ data }) => data);
+}
+
+/**
+ * Logs out the current authenticated session.
+ *
+ * @return {Promise<void>} A promise that resolves after the gateway acknowledges logout.
+ */
+export async function logout(): Promise<void> {
+  await http.post<void>("/auth/logout");
 }

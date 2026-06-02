@@ -1,11 +1,11 @@
 // src/app/pages/Users.tsx
-import type { JSX } from "react";
+import type { ChangeEvent, JSX } from "react";
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/app/providers/AuthProvider";
-import http from "@/api/http";
+import { getUsers, setUserDeleted, setUserSuspended } from "@/api/users";
 import PageContainer from "@/components/PageContainer";
 
 import {
@@ -20,73 +20,51 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  InputAdornment,
   Paper,
   Stack,
+  TextField,
   Typography,
   Tooltip,
 } from "@mui/material";
-import { DataGrid, GridColDef, QuickFilter, QuickFilterControl, Toolbar } from "@mui/x-data-grid";
+import { DataGrid, type GridColDef, type GridPaginationModel } from "@mui/x-data-grid";
 
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
 import RestoreFromTrashOutlinedIcon from "@mui/icons-material/RestoreFromTrashOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+
+import type { PaginatedResponse, User as ApiUser, UserStatus } from "@/api/types";
 
 // ---------- Types ----------
-type User = {
+type UserRowStatus = Exclude<UserStatus, "deleted">;
+
+type UserRow = {
   id: string;
   name: string;
   email: string;
   roles: string[];
-  status: "active" | "blocked" | "pending_verification" | "suspended";
+  status: UserRowStatus;
   emailVerified: boolean;
   deleted: boolean;
   suspended: boolean;
 };
 
-const FALLBACK: User[] = [
-  { id: "X", name: "John Doe", email: "john@example.com", roles: ["user"], status: "active", emailVerified: true, deleted: false, suspended: false },
-];
-
 type ToggleAction = {
   kind: "deleted" | "suspended";
   nextValue: boolean;
-  user: User;
+  user: UserRow;
 };
 
-async function fetchUsers(): Promise<User[]> {
-  const { data: payload } = await http.get<unknown>("/users");
-  const items = Array.isArray(payload)
-    ? payload
-    : (typeof payload === "object" &&
-      payload !== null &&
-      "items" in payload &&
-      Array.isArray(payload.items)
-      ? payload.items
-      : []);
+async function fetchUsers(page: number, limit: number, q: string): Promise<PaginatedResponse<UserRow>> {
+  const data = await getUsers({ page, limit, q });
 
-  return items.map(normalizeUser);
-}
-
-async function setUserDeleted({ deleted, id }: { id: string; deleted: boolean }): Promise<User> {
-  const { data } = await http.patch<unknown>(`/users/${encodeURIComponent(id)}/deleted`, { deleted });
-  return normalizeUser(data);
-}
-
-async function setUserSuspended({ id, suspended }: { id: string; suspended: boolean }): Promise<User> {
-  const { data } = await http.patch<unknown>(`/users/${encodeURIComponent(id)}/suspended`, { suspended });
-  return normalizeUser(data);
-}
-
-function UsersToolbar(): JSX.Element {
-  return (
-    <Toolbar>
-      <QuickFilter debounceMs={300}>
-        <QuickFilterControl />
-      </QuickFilter>
-    </Toolbar>
-  );
+  return {
+    ...data,
+    items: data.items.map(normalizeUser),
+  };
 }
 
 export default function Users(): JSX.Element {
@@ -95,26 +73,27 @@ export default function Users(): JSX.Element {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [pendingAction, setPendingAction] = useState<ToggleAction | null>(null);
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 20 });
+  const [searchQuery, setSearchQuery] = useState("");
   const userRoles = useMemo(() => (user?.roles ?? []).map((role) => role.toLowerCase()), [user?.roles]);
   const isAdmin = userRoles.includes("admin");
   const isManager = userRoles.includes("manager");
   const canViewProfiles = isAdmin;
-
-  const updateCachedUser = (updatedUser: User) => {
-    queryClient.setQueryData<User[]>(["users"], (currentRows) => {
-      if (!currentRows) return [updatedUser];
-      return currentRows.map((row) => row.id === updatedUser.id ? updatedUser : row);
-    });
+  const page = paginationModel.page + 1;
+  const limit = paginationModel.pageSize;
+  const q = searchQuery.trim();
+  const invalidateUsers = () => {
+    void queryClient.invalidateQueries({ queryKey: ["users"] });
   };
 
   const deleteMutation = useMutation({
     mutationFn: setUserDeleted,
-    onSuccess: updateCachedUser,
+    onSuccess: invalidateUsers,
   });
 
   const suspendMutation = useMutation({
     mutationFn: setUserSuspended,
-    onSuccess: updateCachedUser,
+    onSuccess: invalidateUsers,
   });
 
   const mutationError = deleteMutation.error ?? suspendMutation.error;
@@ -126,22 +105,23 @@ export default function Users(): JSX.Element {
     error,
     isFetching,
   } = useQuery({
-    queryKey: ["users"],
-    queryFn: fetchUsers,
-    // NOTE: placeholderData, а НЕ initialData → запрос идёт сразу
-    placeholderData: FALLBACK,
+    queryKey: ["users", page, limit, q],
+    queryFn: () => fetchUsers(page, limit, q),
+    placeholderData: (previousData) => previousData,
     staleTime: 0,
     refetchOnMount: "always",
     refetchOnWindowFocus: false,
     refetchOnReconnect: "always",
   });
 
-  // Нормализуем rows на всякий случай
-  const rows: User[] = useMemo(() => {
-    return Array.isArray(data) ? data : FALLBACK;
-  }, [data]);
+  const rows = data?.items ?? [];
+  const total = data?.total ?? 0;
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setPaginationModel((current) => ({ ...current, page: 0 }));
+  };
 
-  const columns = useMemo<GridColDef<User>[]>(
+  const columns = useMemo<GridColDef<UserRow>[]>(
     () => [
       {
         field: "name",
@@ -172,12 +152,12 @@ export default function Users(): JSX.Element {
         minWidth: 200,
         sortable: false,
         renderCell: (params) => (params.row?.roles ?? []).map((role: string) => {
-          type Colors = 'secondary' | 'info' | 'success' | 'error';
+          type Colors = "secondary" | "info" | "success" | "error";
           const color = {
-            admin: 'secondary',
-            manager: 'info',
-            user: 'success'
-          }[role] || 'error';
+            admin: "secondary",
+            manager: "info",
+            user: "success",
+          }[role] || "error";
           return <Chip key={role} color={color as Colors} label={roleLabel(role, t11n)} size="small" />;
         }),
         valueGetter: (_value, row) => (row.roles ?? []).join(", "),
@@ -188,7 +168,7 @@ export default function Users(): JSX.Element {
         flex: 0.7,
         minWidth: 160,
         renderCell: (params) => {
-          const status = params.row.suspended ? "suspended" : (params.row?.status ?? "active") as User["status"];
+          const status: UserRowStatus = params.row.suspended ? "suspended" : params.row.status;
           const color: "success" | "error" | "warning" =
             status === "active" ? "success" : status === "blocked" || status === "suspended" ? "error" : "warning";
           return (
@@ -288,9 +268,31 @@ export default function Users(): JSX.Element {
 
   return (
     <PageContainer>
-      <Typography variant="h4" gutterBottom>
-        {t11n("users.title")}
-      </Typography>
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        spacing={2}
+        sx={{ mb: 2, alignItems: { sm: "center" }, justifyContent: "space-between" }}
+      >
+        <Typography variant="h4">
+          {t11n("users.title")}
+        </Typography>
+        <TextField
+          size="small"
+          label={t11n("actions.search")}
+          value={searchQuery}
+          onChange={handleSearchChange}
+          sx={{ width: { xs: "100%", sm: 320 } }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchOutlinedIcon fontSize="small" />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+      </Stack>
 
       {isError && (
         <Alert severity="error" sx={{ mb: 2 }}>
@@ -313,18 +315,19 @@ export default function Users(): JSX.Element {
             getRowClassName={(params) => params.row.deleted ? "deleted-user-row" : ""}
             disableRowSelectionOnClick
             loading={isFetching || isMutating}
-            pageSizeOptions={[10, 25, 50]}
+            pageSizeOptions={[20, 50, 100]}
+            paginationMode="server"
+            paginationModel={paginationModel}
+            rowCount={total}
+            onPaginationModelChange={setPaginationModel}
             sx={{
               "& .deleted-user-row": {
                 opacity: 0.62,
               },
             }}
             initialState={{
-              pagination: { paginationModel: { pageSize: 10, page: 0 } },
-              // сортировку можно оставить, теперь valueGetter защищён
               sorting: { sortModel: [{ field: "name", sort: "asc" }] },
             }}
-            slots={{ toolbar: UsersToolbar }}
           />
         </Box>
       </Paper>
@@ -358,49 +361,34 @@ function roleLabel(role: string, t: (key: string, options?: Record<string, unkno
   return t(`users.roles.${role}`, { defaultValue: role });
 }
 
-function userStatusLabel(status: User["status"], t: (key: string, options?: Record<string, unknown>) => string): string {
+function userStatusLabel(status: UserRowStatus, t: (key: string, options?: Record<string, unknown>) => string): string {
   return t(`users.statuses.${status}`);
 }
 
-function normalizeUser(value: unknown): User {
-  const objectValue = isRecord(value) ? value : {};
-  const status = stringField(objectValue, "status");
-  const deleted = booleanField(objectValue, "deleted") ?? booleanField(objectValue, "is_deleted") ?? status === "deleted";
-  const suspended = booleanField(objectValue, "suspended") ?? booleanField(objectValue, "is_suspended") ?? status === "suspended";
+function normalizeUser(value: ApiUser): UserRow {
+  const fullName = [value.first_name, value.last_name].filter(isNonEmptyString).join(" ");
+  const displayName = value.name ?? value.display_name ?? fullName;
+  const name = isNonEmptyString(displayName) ? displayName : value.username ?? value.email;
+  const deleted = value.deleted ?? value.is_deleted ?? value.status === "deleted";
+  const suspended = value.suspended ?? value.is_suspended ?? value.status === "suspended";
 
   return {
-    id: stringField(objectValue, "id") ?? stringField(objectValue, "email") ?? "",
-    name: stringField(objectValue, "name") ?? stringField(objectValue, "display_name") ?? "",
-    email: stringField(objectValue, "email") ?? "",
-    roles: rolesField(objectValue),
-    status: userStatusField(status, suspended),
-    emailVerified: booleanField(objectValue, "emailVerified") ?? booleanField(objectValue, "email_verified") ?? true,
+    id: value.id || value.email,
+    name,
+    email: value.email,
+    roles: value.roles ?? [],
+    status: userStatusField(value.status, suspended),
+    emailVerified: value.emailVerified ?? value.email_verified ?? false,
     deleted,
     suspended,
   };
 }
 
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
+function isNonEmptyString(value: string | null | undefined): value is string {
+  return typeof value === "string" && value.trim().length > 0;
 }
 
-function stringField(value: Record<string, unknown>, field: string): string | undefined {
-  return typeof value[field] === "string" ? value[field] : undefined;
-}
-
-function booleanField(value: Record<string, unknown>, field: string): boolean | undefined {
-  return typeof value[field] === "boolean" ? value[field] : undefined;
-}
-
-function rolesField(value: Record<string, unknown>): string[] {
-  if (Array.isArray(value.roles)) {
-    return value.roles.filter((role: unknown): role is string => typeof role === "string");
-  }
-
-  return typeof value.role === "string" ? [value.role] : [];
-}
-
-function userStatusField(status: string | undefined, suspended: boolean): User["status"] {
+function userStatusField(status: UserStatus | undefined, suspended: boolean): UserRowStatus {
   if (suspended) return "suspended";
   if (status === "active" || status === "blocked" || status === "pending_verification" || status === "suspended") {
     return status;
@@ -409,13 +397,13 @@ function userStatusField(status: string | undefined, suspended: boolean): User["
   return "active";
 }
 
-function suspendTooltip(user: User, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {
+function suspendTooltip(user: UserRow, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {
   if (user.deleted) return t("users.tooltips.deletedCannotBeSuspended");
   if (!allowed) return t("users.tooltips.suspendNotAllowed");
   return user.suspended ? t("users.actions.unsuspend") : t("users.actions.suspend");
 }
 
-function deleteTooltip(user: User, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {
+function deleteTooltip(user: UserRow, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {
   if (!allowed) return t("users.tooltips.deleteNotAllowed");
   return user.deleted ? t("users.actions.restore") : t("users.actions.delete");
 }

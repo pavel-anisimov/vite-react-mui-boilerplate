@@ -8,14 +8,10 @@ import React, {
   useState,
 } from "react";
 
-import { login as apiLogin, me as apiMe } from "@/api/auth";
+import { login as apiLogin, logout as apiLogout, me as apiMe, refresh as apiRefresh } from "@/api/auth";
+import { getAuthTokens, setAuthTokens } from "@/api/http";
 
-type User = {
-  id: string;
-  email: string;
-  name?: string | null;
-  roles?: string[];
-};
+import type { User } from "@/api/types";
 
 /**
  * Represents the authentication context value typically used in an authentication provider or context within an application.
@@ -40,6 +36,8 @@ type AuthContextValue = {
   signUp: (email: string, password: string, name?: string) => Promise<void>;
   signOut: () => Promise<void>;
   setTokens: (accessToken: string, refreshToken?: string) => void; // for refresh from the interceptor if desired
+  refreshAccessToken: () => Promise<string | null>;
+  refreshUser: () => Promise<User | null>;
 };
 
 const AuthReactContext = createContext<AuthContextValue | undefined>(undefined);
@@ -90,30 +88,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const raw = localStorage.getItem("auth");
-    if (raw) {
-      try {
-        const parsed = JSON.parse(raw) as { accessToken?: string; refreshToken?: string };
-        if (parsed.accessToken) setAccessToken(parsed.accessToken);
-        if (parsed.refreshToken) setRefreshToken(parsed.refreshToken);
-      } catch {
-        // invalid JSON - let's clean it up just in case
-        localStorage.removeItem("auth");
-      }
-    }
+    let cancelled = false;
+    const tokens = getAuthTokens();
+
+    if (tokens?.accessToken) setAccessToken(tokens.accessToken);
+    if (tokens?.refreshToken) setRefreshToken(tokens.refreshToken);
 
     (async () => {
       try {
-        if (localStorage.getItem("auth")) {
-          const u = await apiMe();
-          setUser(u);
+        if (tokens?.accessToken) {
+          const restoredUser = await apiMe();
+          if (!cancelled) setUser(restoredUser);
         }
       } catch {
-        // token is invalid, leave logged out
+        setAuthTokens(null);
+        if (!cancelled) {
+          setUser(null);
+          setAccessToken(null);
+          setRefreshToken(null);
+        }
       } finally {
-        setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       }
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   /**
@@ -132,13 +133,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @param {string} [refresh] - Optional refresh token to be stored and utilized.
    */
   const persistTokens = useCallback((access: string, refresh?: string) => {
+    const nextRefreshToken = refresh ?? refreshToken ?? undefined;
     const next = {
       accessToken: access,
-      refreshToken: refresh ?? refreshToken ?? null,
+      refreshToken: nextRefreshToken,
     };
-    localStorage.setItem("auth", JSON.stringify(next));
+    setAuthTokens(next);
     setAccessToken(next.accessToken);
-    if (refresh ?? null) setRefreshToken(refresh!);
+    if (refresh !== undefined) setRefreshToken(refresh);
   }, [refreshToken]);
 
   /**
@@ -152,6 +154,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const setTokens = useCallback((access: string, refresh?: string) => {
     persistTokens(access, refresh);
   }, [persistTokens]);
+
+  const refreshUser = useCallback(async () => {
+    const nextUser = await apiMe();
+    setUser(nextUser);
+    return nextUser;
+  }, []);
+
+  const refreshAccessToken = useCallback(async () => {
+    if (!refreshToken) return null;
+
+    const { accessToken } = await apiRefresh(refreshToken);
+    persistTokens(accessToken);
+
+    return accessToken;
+  }, [persistTokens, refreshToken]);
 
   /**
    * A callback function to handle user sign-in functionality.
@@ -174,9 +191,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = useCallback(async (email: string, password: string) => {
     const { accessToken, refreshToken } = await apiLogin({ email, password });
     persistTokens(accessToken, refreshToken);
-    const user = await apiMe();
-    setUser(user);
-  }, [persistTokens]);
+    await refreshUser();
+  }, [persistTokens, refreshUser]);
 
   /**
    * Asynchronous callback function for initiating the user registration process.
@@ -208,11 +224,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * maintaining the security and integrity of the application.
    */
   const signOut = useCallback(async () => {
-    localStorage.removeItem("auth");
-    setUser(null);
-    setAccessToken(null);
-    setRefreshToken(null);
-  }, []);
+    try {
+      if (accessToken) {
+        await apiLogout();
+      }
+    } finally {
+      setAuthTokens(null);
+      setUser(null);
+      setAccessToken(null);
+      setRefreshToken(null);
+    }
+  }, [accessToken]);
 
   /**
    * Memoized value for the authentication context.
@@ -237,7 +259,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signOut,
     setTokens,
-  }), [user, accessToken, isLoading, signIn, signUp, signOut, setTokens]);
+    refreshAccessToken,
+    refreshUser,
+  }), [user, accessToken, isLoading, signIn, signUp, signOut, setTokens, refreshAccessToken, refreshUser]);
 
   return <AuthReactContext.Provider value={value}>{children}</AuthReactContext.Provider>;
 };
