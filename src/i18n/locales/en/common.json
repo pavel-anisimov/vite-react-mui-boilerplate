@@ -160,9 +160,8 @@
     },
     "statuses": {
       "active": "Active",
-      "blocked": "Blocked",
       "deleted": "Deleted",
-      "suspended": "Suspended",
+      "suspended": "Blocked",
       "pending": "Pending",
       "deactivated": "Deactivated",
       "pending_verification": "Pending"
@@ -177,24 +176,24 @@
       "ban": "Ban",
       "delete": "Delete",
       "restore": "Restore",
-      "suspend": "Suspend",
-      "unsuspend": "Unsuspend"
+      "suspend": "Block",
+      "unsuspend": "Unblock"
     },
     "tooltips": {
       "adminOnlyProfiles": "Only admins can view profiles",
-      "deletedCannotBeSuspended": "Deleted users cannot be suspended",
+      "deletedCannotBeSuspended": "Deleted users cannot be blocked",
       "deleteNotAllowed": "You do not have permission to delete this user",
-      "suspendNotAllowed": "You do not have permission to suspend this user"
+      "suspendNotAllowed": "You do not have permission to block this user"
     },
     "confirm": {
       "deleteTitle": "Delete user?",
       "deleteMessage": "Are you sure you want to delete {{name}}? The user will stay in the table as deleted.",
       "restoreTitle": "Restore user?",
       "restoreMessage": "Are you sure you want to restore {{name}}?",
-      "suspendTitle": "Suspend user?",
-      "suspendMessage": "Are you sure you want to suspend {{name}}?",
-      "unsuspendTitle": "Unsuspend user?",
-      "unsuspendMessage": "Are you sure you want to unsuspend {{name}}?"
+      "suspendTitle": "Block user?",
+      "suspendMessage": "Are you sure you want to block {{name}}?",
+      "unsuspendTitle": "Unblock user?",
+      "unsuspendMessage": "Are you sure you want to unblock {{name}}?"
     },
     "errors": {
       "load": "Failed to load users",

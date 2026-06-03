@@ -1,6 +1,5 @@
 export type UserStatus =
   | "active"
-  | "blocked"
   | "pending"
   | "pending_verification"
   | "suspended"

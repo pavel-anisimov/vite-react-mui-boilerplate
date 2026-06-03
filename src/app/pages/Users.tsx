@@ -39,7 +39,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import type { PaginatedResponse, User as ApiUser, UserStatus } from "@/api/types";
 
 // ---------- Types ----------
-type UserRowStatus = Extract<UserStatus, "active" | "blocked" | "pending" | "pending_verification" | "suspended" | "deactivated" | "deleted">;
+type UserRowStatus = Extract<UserStatus, "active" | "pending" | "pending_verification" | "suspended" | "deactivated" | "deleted">;
 
 type UserRow = {
   id: string;
@@ -373,14 +373,15 @@ function normalizeUser(value: ApiUser): UserRow {
   const displayName = value.name ?? value.display_name ?? fullName;
   const name = isNonEmptyString(displayName) ? displayName : value.username ?? value.email;
   const deleted = value.deleted ?? value.is_deleted ?? value.status === "deleted";
-  const suspended = value.suspended ?? value.is_suspended ?? value.status === "suspended";
+  const apiStatus = value.status as UserStatus | "blocked" | undefined;
+  const suspended = value.suspended ?? value.is_suspended ?? (apiStatus === "suspended" || apiStatus === "blocked");
 
   return {
     id: value.id || value.email,
     name,
     email: value.email,
     roles: value.roles ?? [],
-    status: userStatusField(value.status, suspended, deleted),
+    status: userStatusField(apiStatus, suspended, deleted),
     emailVerified: value.emailVerified ?? value.email_verified ?? false,
     deleted,
     suspended,
@@ -391,12 +392,11 @@ function isNonEmptyString(value: string | null | undefined): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function userStatusField(status: UserStatus | undefined, suspended: boolean, deleted: boolean): UserRowStatus {
+function userStatusField(status: UserStatus | "blocked" | undefined, suspended: boolean, deleted: boolean): UserRowStatus {
   if (deleted) return "deleted";
   if (suspended) return "suspended";
   if (
     status === "active" ||
-    status === "blocked" ||
     status === "pending" ||
     status === "pending_verification" ||
     status === "suspended" ||

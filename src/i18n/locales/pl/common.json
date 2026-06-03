@@ -159,9 +159,8 @@
     },
     "statuses": {
       "active": "Aktywny",
-      "blocked": "Zablokowany",
       "deleted": "Usunięty",
-      "suspended": "Zawieszony",
+      "suspended": "Zablokowany",
       "pending": "Oczekuje",
       "deactivated": "Dezaktywowany",
       "pending_verification": "Oczekuje na weryfikację"
@@ -176,24 +175,24 @@
       "ban": "Zablokuj",
       "delete": "Usuń",
       "restore": "Przywróć",
-      "suspend": "Zawieś",
-      "unsuspend": "Cofnij zawieszenie"
+      "suspend": "Zablokuj",
+      "unsuspend": "Odblokuj"
     },
     "tooltips": {
       "adminOnlyProfiles": "Tylko administratorzy mogą przeglądać profile",
-      "deletedCannotBeSuspended": "Usuniętych użytkowników nie można zawieszać",
+      "deletedCannotBeSuspended": "Usuniętych użytkowników nie można blokować",
       "deleteNotAllowed": "Nie masz uprawnień, aby usunąć tego użytkownika",
-      "suspendNotAllowed": "Nie masz uprawnień, aby zawiesić tego użytkownika"
+      "suspendNotAllowed": "Nie masz uprawnień, aby zablokować tego użytkownika"
     },
     "confirm": {
       "deleteTitle": "Usunąć użytkownika?",
       "deleteMessage": "Czy na pewno chcesz usunąć {{name}}? Użytkownik pozostanie w tabeli jako usunięty.",
       "restoreTitle": "Przywrócić użytkownika?",
       "restoreMessage": "Czy na pewno chcesz przywrócić {{name}}?",
-      "suspendTitle": "Zawiesić użytkownika?",
-      "suspendMessage": "Czy na pewno chcesz zawiesić {{name}}?",
-      "unsuspendTitle": "Cofnąć zawieszenie?",
-      "unsuspendMessage": "Czy na pewno chcesz cofnąć zawieszenie użytkownika {{name}}?"
+      "suspendTitle": "Zablokować użytkownika?",
+      "suspendMessage": "Czy na pewno chcesz zablokować {{name}}?",
+      "unsuspendTitle": "Odblokować użytkownika?",
+      "unsuspendMessage": "Czy na pewno chcesz odblokować {{name}}?"
     },
     "errors": {
       "load": "Nie udało się załadować użytkowników",
