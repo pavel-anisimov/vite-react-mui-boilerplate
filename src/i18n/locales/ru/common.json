@@ -277,7 +277,7 @@
     "server": "Ошибка сервера. Повторите позже."
   },
   "pagination": {
-    "rowsPerPage": "Строк на странице",
+    "rowsPerPage": "Записей на странице:",
     "of": "из",
     "page": "Страница",
     "perPage": "на странице",
@@ -399,7 +399,7 @@
       "timezone": "Часовой пояс",
       "twoFactor": "Двухфакторная защита",
       "updated": "Обновлено",
-      "userAgent": "User agent",
+      "userAgent": "User-Agent",
       "userId": "ID пользователя",
       "zip": "Индекс"
     },

@@ -289,7 +289,7 @@
   },
 
   "pagination": {
-    "rowsPerPage": "Rows per page",
+    "rowsPerPage": "Rows per page:",
     "of": "of",
     "page": "Page",
     "perPage": "per page",

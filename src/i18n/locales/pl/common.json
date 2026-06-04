@@ -281,7 +281,7 @@
     "server": "Błąd serwera. Spróbuj ponownie później."
   },
   "pagination": {
-    "rowsPerPage": "Wierszy na stronę",
+    "rowsPerPage": "Wierszy na stronę:",
     "of": "z",
     "page": "Strona",
     "perPage": "na stronę",
@@ -403,7 +403,7 @@
       "timezone": "Strefa czasowa",
       "twoFactor": "Dwuetapowe uwierzytelnianie",
       "updated": "Zaktualizowano",
-      "userAgent": "User agent",
+      "userAgent": "User-Agent",
       "userId": "ID użytkownika",
       "zip": "Kod pocztowy"
     },

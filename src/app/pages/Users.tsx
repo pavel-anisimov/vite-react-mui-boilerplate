@@ -321,6 +321,9 @@ export default function Users(): JSX.Element {
             pageSizeOptions={[20, 50, 100]}
             paginationMode="server"
             paginationModel={paginationModel}
+            localeText={{
+              paginationRowsPerPage: t11n("pagination.rowsPerPage"),
+            }}
             rowCount={total}
             onPaginationModelChange={setPaginationModel}
             sx={{
