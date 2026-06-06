@@ -4,6 +4,5 @@ node_modules
 .env.local
 .env.production
 .DS_Store
+cookies.txt
 .idea
-.gitignore
-.gittattributes
