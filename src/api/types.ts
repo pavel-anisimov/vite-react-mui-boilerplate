@@ -1,10 +1,4 @@
-export type UserStatus =
-  | "active"
-  | "pending"
-  | "pending_verification"
-  | "suspended"
-  | "deactivated"
-  | "deleted";
+export type UserStatus = "active" | "pending" | "pending_verification" | "suspended" | "deactivated" | "deleted";
 
 export type User = {
   id: string;
@@ -121,16 +115,35 @@ export type PaginatedResponse<T> = {
   limit: number;
 };
 
-export type AuthLoginPayload = {
+/** The authenticated user returned by the gateway (login response / GET /auth/me). */
+export type CurrentUser = User;
+
+export type RegisterPayload = {
   email: string;
   password: string;
 };
 
-export type AuthLoginResponse = {
+export type RegisterResponse = {
+  ok: true;
+  message: string;
+};
+
+export type LoginPayload = {
+  email: string;
+  password: string;
+};
+
+export type LoginResponse = {
   accessToken: string;
   refreshToken: string;
-  user: User;
+  tokenType: "bearer";
+  user: CurrentUser;
 };
+
+/** @deprecated Use LoginPayload. */
+export type AuthLoginPayload = LoginPayload;
+/** @deprecated Use LoginResponse. */
+export type AuthLoginResponse = LoginResponse;
 
 export type AuthRefreshResponse = {
   accessToken: string;

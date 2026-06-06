@@ -18,9 +18,10 @@ export default function NotFound(): JSX.Element {
 
   return (
     <PageContainer>
-      <Typography variant="h4" gutterBottom>{t("notfound.title")}</Typography>
+      <Typography variant="h4" gutterBottom>
+        {t("notfound.title")}
+      </Typography>
       <Typography>{t("notfound.subtitle")}</Typography>
     </PageContainer>
   );
 }
-

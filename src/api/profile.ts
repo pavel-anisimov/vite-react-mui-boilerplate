@@ -66,5 +66,7 @@ export async function updateMyProfile(payload: UpdateMyProfilePayload): Promise<
 }
 
 export async function deleteMyAccount(userId: string): Promise<UserProfile> {
-  return http.patch<UserProfile>(`/users/${encodeURIComponent(userId)}/deleted`, { deleted: true }).then(({ data }) => data);
+  return http
+    .patch<UserProfile>(`/users/${encodeURIComponent(userId)}/deleted`, { deleted: true })
+    .then(({ data }) => data);
 }

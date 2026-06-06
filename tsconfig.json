@@ -13,8 +13,5 @@
     "noFallthroughCasesInSwitch": true,
     "paths": { "@/*": ["./src/*"] }
   },
-  "include": [
-    "src",
-    "node_modules/eslint-plugin-react/lib/types.d.ts"
-  ]
+  "include": ["src", "node_modules/eslint-plugin-react/lib/types.d.ts"]
 }

@@ -1,9 +1,4 @@
-import axios, {
-  AxiosResponse,
-  InternalAxiosRequestConfig,
-  AxiosError,
-  AxiosHeaders,
-} from "axios";
+import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError, AxiosHeaders } from "axios";
 
 import type { AuthRefreshResponse } from "@/api/types";
 
@@ -136,6 +131,5 @@ http.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
 
 export default http;

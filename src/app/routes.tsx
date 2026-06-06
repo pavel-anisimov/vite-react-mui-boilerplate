@@ -73,7 +73,7 @@ export const routes: RouteObject[] = [
           <ProtectedRoute>
             <Forum />
           </ProtectedRoute>
-        )
+        ),
       },
       // Users — admin or manager only
       {

@@ -5,19 +5,7 @@ import {
   LinkOutlined,
   LocationOnOutlined,
 } from "@mui/icons-material";
-import {
-  Alert,
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  Chip,
-  Grid,
-  Link,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Alert, Avatar, Box, Card, CardContent, CardHeader, Chip, Grid, Link, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Navigate, useParams } from "react-router-dom";
@@ -32,12 +20,7 @@ export default function PublicUserProfilePage(): JSX.Element {
   const { t } = useTranslation("common");
   const { id } = useParams<{ id?: string }>();
 
-  const {
-    data,
-    error,
-    isError,
-    isFetching,
-  } = useQuery({
+  const { data, error, isError, isFetching } = useQuery({
     queryKey: ["public-user-profile", id],
     queryFn: () => getPublicUserProfile(id!),
     enabled: Boolean(id),
@@ -55,16 +38,8 @@ export default function PublicUserProfilePage(): JSX.Element {
     return (
       <PageContainer>
         <Stack spacing={2}>
-          {isError && (
-            <Alert severity="error">
-              {(error as Error)?.message ?? t("profile.errors.load")}
-            </Alert>
-          )}
-          {isFetching && (
-            <Alert severity="info">
-              {t("profile.loadingUser", { userId: id })}
-            </Alert>
-          )}
+          {isError && <Alert severity="error">{(error as Error)?.message ?? t("profile.errors.load")}</Alert>}
+          {isFetching && <Alert severity="info">{t("profile.loadingUser", { userId: id })}</Alert>}
         </Stack>
       </PageContainer>
     );
@@ -73,16 +48,8 @@ export default function PublicUserProfilePage(): JSX.Element {
   return (
     <PageContainer>
       <Stack spacing={3}>
-        {isError && (
-          <Alert severity="error">
-            {(error as Error)?.message ?? t("profile.errors.load")}
-          </Alert>
-        )}
-        {isFetching && (
-          <Alert severity="info">
-            {t("profile.loadingUser", { userId: id })}
-          </Alert>
-        )}
+        {isError && <Alert severity="error">{(error as Error)?.message ?? t("profile.errors.load")}</Alert>}
+        {isFetching && <Alert severity="info">{t("profile.loadingUser", { userId: id })}</Alert>}
 
         <Card>
           <CardContent>
@@ -118,9 +85,21 @@ export default function PublicUserProfilePage(): JSX.Element {
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 6 }}>
             <InfoCard title={t("profile.sections.profile")} icon={<AccountCircleOutlined />}>
-              <DetailRow icon={<LocationOnOutlined />} label={t("profile.labels.location")} value={publicLocation(data)} />
-              <DetailRow icon={<CalendarMonthOutlined />} label={t("profile.labels.created")} value={formatDate(data.member_since)} />
-              <DetailRow icon={<CalendarMonthOutlined />} label={t("profile.labels.lastSeen", { defaultValue: "Last seen" })} value={formatNullableDateTime(data.last_seen_at, t("profile.values.none"))} />
+              <DetailRow
+                icon={<LocationOnOutlined />}
+                label={t("profile.labels.location")}
+                value={publicLocation(data)}
+              />
+              <DetailRow
+                icon={<CalendarMonthOutlined />}
+                label={t("profile.labels.created")}
+                value={formatDate(data.member_since)}
+              />
+              <DetailRow
+                icon={<CalendarMonthOutlined />}
+                label={t("profile.labels.lastSeen", { defaultValue: "Last seen" })}
+                value={formatNullableDateTime(data.last_seen_at, t("profile.values.none"))}
+              />
             </InfoCard>
           </Grid>
 
@@ -139,7 +118,11 @@ export default function PublicUserProfilePage(): JSX.Element {
 
           <Grid size={{ xs: 12 }}>
             <InfoCard title={t("profile.labels.featureGates", { defaultValue: "Badges" })} icon={<LanguageOutlined />}>
-              {data.badges.length > 0 ? <ChipList values={data.badges} /> : <Typography variant="body2">{t("profile.values.none")}</Typography>}
+              {data.badges.length > 0 ? (
+                <ChipList values={data.badges} />
+              ) : (
+                <Typography variant="body2">{t("profile.values.none")}</Typography>
+              )}
             </InfoCard>
           </Grid>
         </Grid>
@@ -202,10 +185,7 @@ function recordEntries(record: Record<string, string | null>): Array<[string, st
 }
 
 function publicLocation(profile: PublicUserProfile): string {
-  return [
-    profile.public_location?.city,
-    profile.public_location?.country,
-  ].filter(Boolean).join(", ") || "Unknown";
+  return [profile.public_location?.city, profile.public_location?.country].filter(Boolean).join(", ") || "Unknown";
 }
 
 function initials(nameOrEmail: string): string {

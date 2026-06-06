@@ -1,6 +1,6 @@
 import { Box, Container, Paper, Typography } from "@mui/material";
 
-import type {JSX, ReactNode} from "react";
+import type { JSX, ReactNode } from "react";
 
 /**
  * AuthLayout is a layout component that provides a styled container for authentication-related screens or components.
@@ -14,8 +14,14 @@ import type {JSX, ReactNode} from "react";
  * @constructor
  */
 export default function AuthLayout({
-                                     title, subtitle, children,
-                                   }: { title: string; subtitle?: string; children: ReactNode }): JSX.Element {
+  title,
+  subtitle,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  children: ReactNode;
+}): JSX.Element {
   return (
     <Container maxWidth="sm" sx={{ display: "grid", placeItems: "center", minHeight: "100dvh" }}>
       <Paper elevation={3} sx={{ p: 4, width: "100%", borderRadius: 3 }}>

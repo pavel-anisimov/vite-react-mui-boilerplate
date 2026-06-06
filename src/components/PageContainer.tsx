@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 
-import type {JSX, PropsWithChildren} from "react";
+import type { JSX, PropsWithChildren } from "react";
 
 /**
  * A component that serves as a wrapper for page content, providing consistent styling and layout adjustments.
@@ -12,7 +12,8 @@ import type {JSX, PropsWithChildren} from "react";
  */
 export default function PageContainer({ children }: PropsWithChildren): JSX.Element {
   return (
-    <Container sx={{ py: 3 }} maxWidth="lg">{children}</Container>
+    <Container sx={{ py: 3 }} maxWidth="lg">
+      {children}
+    </Container>
   );
 }
-

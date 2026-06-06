@@ -1,14 +1,14 @@
 // vite.config.ts
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
-import { fileURLToPath, URL } from 'node:url';
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
   plugins: [react()],
 
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)), // 👈 alias @ -> src
+      "@": fileURLToPath(new URL("./src", import.meta.url)), // 👈 alias @ -> src
     },
   },
 
@@ -16,8 +16,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': {
-        target: 'http://localhost:3100', // API-Gateway
+      "/api": {
+        target: "http://localhost:3100", // API-Gateway
         changeOrigin: true,
       },
     },
@@ -30,10 +30,10 @@ export default defineConfig({
   // Vitest config (previously it caused typing to fail)
   test: {
     globals: true,
-    environment: 'jsdom',
-    setupFiles: ['./src/setupTests.ts'],
+    environment: "jsdom",
+    setupFiles: ["./src/setupTests.ts"],
     css: true,
-    reporters: 'default',
-    coverage: { reporter: ['text', 'lcov'] },
+    reporters: "default",
+    coverage: { reporter: ["text", "lcov"] },
   },
 });

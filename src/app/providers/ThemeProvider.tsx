@@ -4,7 +4,10 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import type { PropsWithChildren } from "react";
 
 export type ColorScheme = "light" | "dark";
-interface Context { scheme: ColorScheme; toggle: () => void; }
+interface Context {
+  scheme: ColorScheme;
+  toggle: () => void;
+}
 
 const ThemeContext = createContext<Context | null>(null);
 const STORAGE_KEY = "bp_color_scheme";
@@ -57,10 +60,7 @@ export function AppThemeProvider({ children }: PropsWithChildren): React.ReactEl
    * - scheme: The current color mode, typically 'light' or 'dark',
    *   which determines the theme palette's mode.
    */
-  const theme = useMemo(
-    () => createTheme({ palette: { mode: scheme } }),
-    [scheme]
-  );
+  const theme = useMemo(() => createTheme({ palette: { mode: scheme } }), [scheme]);
 
   /**
    * Memoized context value for theme management.
@@ -75,16 +75,17 @@ export function AppThemeProvider({ children }: PropsWithChildren): React.ReactEl
   const value: Context = useMemo<Context>(
     () => ({
       scheme,
-      toggle: () => setScheme(
-        (scheme) => (scheme === "light" ? "dark" : "light")
-      )
+      toggle: () => setScheme((scheme) => (scheme === "light" ? "dark" : "light")),
     }),
-    [scheme]
+    [scheme],
   );
 
   return (
     <ThemeContext.Provider value={value}>
-      <ThemeProvider theme={theme}><CssBaseline />{children}</ThemeProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
     </ThemeContext.Provider>
   );
 }

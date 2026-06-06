@@ -54,12 +54,15 @@ export default defineConfig([
 
     rules: {
       // TS: Ignore unused if name starts with "_"
-      "@typescript-eslint/no-unused-vars": ["warn", {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-        caughtErrorsIgnorePattern: "^_",
-        ignoreRestSiblings: true,
-      }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
 
       // React / Hooks
       "react/react-in-jsx-scope": "off", // Vite/React 17+
@@ -72,12 +75,15 @@ export default defineConfig([
       // (set the default from the plugin, you can add it pointwise)
 
       // Unicorn — softer for familiar contractions
-      "unicorn/prevent-abbreviations": ["warn", {
-        checkFilenames: false,
-        checkProperties: false,
-        replacements: { props: false, ref: false },
-        ignore: ["e", "err", "ctx", "env", "db", "i18n", "params"],
-      }],
+      "unicorn/prevent-abbreviations": [
+        "warn",
+        {
+          checkFilenames: false,
+          checkProperties: false,
+          replacements: { props: false, ref: false },
+          ignore: ["e", "err", "ctx", "env", "db", "i18n", "params"],
+        },
+      ],
     },
   },
 ]);

@@ -39,7 +39,10 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import type { PaginatedResponse, User as ApiUser, UserStatus } from "@/api/types";
 
 // ---------- Types ----------
-type UserRowStatus = Extract<UserStatus, "active" | "pending" | "pending_verification" | "suspended" | "deactivated" | "deleted">;
+type UserRowStatus = Extract<
+  UserStatus,
+  "active" | "pending" | "pending_verification" | "suspended" | "deactivated" | "deleted"
+>;
 
 type UserRow = {
   id: string;
@@ -99,12 +102,7 @@ export default function Users(): JSX.Element {
   const mutationError = deleteMutation.error ?? suspendMutation.error;
   const isMutating = deleteMutation.isPending || suspendMutation.isPending;
 
-  const {
-    data,
-    isError,
-    error,
-    isFetching,
-  } = useQuery({
+  const { data, isError, error, isFetching } = useQuery({
     queryKey: ["users", page, limit, q],
     queryFn: () => fetchUsers(page, limit, q),
     placeholderData: (previousData) => previousData,
@@ -130,12 +128,16 @@ export default function Users(): JSX.Element {
         minWidth: 240,
         sortable: true,
         renderCell: (params) => (
-          <Stack direction="row" spacing={1.5} sx={{ overflow: "hidden", alignItems: "center", opacity: params.row.deleted ? 0.62 : 1 }}>
-            <Avatar sx={{ width: 28, height: 28 }}>
-              {params.row?.name?.charAt(0)?.toUpperCase() || "U"}
-            </Avatar>
+          <Stack
+            direction="row"
+            spacing={1.5}
+            sx={{ overflow: "hidden", alignItems: "center", opacity: params.row.deleted ? 0.62 : 1 }}
+          >
+            <Avatar sx={{ width: 28, height: 28 }}>{params.row?.name?.charAt(0)?.toUpperCase() || "U"}</Avatar>
             <Stack sx={{ minWidth: 0 }}>
-              <Typography variant="body2" noWrap>{params.row?.name ?? ""}</Typography>
+              <Typography variant="body2" noWrap>
+                {params.row?.name ?? ""}
+              </Typography>
               <Typography variant="caption" color="text.secondary" noWrap>
                 {params.row?.email ?? ""}
               </Typography>
@@ -151,15 +153,17 @@ export default function Users(): JSX.Element {
         flex: 0.9,
         minWidth: 200,
         sortable: false,
-        renderCell: (params) => (params.row?.roles ?? []).map((role: string) => {
-          type Colors = "secondary" | "info" | "success" | "error";
-          const color = {
-            admin: "secondary",
-            manager: "info",
-            user: "success",
-          }[role] || "error";
-          return <Chip key={role} color={color as Colors} label={roleLabel(role, t11n)} size="small" />;
-        }),
+        renderCell: (params) =>
+          (params.row?.roles ?? []).map((role: string) => {
+            type Colors = "secondary" | "info" | "success" | "error";
+            const color =
+              {
+                admin: "secondary",
+                manager: "info",
+                user: "success",
+              }[role] || "error";
+            return <Chip key={role} color={color as Colors} label={roleLabel(role, t11n)} size="small" />;
+          }),
         valueGetter: (_value, row) => (row.roles ?? []).join(", "),
       },
       {
@@ -192,7 +196,7 @@ export default function Users(): JSX.Element {
             ? ["success", t11n("actions.yes")]
             : ["error", t11n("actions.no")];
           return <Chip size="small" color={color} label={label} />;
-        }
+        },
       },
       {
         field: "actions",
@@ -226,7 +230,13 @@ export default function Users(): JSX.Element {
 
           return (
             <Stack direction="row" spacing={0.5}>
-              <Tooltip title={canViewProfiles ? t11n("users.actions.view", { defaultValue: "View" }) : t11n("users.tooltips.adminOnlyProfiles")}>
+              <Tooltip
+                title={
+                  canViewProfiles
+                    ? t11n("users.actions.view", { defaultValue: "View" })
+                    : t11n("users.tooltips.adminOnlyProfiles")
+                }
+              >
                 <span>
                   <IconButton size="small" onClick={handleView} disabled={!canViewProfiles}>
                     <VisibilityOutlinedIcon fontSize="small" />
@@ -242,8 +252,17 @@ export default function Users(): JSX.Element {
               </Tooltip>
               <Tooltip title={deleteTooltip(row, canDelete, t11n)}>
                 <span>
-                  <IconButton size="small" color={row.deleted ? "default" : "error"} onClick={handleDelete} disabled={!canDelete || isMutating}>
-                    {row.deleted ? <RestoreFromTrashOutlinedIcon fontSize="small" /> : <DeleteOutlineOutlinedIcon fontSize="small" />}
+                  <IconButton
+                    size="small"
+                    color={row.deleted ? "default" : "error"}
+                    onClick={handleDelete}
+                    disabled={!canDelete || isMutating}
+                  >
+                    {row.deleted ? (
+                      <RestoreFromTrashOutlinedIcon fontSize="small" />
+                    ) : (
+                      <DeleteOutlineOutlinedIcon fontSize="small" />
+                    )}
                   </IconButton>
                 </span>
               </Tooltip>
@@ -252,7 +271,7 @@ export default function Users(): JSX.Element {
         },
       },
     ],
-    [canViewProfiles, isAdmin, isManager, isMutating, navigate, t11n, user?.id]
+    [canViewProfiles, isAdmin, isManager, isMutating, navigate, t11n, user?.id],
   );
 
   const handleCancelAction = () => setPendingAction(null);
@@ -276,9 +295,7 @@ export default function Users(): JSX.Element {
         spacing={2}
         sx={{ mb: 2, alignItems: { sm: "center" }, justifyContent: "space-between" }}
       >
-        <Typography variant="h4">
-          {t11n("users.title")}
-        </Typography>
+        <Typography variant="h4">{t11n("users.title")}</Typography>
         <TextField
           size="small"
           label={t11n("actions.search")}
@@ -315,7 +332,7 @@ export default function Users(): JSX.Element {
             rows={rows}
             columns={columns}
             getRowId={(row) => row.id || row.email}
-            getRowClassName={(params) => params.row.deleted ? "deleted-user-row" : ""}
+            getRowClassName={(params) => (params.row.deleted ? "deleted-user-row" : "")}
             disableRowSelectionOnClick
             loading={isFetching || isMutating}
             pageSizeOptions={[20, 50, 100]}
@@ -341,9 +358,7 @@ export default function Users(): JSX.Element {
       <Dialog open={Boolean(pendingAction)} onClose={handleCancelAction}>
         <DialogTitle>{pendingAction ? confirmationTitle(pendingAction, t11n) : ""}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {pendingAction ? confirmationMessage(pendingAction, t11n) : ""}
-          </DialogContentText>
+          <DialogContentText>{pendingAction ? confirmationMessage(pendingAction, t11n) : ""}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelAction} disabled={isMutating}>
@@ -374,7 +389,7 @@ function userStatusLabel(status: UserRowStatus, t: (key: string, options?: Recor
 function normalizeUser(value: ApiUser): UserRow {
   const fullName = [value.first_name, value.last_name].filter(isNonEmptyString).join(" ");
   const displayName = value.name ?? value.display_name ?? fullName;
-  const name = isNonEmptyString(displayName) ? displayName : value.username ?? value.email;
+  const name = isNonEmptyString(displayName) ? displayName : (value.username ?? value.email);
   const deleted = value.deleted ?? value.is_deleted ?? value.status === "deleted";
   const apiStatus = value.status as UserStatus | "blocked" | undefined;
   const suspended = value.suspended ?? value.is_suspended ?? (apiStatus === "suspended" || apiStatus === "blocked");
@@ -395,7 +410,11 @@ function isNonEmptyString(value: string | null | undefined): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
-function userStatusField(status: UserStatus | "blocked" | undefined, suspended: boolean, deleted: boolean): UserRowStatus {
+function userStatusField(
+  status: UserStatus | "blocked" | undefined,
+  suspended: boolean,
+  deleted: boolean,
+): UserRowStatus {
   if (deleted) return "deleted";
   if (suspended) return "suspended";
   if (
@@ -419,18 +438,29 @@ function statusColor(status: UserRowStatus): "default" | "success" | "error" | "
   return "error";
 }
 
-function suspendTooltip(user: UserRow, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {
+function suspendTooltip(
+  user: UserRow,
+  allowed: boolean,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   if (user.deleted) return t("users.tooltips.deletedCannotBeSuspended");
   if (!allowed) return t("users.tooltips.suspendNotAllowed");
   return user.suspended ? t("users.actions.unsuspend") : t("users.actions.suspend");
 }
 
-function deleteTooltip(user: UserRow, allowed: boolean, t: (key: string, options?: Record<string, unknown>) => string): string {
+function deleteTooltip(
+  user: UserRow,
+  allowed: boolean,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   if (!allowed) return t("users.tooltips.deleteNotAllowed");
   return user.deleted ? t("users.actions.restore") : t("users.actions.delete");
 }
 
-function confirmationTitle(action: ToggleAction, t: (key: string, options?: Record<string, unknown>) => string): string {
+function confirmationTitle(
+  action: ToggleAction,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   if (action.kind === "deleted") {
     return action.nextValue ? t("users.confirm.deleteTitle") : t("users.confirm.restoreTitle");
   }
@@ -438,20 +468,22 @@ function confirmationTitle(action: ToggleAction, t: (key: string, options?: Reco
   return action.nextValue ? t("users.confirm.suspendTitle") : t("users.confirm.unsuspendTitle");
 }
 
-function confirmationMessage(action: ToggleAction, t: (key: string, options?: Record<string, unknown>) => string): string {
+function confirmationMessage(
+  action: ToggleAction,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   const name = action.user.name || action.user.email || action.user.id;
   if (action.kind === "deleted") {
-    return action.nextValue
-      ? t("users.confirm.deleteMessage", { name })
-      : t("users.confirm.restoreMessage", { name });
+    return action.nextValue ? t("users.confirm.deleteMessage", { name }) : t("users.confirm.restoreMessage", { name });
   }
 
-  return action.nextValue
-    ? t("users.confirm.suspendMessage", { name })
-    : t("users.confirm.unsuspendMessage", { name });
+  return action.nextValue ? t("users.confirm.suspendMessage", { name }) : t("users.confirm.unsuspendMessage", { name });
 }
 
-function confirmationConfirmLabel(action: ToggleAction, t: (key: string, options?: Record<string, unknown>) => string): string {
+function confirmationConfirmLabel(
+  action: ToggleAction,
+  t: (key: string, options?: Record<string, unknown>) => string,
+): string {
   if (action.kind === "deleted") {
     return action.nextValue ? t("users.actions.delete") : t("users.actions.restore");
   }

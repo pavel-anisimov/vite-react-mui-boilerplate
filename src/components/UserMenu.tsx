@@ -1,13 +1,11 @@
 import { AccountCircle, Logout, Person, Settings, Login, PersonAdd } from "@mui/icons-material";
-import {
-  Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography,
-} from "@mui/material";
+import { Avatar, Divider, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from "@mui/material";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
 import type { JSX } from "react";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 /**
  * Generates initials from a given name or email address.
@@ -62,17 +60,35 @@ export default function UserMenu(): JSX.Element | null {
   };
   const handleClose = () => setAnchorElement(null);
 
-  const handleSignIn = async () => { handleClose(); await navigate("/auth/sign-in"); };
-  const handleSignUp = async () => { handleClose(); await navigate("/auth/sign-up"); };
-  const handleProfile = async () => { handleClose(); await navigate("/me/profile"); };
-  const handleSettings = async () => { handleClose(); await navigate("/settings"); };
-  const handleSignOut = async () => { handleClose(); await signOut(); await navigate("/auth/sign-in"); };
+  const handleSignIn = async () => {
+    handleClose();
+    await navigate("/auth/sign-in");
+  };
+  const handleSignUp = async () => {
+    handleClose();
+    await navigate("/auth/sign-up");
+  };
+  const handleProfile = async () => {
+    handleClose();
+    await navigate("/me/profile");
+  };
+  const handleSettings = async () => {
+    handleClose();
+    await navigate("/settings");
+  };
+  const handleSignOut = async () => {
+    handleClose();
+    await signOut();
+    await navigate("/auth/sign-in");
+  };
 
   const label = user?.name || user?.email || "User";
 
-  const Trigger = accessToken
-    ? <Avatar sx={{ width: 32, height: 32 }}>{initials(label)}</Avatar>
-    : <AccountCircle fontSize="large" />;
+  const Trigger = accessToken ? (
+    <Avatar sx={{ width: 32, height: 32 }}>{initials(label)}</Avatar>
+  ) : (
+    <AccountCircle fontSize="large" />
+  );
 
   /**
    * An array representing menu items for an authenticated user interface.
@@ -108,17 +124,23 @@ export default function UserMenu(): JSX.Element | null {
     </MenuItem>,
     <Divider key="div-1" />,
     <MenuItem key="profile" onClick={handleProfile}>
-      <ListItemIcon><Person fontSize="small" /></ListItemIcon>
-      {t("account.profile") /* My profile */ }
+      <ListItemIcon>
+        <Person fontSize="small" />
+      </ListItemIcon>
+      {t("account.profile") /* My profile */}
     </MenuItem>,
     <MenuItem key="settings" onClick={handleSettings}>
-      <ListItemIcon><Settings fontSize="small" /></ListItemIcon>
-      {t("account.settings") /* Settings */ }
+      <ListItemIcon>
+        <Settings fontSize="small" />
+      </ListItemIcon>
+      {t("account.settings") /* Settings */}
     </MenuItem>,
     <Divider key="div-2" />,
     <MenuItem key="logout" onClick={handleSignOut}>
-      <ListItemIcon><Logout fontSize="small" /></ListItemIcon>
-      {t("account.signOut") /* Sign out */ }
+      <ListItemIcon>
+        <Logout fontSize="small" />
+      </ListItemIcon>
+      {t("account.signOut") /* Sign out */}
     </MenuItem>,
   ];
 
@@ -134,11 +156,15 @@ export default function UserMenu(): JSX.Element | null {
    */
   const guestItems = [
     <MenuItem key="signin" onClick={handleSignIn}>
-      <ListItemIcon><Login fontSize="small" /></ListItemIcon>
-      {t("account.signIn") /* Sign In */ }
+      <ListItemIcon>
+        <Login fontSize="small" />
+      </ListItemIcon>
+      {t("account.signIn") /* Sign In */}
     </MenuItem>,
     <MenuItem key="signup" onClick={handleSignUp}>
-      <ListItemIcon><PersonAdd fontSize="small" /></ListItemIcon>
+      <ListItemIcon>
+        <PersonAdd fontSize="small" />
+      </ListItemIcon>
       Sign up
     </MenuItem>,
   ];

@@ -37,10 +37,7 @@ export default function Layout(): JSX.Element | null {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
 
-      <AppTopBar
-        showSidebar={showSidebar}
-        onToggleSidebar={() => setOpen((v) => !v)}
-      />
+      <AppTopBar showSidebar={showSidebar} onToggleSidebar={() => setOpen((v) => !v)} />
 
       {showSidebar && (
         <SideNav

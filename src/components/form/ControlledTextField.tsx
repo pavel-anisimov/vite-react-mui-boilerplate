@@ -28,9 +28,13 @@ type ControlledTextFieldProps<T extends FieldValues> = {
  *
  * @constructor
  */
-export default function ControlledTextField<T extends FieldValues>(
-  { form, name, label, type = "text", ...props }: ControlledTextFieldProps<T>,
-): JSX.Element {
+export default function ControlledTextField<T extends FieldValues>({
+  form,
+  name,
+  label,
+  type = "text",
+  ...props
+}: ControlledTextFieldProps<T>): JSX.Element {
   return (
     <Controller
       control={form.control}

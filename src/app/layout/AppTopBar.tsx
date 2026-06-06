@@ -3,9 +3,7 @@ import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import MenuIcon from "@mui/icons-material/Menu";
 import TranslateIcon from "@mui/icons-material/Translate";
-import {
-  AppBar, Box, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Typography,
-} from "@mui/material";
+import { AppBar, Box, IconButton, ListItemIcon, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
 import React, { JSX } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { useTranslation } from "react-i18next";
@@ -46,12 +44,7 @@ export default function AppTopBar({ showSidebar, onToggleSidebar }: AppTopBarPro
     <AppBar position="fixed" color="primary" sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}>
       <Toolbar>
         {showSidebar && (
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={onToggleSidebar}
-            aria-label={t("nav.toggleMenu")}
-          >
+          <IconButton color="inherit" edge="start" onClick={onToggleSidebar} aria-label={t("nav.toggleMenu")}>
             <MenuIcon />
           </IconButton>
         )}

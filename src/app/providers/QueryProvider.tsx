@@ -25,4 +25,3 @@ export function AppQueryProvider({ children }: PropsWithChildren): JSX.Element {
     </QueryClientProvider>
   );
 }
-

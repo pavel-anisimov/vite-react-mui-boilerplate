@@ -32,9 +32,7 @@ export default function SignIn(): JSX.Element {
     () =>
       z.object({
         email: z.email({ message: t("validation.email") }),
-        password: z
-          .string()
-          .min(1, t("validation.required", { field: t("auth.password") })),
+        password: z.string().min(1, t("validation.required", { field: t("auth.password") })),
       }),
     [t],
   );
@@ -47,7 +45,7 @@ export default function SignIn(): JSX.Element {
   const getErrorMessage = (error: unknown): string => {
     if (typeof error === "object" && error !== null) {
       type MaybeAxios = {
-        response?: { data?: { message?: unknown; error?: unknown } };
+        response?: { status?: number; data?: { message?: unknown; error?: unknown } };
         message?: unknown;
       };
       const e = error as MaybeAxios;
@@ -55,6 +53,10 @@ export default function SignIn(): JSX.Element {
         (typeof e.response?.data?.message === "string" && e.response.data.message) ||
         (typeof e.response?.data?.error === "string" && e.response.data.error) ||
         null;
+      // Gateway rejects sign-in with 403 until the email is verified.
+      if (e.response?.status === 403 || (messageFromData && /verif/i.test(messageFromData))) {
+        return t("auth.verifyBeforeSignIn");
+      }
       const message = messageFromData || (typeof e.message === "string" ? e.message : null);
       if (message && message.trim()) return message;
     }
@@ -100,10 +102,10 @@ export default function SignIn(): JSX.Element {
         <ControlledTextField form={form} name="password" label={t("auth.password")} type="password" />
         <Stack direction="row" sx={{ mt: 0.5, justifyContent: "space-between" }}>
           <Link href="/auth/forgot" underline="hover">
-            {t("auth.forgot") /* Forgot password? */ }
+            {t("auth.forgot") /* Forgot password? */}
           </Link>
           <Link href="/auth/sign-up" underline="hover">
-            {t("auth.createAccount") /* Create account */ }
+            {t("auth.createAccount") /* Create account */}
           </Link>
         </Stack>
         {error && (
@@ -113,7 +115,7 @@ export default function SignIn(): JSX.Element {
         )}
         <Box sx={{ mt: 2 }}>
           <Button type="submit" fullWidth variant="contained" loading={loading}>
-            {t("auth.signIn") /* Sign in */ }
+            {t("auth.signIn") /* Sign in */}
           </Button>
         </Box>
       </form>

@@ -1,10 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Box, Button } from "@mui/material";
-import { useMemo, useState} from "react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import type {JSX} from "react";
+import type { JSX } from "react";
 
 import AuthLayout from "@/components/AuthLayout";
 import ControlledTextField from "@/components/form/ControlledTextField";
@@ -124,13 +124,7 @@ export default function ResetPassword(): JSX.Element {
           </Alert>
         )}
         <Box sx={{ mt: 2 }}>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            loading={loading}
-            disabled={tokenMissing}
-          >
+          <Button type="submit" fullWidth variant="contained" loading={loading} disabled={tokenMissing}>
             Update password
           </Button>
         </Box>

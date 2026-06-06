@@ -1,10 +1,8 @@
 import ForumIcon from "@mui/icons-material/Forum";
 import HomeIcon from "@mui/icons-material/Home";
 import PeopleIcon from "@mui/icons-material/People";
-import {
-  Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar,
-} from "@mui/material";
-import React, {JSX} from "react";
+import { Divider, Drawer, List, ListItemButton, ListItemIcon, ListItemText, Toolbar } from "@mui/material";
+import React, { JSX } from "react";
 import { useTranslation } from "react-i18next";
 import { Link as RouterLink, useLocation } from "react-router-dom";
 
@@ -37,9 +35,7 @@ type SideNavProps = {
  * @return {JSX.Element} Returns the rendered SideNav component.
  * @constructor
  */
-export default function SideNav({
-                                  open, onClose, variant, mdDown, canSeeUsers,
-                                }: SideNavProps): JSX.Element {
+export default function SideNav({ open, onClose, variant, mdDown, canSeeUsers }: SideNavProps): JSX.Element {
   const { t } = useTranslation("common");
   const loc = useLocation();
 
@@ -54,32 +50,30 @@ export default function SideNav({
       sx={{
         ...(variant === "persistent"
           ? {
-            width: 0,
-            flexShrink: 0,
-            "& .MuiDrawer-paper": drawerPaper,
-          }
+              width: 0,
+              flexShrink: 0,
+              "& .MuiDrawer-paper": drawerPaper,
+            }
           : {
-            "& .MuiDrawer-paper": drawerPaper,
-          }),
+              "& .MuiDrawer-paper": drawerPaper,
+            }),
       }}
     >
       <Toolbar />
       <Divider />
       <List>
-        {NAV
-          .filter((item) => item.to !== "/users" || canSeeUsers)
-          .map((item) => (
-            <ListItemButton
-              key={item.to}
-              component={RouterLink}
-              to={item.to}
-              selected={loc.pathname === item.to}
-              onClick={() => mdDown && onClose()}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={t(item.labelKey)} />
-            </ListItemButton>
-          ))}
+        {NAV.filter((item) => item.to !== "/users" || canSeeUsers).map((item) => (
+          <ListItemButton
+            key={item.to}
+            component={RouterLink}
+            to={item.to}
+            selected={loc.pathname === item.to}
+            onClick={() => mdDown && onClose()}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={t(item.labelKey)} />
+          </ListItemButton>
+        ))}
       </List>
     </Drawer>
   );

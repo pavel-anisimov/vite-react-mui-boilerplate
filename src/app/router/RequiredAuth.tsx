@@ -18,7 +18,7 @@ type RequireAuth = React.FC<{ children: React.ReactNode }>;
  *                              otherwise navigates to the login page.
  * @constructor
  */
-export const RequireAuth= ({ children }: { children: React.ReactNode; }): React.ReactNode => {
+export const RequireAuth = ({ children }: { children: React.ReactNode }): React.ReactNode => {
   const { user } = useAuth();
   const location = useLocation();
 

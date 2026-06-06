@@ -59,11 +59,13 @@ function buildTimezoneOptions(): TimezoneOption[] {
     if (seenOffsets.has(offsetMinutes)) return [];
 
     seenOffsets.add(offsetMinutes);
-    return [{
-      value: timezone,
-      label: `${timezone} (${formatOffset(offsetMinutes)})`,
-      offsetMinutes,
-    }];
+    return [
+      {
+        value: timezone,
+        label: `${timezone} (${formatOffset(offsetMinutes)})`,
+        offsetMinutes,
+      },
+    ];
   });
 }
 
@@ -72,10 +74,7 @@ function getTimezoneOffsetMinutes(timezone: string): number {
     timeZone: timezone,
     timeZoneName: "shortOffset",
   });
-  const offset = formatter
-    .formatToParts(new Date())
-    .find((part) => part.type === "timeZoneName")
-    ?.value;
+  const offset = formatter.formatToParts(new Date()).find((part) => part.type === "timeZoneName")?.value;
 
   if (!offset || offset === "GMT") return 0;
 
@@ -86,7 +85,7 @@ function getTimezoneOffsetMinutes(timezone: string): number {
   const hours = Number(match.groups.hours);
   const minutes = Number(match.groups.minutes ?? "0");
 
-  return sign * ((hours * 60) + minutes);
+  return sign * (hours * 60 + minutes);
 }
 
 function formatOffset(offsetMinutes: number): string {

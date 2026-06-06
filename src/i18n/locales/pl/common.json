@@ -29,18 +29,7 @@
     },
     "whatsNew": {
       "title": "Co nowego",
-      "versions": [
-        "v0.1.0",
-        "v0.7.2",
-        "v1.3.0",
-        "v1.8.5",
-        "v2.0.0",
-        "v2.4.1",
-        "v3.0.9",
-        "v3.6.0",
-        "v4.0.2",
-        "v4.15.4"
-      ],
+      "versions": ["v0.1.0", "v0.7.2", "v1.3.0", "v1.8.5", "v2.0.0", "v2.4.1", "v3.0.9", "v3.6.0", "v4.0.2", "v4.15.4"],
       "items": [
         "Stabilne logowanie i przechowywanie sesji; poprawione komunikaty błędów i obsługa wygasłych tokenów.",
         "Nowa tabela użytkowników z rolami i statusami, szybkim filtrem oraz akcjami kontekstowymi.",
@@ -126,6 +115,7 @@
     "checkEmail": "Sprawdź pocztę",
     "weSentReset": "Wysłaliśmy link do resetu hasła.",
     "weSentVerify": "Wysłaliśmy link weryfikacyjny.",
+    "verifyBeforeSignIn": "Potwierdź swój adres e-mail przed zalogowaniem.",
     "twoFactor": "Weryfikacja dwuetapowa",
     "otp": "Jednorazowy kod",
     "rememberMe": "Zapamiętaj mnie",

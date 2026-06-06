@@ -22,9 +22,15 @@ export default function Home(): JSX.Element {
   const whatsNewItems = t("home.whatsNew.items", { returnObjects: true }) as string[];
   const whatsNewVersions = t("home.whatsNew.versions", { returnObjects: true }) as string[] | undefined;
 
-  const systems = t("home.system.systems", { returnObjects: true }) as { name: string; status: "ok" | "off" | "degraded" }[] | undefined;
-  const tasks = t("home.tasks.items", { returnObjects: true }) as { title: string; due: string; status: "todo" | "in_progress" | "done" }[] | undefined;
-  const progressItems = t("home.progress.items", { returnObjects: true }) as { label: string; percent: number }[] | undefined;
+  const systems = t("home.system.systems", { returnObjects: true }) as
+    | { name: string; status: "ok" | "off" | "degraded" }[]
+    | undefined;
+  const tasks = t("home.tasks.items", { returnObjects: true }) as
+    | { title: string; due: string; status: "todo" | "in_progress" | "done" }[]
+    | undefined;
+  const progressItems = t("home.progress.items", { returnObjects: true }) as
+    | { label: string; percent: number }[]
+    | undefined;
 
   return (
     <PageContainer>
@@ -38,12 +44,15 @@ export default function Home(): JSX.Element {
 
       <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
         {/* ===== Left column (≈70%) ===== */}
-        <Grid size={{ xs: 12, md: 8 }} sx={{
-          flex: 1,          // take remaining width
-          minWidth: 0,      // allow shrinking
-          wordBreak: "break-word",
-          overflowWrap: "anywhere"
-        }}>
+        <Grid
+          size={{ xs: 12, md: 8 }}
+          sx={{
+            flex: 1, // take remaining width
+            minWidth: 0, // allow shrinking
+            wordBreak: "break-word",
+            overflowWrap: "anywhere",
+          }}
+        >
           <Stack spacing={2} sx={{ height: "100%" }}>
             {/* What's new */}
             <Card sx={{ display: "flex", flexDirection: "column" }}>
@@ -86,8 +95,12 @@ export default function Home(): JSX.Element {
                       sx={{ alignItems: "center", justifyContent: "space-between" }}
                     >
                       <Box sx={{ minWidth: 0 }}>
-                        <Typography variant="body2" noWrap title={task.title}>{task.title}</Typography>
-                        <Typography variant="caption" color="text.secondary">{task.due}</Typography>
+                        <Typography variant="body2" noWrap title={task.title}>
+                          {task.title}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {task.due}
+                        </Typography>
                       </Box>
                       <Chip size="small" label={taskStatusLabel(task.status)} color={taskStatusColor(task.status)} />
                     </Stack>

@@ -1,10 +1,9 @@
-
-import {render, screen} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { describe, it, expect } from "vitest";
 
-import type { RenderResult} from "@testing-library/react";
+import type { RenderResult } from "@testing-library/react";
 
 import App from "@/app/App";
 import { AuthProvider } from "@/app/providers/AuthProvider";
@@ -27,28 +26,25 @@ function renderWithProviders(ui: React.ReactElement): RenderResult {
           <AppThemeProvider>{ui}</AppThemeProvider>
         </AuthProvider>
       </AppQueryProvider>
-    </BrowserRouter>
+    </BrowserRouter>,
   );
 }
 
-describe("App",
+/**
+ * Test to ensure that the navigation items are rendered correctly in the application.
+ *
+ * This test checks if a button with the name "menu" is present in the
+ * document after rendering the application with the provided test utilities.
+ */
+describe("App", () => {
   /**
-   * Test to ensure that the navigation items are rendered correctly in the application.
-   *
-   * This test checks if a button with the name "menu" is present in the
-   * document after rendering the application with the provided test utilities.
+   * Asynchronous test function to render the application component using the `renderWithProviders` utility function.
+   * It asserts that the top bar renders for a logged-out user.
    */
-  () => {
-  it("renders the app shell",
-    /**
-     * Asynchronous test function to render the application component using the `renderWithProviders` utility function.
-     * It asserts that the top bar renders for a logged-out user.
-     */
-    async () => {
-      renderWithProviders(<App />);
-      expect(await screen.findByText("Boilerplate")).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /language/i })).toBeInTheDocument();
-      expect(screen.getByRole("button", { name: /toggle theme/i })).toBeInTheDocument();
-    }
-  );
+  it("renders the app shell", async () => {
+    renderWithProviders(<App />);
+    expect(await screen.findByText("Boilerplate")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /language/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /toggle theme/i })).toBeInTheDocument();
+  });
 });

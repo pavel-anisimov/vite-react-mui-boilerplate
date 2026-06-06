@@ -31,18 +31,7 @@
     },
     "whatsNew": {
       "title": "What’s new",
-      "versions": [
-        "v0.1.0",
-        "v0.7.2",
-        "v1.3.0",
-        "v1.8.5",
-        "v2.0.0",
-        "v2.4.1",
-        "v3.0.9",
-        "v3.6.0",
-        "v4.0.2",
-        "v4.15.4"
-      ],
+      "versions": ["v0.1.0", "v0.7.2", "v1.3.0", "v1.8.5", "v2.0.0", "v2.4.1", "v3.0.9", "v3.6.0", "v4.0.2", "v4.15.4"],
       "items": [
         "Polished login flow, session handling and token expiry messages for a smoother first-run experience.",
         "Users table with roles, status chips, quick filter and action buttons for common tasks.",
@@ -126,6 +115,7 @@
     "checkEmail": "Check your email",
     "weSentReset": "We sent you a password reset link.",
     "weSentVerify": "We sent you a verification link.",
+    "verifyBeforeSignIn": "Please verify your email before signing in.",
     "twoFactor": "Two-factor verification",
     "otp": "One-time password",
     "rememberMe": "Remember me",

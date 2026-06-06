@@ -1,12 +1,5 @@
 // src/app/providers/AuthProvider.tsx
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { login as apiLogin, logout as apiLogout, me as apiMe, refresh as apiRefresh } from "@/api/auth";
 import { getAuthTokens, setAuthTokens } from "@/api/http";
@@ -24,16 +17,18 @@ import type { User } from "@/api/types";
  *
  * Methods:
  * - signIn: Authenticates the user using their email and password.
- * - signUp: Registers a new user with an email, password, and optionally a name.
  * - signOut: Logs out the current user, removing authentication tokens and user data.
  * - setTokens: Updates the current authentication tokens, used for token refresh scenarios or other updates to tokens.
+ *
+ * Note: registration is intentionally not part of this context — it does not
+ * affect auth state (no tokens are issued until the email is verified and the
+ * user signs in). Use `register` from `@/api/auth` directly.
  */
 type AuthContextValue = {
   user: User | null;
   accessToken: string | null;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, name?: string) => Promise<void>;
   signOut: () => Promise<void>;
   setTokens: (accessToken: string, refreshToken?: string) => void; // for refresh from the interceptor if desired
   refreshAccessToken: () => Promise<string | null>;
@@ -55,7 +50,7 @@ const AuthReactContext = createContext<AuthContextValue | undefined>(undefined);
  * - The loading state (`isLoading`) that indicates the status of authentication initialization.
  *
  * This component persists authentication tokens in the `localStorage` and provides methods
- * for signing in, signing up (unimplemented), signing out, and manually updating tokens.
+ * for signing in, signing out, and manually updating tokens.
  *
  * Props:
  * - `children` - A React node that consumes the provided authentication context.
@@ -64,9 +59,8 @@ const AuthReactContext = createContext<AuthContextValue | undefined>(undefined);
  * - Initializes authentication state from `localStorage`.
  * - Handles user profile fetching if an access token is available.
  * - Persists tokens to `localStorage` and updates the state.
- * - Supports signing in a user by storing tokens and fetching the user's profile.
+ * - Supports signing in a user by storing tokens and the user payload from the login response.
  * - Clears authentication state and storage upon signing out.
- * - Provides a placeholder for user registration (currently unimplemented).
  *
  * Context:
  * The component uses `AuthReactContext` to provide the following values to its children:
@@ -74,7 +68,6 @@ const AuthReactContext = createContext<AuthContextValue | undefined>(undefined);
  * - `accessToken`: The access token for API authorization or `null`.
  * - `isLoading`: A boolean indicating if the authentication state is being initialized.
  * - `signIn`: A method to log in a user with email and password.
- * - `signUp`: A method to register a user (throws a not-implemented error).
  * - `signOut`: A method to log out the user and clear authentication data.
  * - `setTokens`: A method to manually set and persist tokens.
  *
@@ -132,16 +125,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @param {string} access - The access token to be stored and utilized.
    * @param {string} [refresh] - Optional refresh token to be stored and utilized.
    */
-  const persistTokens = useCallback((access: string, refresh?: string) => {
-    const nextRefreshToken = refresh ?? refreshToken ?? undefined;
-    const next = {
-      accessToken: access,
-      refreshToken: nextRefreshToken,
-    };
-    setAuthTokens(next);
-    setAccessToken(next.accessToken);
-    if (refresh !== undefined) setRefreshToken(refresh);
-  }, [refreshToken]);
+  const persistTokens = useCallback(
+    (access: string, refresh?: string) => {
+      const nextRefreshToken = refresh ?? refreshToken ?? undefined;
+      const next = {
+        accessToken: access,
+        refreshToken: nextRefreshToken,
+      };
+      setAuthTokens(next);
+      setAccessToken(next.accessToken);
+      if (refresh !== undefined) setRefreshToken(refresh);
+    },
+    [refreshToken],
+  );
 
   /**
    * A callback function to persist authentication tokens.
@@ -151,9 +147,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @param {string} access - The access token to be persisted.
    * @param {string} [refresh] - The optional refresh token to be persisted.
    */
-  const setTokens = useCallback((access: string, refresh?: string) => {
-    persistTokens(access, refresh);
-  }, [persistTokens]);
+  const setTokens = useCallback(
+    (access: string, refresh?: string) => {
+      persistTokens(access, refresh);
+    },
+    [persistTokens],
+  );
 
   const refreshUser = useCallback(async () => {
     const nextUser = await apiMe();
@@ -174,8 +173,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * A callback function to handle user sign-in functionality.
    * This asynchronous function authenticates a user with the provided email
    * and password by using an API login endpoint. Upon successful authentication,
-   * access and refresh tokens are persisted, and the user's data is fetched
-   * and stored using the `setUser` function.
+   * access and refresh tokens are persisted, and the user from the login
+   * response is stored using the `setUser` function.
    *
    * Dependencies:
    * - persistTokens: A function to save the tokens securely.
@@ -188,31 +187,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * @param {string} password - The password associated with the provided email address.
    * @returns {Promise<void>} Resolves once the sign-in process is completed.
    */
-  const signIn = useCallback(async (email: string, password: string) => {
-    const { accessToken, refreshToken } = await apiLogin({ email, password });
-    persistTokens(accessToken, refreshToken);
-    await refreshUser();
-  }, [persistTokens, refreshUser]);
-
-  /**
-   * Asynchronous callback function for initiating the user registration process.
-   *
-   * This function is designed to handle the sign-up process by taking an email,
-   * password, and an optional name as parameters. However, the implementation
-   * is currently incomplete and will throw an error when invoked. It is intended
-   * to integrate with the API-Gateway in the future for user registration functionality.
-   *
-   * The function is memoized using `useCallback` to optimize performance and prevent
-   * unnecessary re-creation upon re-renders.
-   *
-   * @param {string} _email - The email address used for registration.
-   * @param {string} _password - The password associated with the user's account.
-   * @param {string} [_name] - An optional name for the user.
-   * @throws {Error} Throws an error indicating registration is not yet implemented.
-   */
-  const signUp = useCallback(async (_email: string, _password: string, _name?: string) => {
-    throw new Error("Registration is not implemented yet on API-Gateway");
-  }, []);
+  const signIn = useCallback(
+    async (email: string, password: string) => {
+      const { accessToken, refreshToken, user: nextUser } = await apiLogin({ email, password });
+      persistTokens(accessToken, refreshToken);
+      setUser(nextUser);
+    },
+    [persistTokens],
+  );
 
   /**
    * signOut is a callback function responsible for handling the user sign-out process.
@@ -247,21 +229,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * - accessToken: The token is used for API authentication.
    * - isLoading: A boolean indicating if an authentication-related process is in progress.
    * - signIn: A method to handle user sign-in.
-   * - signUp: A method to handle user sign-up.
    * - signOut: A method to handle user logout.
    * - setTokens: A method to update authentication tokens.
    */
-  const value = useMemo<AuthContextValue>(() => ({
-    user,
-    accessToken,
-    isLoading,
-    signIn,
-    signUp,
-    signOut,
-    setTokens,
-    refreshAccessToken,
-    refreshUser,
-  }), [user, accessToken, isLoading, signIn, signUp, signOut, setTokens, refreshAccessToken, refreshUser]);
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      accessToken,
+      isLoading,
+      signIn,
+      signOut,
+      setTokens,
+      refreshAccessToken,
+      refreshUser,
+    }),
+    [user, accessToken, isLoading, signIn, signOut, setTokens, refreshAccessToken, refreshUser],
+  );
 
   return <AuthReactContext.Provider value={value}>{children}</AuthReactContext.Provider>;
 };

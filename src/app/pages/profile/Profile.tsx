@@ -138,12 +138,7 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
     defaultValues: EMPTY_FORM_VALUES,
   });
 
-  const {
-    data,
-    error,
-    isError,
-    isFetching,
-  } = useQuery({
+  const { data, error, isError, isFetching } = useQuery({
     queryKey: isOwnProfile ? ["user-profile", "me"] : ["user-profile", requestedUserId],
     queryFn: () => (isOwnProfile ? getCurrentUserProfile() : getAdminUserProfile(requestedUserId!)),
     enabled: canViewRequestedProfile,
@@ -203,16 +198,10 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
     return (
       <PageContainer>
         <Stack spacing={2}>
-          {isError && (
-            <Alert severity="error">
-              {(error as Error)?.message ?? t("profile.errors.load")}
-            </Alert>
-          )}
+          {isError && <Alert severity="error">{(error as Error)?.message ?? t("profile.errors.load")}</Alert>}
           {isFetching && (
             <Alert severity="info">
-              {isOwnProfile
-                ? t("profile.loadingOwn")
-                : t("profile.loadingUser", { userId: requestedUserId })}
+              {isOwnProfile ? t("profile.loadingOwn") : t("profile.loadingUser", { userId: requestedUserId })}
             </Alert>
           )}
         </Stack>
@@ -235,16 +224,10 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
   return (
     <PageContainer>
       <Stack spacing={3}>
-        {isError && (
-          <Alert severity="error">
-            {(error as Error)?.message ?? t("profile.errors.load")}
-          </Alert>
-        )}
+        {isError && <Alert severity="error">{(error as Error)?.message ?? t("profile.errors.load")}</Alert>}
 
         {updateMutation.isError && (
-          <Alert severity="error">
-            {(updateMutation.error as Error)?.message ?? t("profile.errors.update")}
-          </Alert>
+          <Alert severity="error">{(updateMutation.error as Error)?.message ?? t("profile.errors.update")}</Alert>
         )}
 
         {deleteAccountMutation.isError && (
@@ -255,16 +238,12 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
 
         {isFetching && (
           <Alert severity="info">
-            {isOwnProfile
-              ? t("profile.loadingOwn")
-              : t("profile.loadingUser", { userId: requestedUserId })}
+            {isOwnProfile ? t("profile.loadingOwn") : t("profile.loadingUser", { userId: requestedUserId })}
           </Alert>
         )}
 
         {missingFields.length > 0 && (
-          <Alert severity="warning">
-            {t("profile.incomplete", { fields: missingFields.join(", ") })}
-          </Alert>
+          <Alert severity="warning">{t("profile.incomplete", { fields: missingFields.join(", ") })}</Alert>
         )}
 
         <Card>
@@ -287,20 +266,25 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
               </Avatar>
 
               <Box sx={{ minWidth: 0, flex: 1 }}>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  useFlexGap
-                  sx={{ alignItems: "center", flexWrap: "wrap", mb: 0.75 }}
-                >
+                <Stack direction="row" spacing={1} useFlexGap sx={{ alignItems: "center", flexWrap: "wrap", mb: 0.75 }}>
                   <Typography variant="h4" sx={{ wordBreak: "break-word" }}>
                     {user.display_name || fullName || user.email || t("profile.title")}
                   </Typography>
                   <StatusChip status={user.status} t={t} />
                   {user.email_verified ? (
-                    <Chip size="small" color="success" icon={<CheckCircleOutlined />} label={t("profile.values.emailVerified")} />
+                    <Chip
+                      size="small"
+                      color="success"
+                      icon={<CheckCircleOutlined />}
+                      label={t("profile.values.emailVerified")}
+                    />
                   ) : (
-                    <Chip size="small" color="warning" icon={<MarkEmailUnreadOutlined />} label={t("profile.values.emailNotVerified")} />
+                    <Chip
+                      size="small"
+                      color="warning"
+                      icon={<MarkEmailUnreadOutlined />}
+                      label={t("profile.values.emailNotVerified")}
+                    />
                   )}
                 </Stack>
                 <Typography variant="body1" color="text.secondary" sx={{ wordBreak: "break-word" }}>
@@ -350,7 +334,11 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
             <MetricCard
               icon={<ShieldOutlined />}
               label={t("profile.sections.security")}
-              value={user.security?.two_factor_enabled ? t("profile.values.twoFactorEnabled") : t("profile.values.twoFactorDisabled")}
+              value={
+                user.security?.two_factor_enabled
+                  ? t("profile.values.twoFactorEnabled")
+                  : t("profile.values.twoFactorDisabled")
+              }
               caption={t("profile.values.failedAttempts", { count: user.security?.failed_login_count ?? 0 })}
             />
           </Grid>
@@ -359,7 +347,9 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
               icon={<BadgeOutlined />}
               label={t("profile.labels.tenant")}
               value={user.tenant_id ?? t("profile.values.unknown")}
-              caption={t("profile.values.authProvider", { provider: user.auth_provider ?? t("profile.values.unknown") })}
+              caption={t("profile.values.authProvider", {
+                provider: user.auth_provider ?? t("profile.values.unknown"),
+              })}
             />
           </Grid>
         </Grid>
@@ -369,9 +359,21 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
             <InfoCard title={t("profile.sections.account")} icon={<AccountCircleOutlined />}>
               <DetailRow icon={<FingerprintOutlined />} label={t("profile.labels.userId")} value={user.id} />
               <DetailRow icon={<EmailOutlined />} label={t("profile.labels.email")} value={user.email} />
-              <DetailRow icon={<BadgeOutlined />} label={t("profile.labels.roles")} value={<ChipList values={user.roles ?? []} />} />
-              <DetailRow icon={<CalendarMonthOutlined />} label={t("profile.labels.created")} value={formatDateTime(user.created_at)} />
-              <DetailRow icon={<CalendarMonthOutlined />} label={t("profile.labels.updated")} value={formatDateTime(user.updated_at)} />
+              <DetailRow
+                icon={<BadgeOutlined />}
+                label={t("profile.labels.roles")}
+                value={<ChipList values={user.roles ?? []} />}
+              />
+              <DetailRow
+                icon={<CalendarMonthOutlined />}
+                label={t("profile.labels.created")}
+                value={formatDateTime(user.created_at)}
+              />
+              <DetailRow
+                icon={<CalendarMonthOutlined />}
+                label={t("profile.labels.updated")}
+                value={formatDateTime(user.updated_at)}
+              />
               <DetailRow
                 icon={<GppMaybeOutlined />}
                 label={t("profile.labels.statusChanged")}
@@ -385,42 +387,130 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
 
           <Grid size={{ xs: 12, md: 6 }}>
             <InfoCard title={t("profile.sections.profile")} icon={<BadgeOutlined />}>
-              <DetailRow icon={<PhoneOutlined />} label={t("profile.labels.phone")} value={withVerification(user.profile?.phone_number, user.profile?.phone_verified, t)} />
-              <DetailRow icon={<LocationOnOutlined />} label={t("profile.labels.location")} value={location || t("profile.values.unknown")} />
-              <DetailRow icon={<LanguageOutlined />} label={t("profile.labels.language")} value={user.profile?.language?.toUpperCase() ?? t("profile.values.unknown")} />
+              <DetailRow
+                icon={<PhoneOutlined />}
+                label={t("profile.labels.phone")}
+                value={withVerification(user.profile?.phone_number, user.profile?.phone_verified, t)}
+              />
+              <DetailRow
+                icon={<LocationOnOutlined />}
+                label={t("profile.labels.location")}
+                value={location || t("profile.values.unknown")}
+              />
+              <DetailRow
+                icon={<LanguageOutlined />}
+                label={t("profile.labels.language")}
+                value={user.profile?.language?.toUpperCase() ?? t("profile.values.unknown")}
+              />
               <DetailRow
                 icon={<PublicOutlined />}
                 label={t("profile.labels.timezone")}
-                value={user.profile?.timezone ? formatTimezoneLabel(user.profile.timezone) : t("profile.values.unknown")}
+                value={
+                  user.profile?.timezone ? formatTimezoneLabel(user.profile.timezone) : t("profile.values.unknown")
+                }
               />
-              <DetailRow icon={<CalendarMonthOutlined />} label={t("profile.labels.dateOfBirth")} value={formatDate(user.profile?.date_of_birth)} />
+              <DetailRow
+                icon={<CalendarMonthOutlined />}
+                label={t("profile.labels.dateOfBirth")}
+                value={formatDate(user.profile?.date_of_birth)}
+              />
               <DetailRow
                 icon={<LinkOutlined />}
                 label={t("profile.labels.avatarUrl")}
-                value={user.profile?.avatar_url ? <ExternalLink href={user.profile.avatar_url} label={user.profile.avatar_url} /> : t("profile.values.none")}
+                value={
+                  user.profile?.avatar_url ? (
+                    <ExternalLink href={user.profile.avatar_url} label={user.profile.avatar_url} />
+                  ) : (
+                    t("profile.values.none")
+                  )
+                }
               />
             </InfoCard>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
             <InfoCard title={t("profile.sections.security")} icon={<LockOutlined />}>
-              <DetailRow icon={<VerifiedUserOutlined />} label={t("profile.labels.twoFactor")} value={booleanChip(user.security?.two_factor_enabled, t("profile.values.enabled"), t("profile.values.disabled"))} />
-              <DetailRow icon={<KeyOutlined />} label={t("profile.labels.passwordUpdated")} value={formatDateTime(user.security?.password_updated_at)} />
-              <DetailRow icon={<GppMaybeOutlined />} label={t("profile.labels.lockedUntil")} value={formatNullableDateTime(user.security?.locked_until, t)} />
-              <DetailRow icon={<GppMaybeOutlined />} label={t("profile.labels.lastFailedLogin")} value={formatNullableDateTime(user.security?.last_failed_login_at, t)} />
-              <DetailRow icon={<LoginOutlined />} label={t("profile.labels.signupIp")} value={user.metadata?.signup_ip ?? t("profile.values.unknown")} />
-              <DetailRow icon={<LoginOutlined />} label={t("profile.labels.lastLoginIp")} value={user.metadata?.last_login_ip ?? t("profile.values.unknown")} />
+              <DetailRow
+                icon={<VerifiedUserOutlined />}
+                label={t("profile.labels.twoFactor")}
+                value={booleanChip(
+                  user.security?.two_factor_enabled,
+                  t("profile.values.enabled"),
+                  t("profile.values.disabled"),
+                )}
+              />
+              <DetailRow
+                icon={<KeyOutlined />}
+                label={t("profile.labels.passwordUpdated")}
+                value={formatDateTime(user.security?.password_updated_at)}
+              />
+              <DetailRow
+                icon={<GppMaybeOutlined />}
+                label={t("profile.labels.lockedUntil")}
+                value={formatNullableDateTime(user.security?.locked_until, t)}
+              />
+              <DetailRow
+                icon={<GppMaybeOutlined />}
+                label={t("profile.labels.lastFailedLogin")}
+                value={formatNullableDateTime(user.security?.last_failed_login_at, t)}
+              />
+              <DetailRow
+                icon={<LoginOutlined />}
+                label={t("profile.labels.signupIp")}
+                value={user.metadata?.signup_ip ?? t("profile.values.unknown")}
+              />
+              <DetailRow
+                icon={<LoginOutlined />}
+                label={t("profile.labels.lastLoginIp")}
+                value={user.metadata?.last_login_ip ?? t("profile.values.unknown")}
+              />
             </InfoCard>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
             <InfoCard title={t("profile.sections.preferences")} icon={<PolicyOutlined />}>
-              <DetailRow icon={<PublicOutlined />} label={t("profile.labels.theme")} value={themeLabel(user.preferences?.theme, t)} />
-              <DetailRow icon={<EmailOutlined />} label={t("profile.labels.emailNotifications")} value={booleanChip(user.preferences?.notifications?.email, t("profile.values.on"), t("profile.values.off"))} />
-              <DetailRow icon={<PhoneOutlined />} label={t("profile.labels.smsNotifications")} value={booleanChip(user.preferences?.notifications?.sms, t("profile.values.on"), t("profile.values.off"))} />
-              <DetailRow icon={<MarkEmailUnreadOutlined />} label={t("profile.labels.marketing")} value={booleanChip(user.preferences?.notifications?.marketing, t("profile.values.on"), t("profile.values.off"))} />
-              <DetailRow icon={<EmailOutlined />} label={t("profile.labels.emailPrivacy")} value={privacyLabel(user.preferences?.privacy?.email, t)} />
-              <DetailRow icon={<PolicyOutlined />} label={t("profile.labels.termsVersion")} value={user.terms_version ?? t("profile.values.unknown")} />
+              <DetailRow
+                icon={<PublicOutlined />}
+                label={t("profile.labels.theme")}
+                value={themeLabel(user.preferences?.theme, t)}
+              />
+              <DetailRow
+                icon={<EmailOutlined />}
+                label={t("profile.labels.emailNotifications")}
+                value={booleanChip(
+                  user.preferences?.notifications?.email,
+                  t("profile.values.on"),
+                  t("profile.values.off"),
+                )}
+              />
+              <DetailRow
+                icon={<PhoneOutlined />}
+                label={t("profile.labels.smsNotifications")}
+                value={booleanChip(
+                  user.preferences?.notifications?.sms,
+                  t("profile.values.on"),
+                  t("profile.values.off"),
+                )}
+              />
+              <DetailRow
+                icon={<MarkEmailUnreadOutlined />}
+                label={t("profile.labels.marketing")}
+                value={booleanChip(
+                  user.preferences?.notifications?.marketing,
+                  t("profile.values.on"),
+                  t("profile.values.off"),
+                )}
+              />
+              <DetailRow
+                icon={<EmailOutlined />}
+                label={t("profile.labels.emailPrivacy")}
+                value={privacyLabel(user.preferences?.privacy?.email, t)}
+              />
+              <DetailRow
+                icon={<PolicyOutlined />}
+                label={t("profile.labels.termsVersion")}
+                value={user.terms_version ?? t("profile.values.unknown")}
+              />
             </InfoCard>
           </Grid>
 
@@ -443,21 +533,43 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
                 />
               ))}
               {!recordEntries(user.profile?.social).length && !recordEntries(user.external_ids).length ? (
-                <DetailRow icon={<LinkOutlined />} label={t("profile.labels.accounts")} value={t("profile.values.noneConnected")} />
+                <DetailRow
+                  icon={<LinkOutlined />}
+                  label={t("profile.labels.accounts")}
+                  value={t("profile.values.noneConnected")}
+                />
               ) : null}
             </InfoCard>
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
             <InfoCard title={t("profile.sections.compliance")} icon={<PolicyOutlined />}>
-              <DetailRow icon={<PolicyOutlined />} label={t("profile.labels.termsAccepted")} value={formatDateTime(user.terms_accepted_at)} />
-              <DetailRow icon={<PolicyOutlined />} label={t("profile.labels.privacyAccepted")} value={formatDateTime(user.privacy_accepted_at)} />
+              <DetailRow
+                icon={<PolicyOutlined />}
+                label={t("profile.labels.termsAccepted")}
+                value={formatDateTime(user.terms_accepted_at)}
+              />
+              <DetailRow
+                icon={<PolicyOutlined />}
+                label={t("profile.labels.privacyAccepted")}
+                value={formatDateTime(user.privacy_accepted_at)}
+              />
               <DetailRow
                 icon={<ShieldOutlined />}
                 label={t("profile.labels.featureGates")}
-                value={(user.feature_gates ?? []).length > 0 ? <ChipList values={user.feature_gates ?? []} /> : t("profile.values.none")}
+                value={
+                  (user.feature_gates ?? []).length > 0 ? (
+                    <ChipList values={user.feature_gates ?? []} />
+                  ) : (
+                    t("profile.values.none")
+                  )
+                }
               />
-              <DetailRow icon={<PublicOutlined />} label={t("profile.labels.userAgent")} value={user.metadata?.user_agent ?? t("profile.values.unknown")} />
+              <DetailRow
+                icon={<PublicOutlined />}
+                label={t("profile.labels.userAgent")}
+                value={user.metadata?.user_agent ?? t("profile.values.unknown")}
+              />
             </InfoCard>
           </Grid>
         </Grid>
@@ -496,9 +608,7 @@ export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.El
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
         <DialogTitle>{t("profile.deleteAccount.confirmTitle")}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            {t("profile.deleteAccount.confirmMessage")}
-          </DialogContentText>
+          <DialogContentText>{t("profile.deleteAccount.confirmMessage")}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)} disabled={deleteAccountMutation.isPending}>
@@ -552,36 +662,35 @@ function EditableProfileCard({
     <Card component="form" onSubmit={form.handleSubmit(onSubmit)}>
       <CardHeader
         title={t("profile.editProfile")}
-        action={(
+        action={
           <Stack direction="row" spacing={1}>
-            <Button
-              type="submit"
-              variant="contained"
-              startIcon={<SaveOutlined />}
-              disabled={saving}
-            >
+            <Button type="submit" variant="contained" startIcon={<SaveOutlined />} disabled={saving}>
               {t("actions.save")}
             </Button>
-            <Button
-              type="button"
-              variant="outlined"
-              startIcon={<CloseOutlined />}
-              onClick={onCancel}
-              disabled={saving}
-            >
+            <Button type="button" variant="outlined" startIcon={<CloseOutlined />} onClick={onCancel} disabled={saving}>
               {t("actions.cancel")}
             </Button>
           </Stack>
-        )}
+        }
         slotProps={{ title: { variant: "h6" } }}
       />
       <CardContent sx={{ pt: 0 }}>
         <Grid container spacing={2}>
           <Grid size={{ xs: 12, md: 4 }}>
-            <ControlledTextField form={form} name="display_name" label={t("profile.labels.displayName")} disabled={saving} />
+            <ControlledTextField
+              form={form}
+              name="display_name"
+              label={t("profile.labels.displayName")}
+              disabled={saving}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <ControlledTextField form={form} name="first_name" label={t("profile.labels.firstName")} disabled={saving} />
+            <ControlledTextField
+              form={form}
+              name="first_name"
+              label={t("profile.labels.firstName")}
+              disabled={saving}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <ControlledTextField form={form} name="last_name" label={t("profile.labels.lastName")} disabled={saving} />
@@ -592,7 +701,14 @@ function EditableProfileCard({
               control={form.control}
               name="gender"
               render={({ field }) => (
-                <TextField {...field} select fullWidth margin="normal" label={t("profile.labels.gender")} disabled={saving}>
+                <TextField
+                  {...field}
+                  select
+                  fullWidth
+                  margin="normal"
+                  label={t("profile.labels.gender")}
+                  disabled={saving}
+                >
                   <MenuItem value="">{t("profile.gender.notSpecified")}</MenuItem>
                   <MenuItem value="male">{t("profile.gender.male")}</MenuItem>
                   <MenuItem value="female">{t("profile.gender.female")}</MenuItem>
@@ -603,7 +719,14 @@ function EditableProfileCard({
             />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
-            <ControlledTextField form={form} name="date_of_birth" label={t("profile.labels.dateOfBirth")} type="date" disabled={saving} slotProps={{ inputLabel: { shrink: true } }} />
+            <ControlledTextField
+              form={form}
+              name="date_of_birth"
+              label={t("profile.labels.dateOfBirth")}
+              type="date"
+              disabled={saving}
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 4 }}>
             <ControlledTextField form={form} name="phone_number" label={t("profile.labels.phone")} disabled={saving} />
@@ -614,7 +737,14 @@ function EditableProfileCard({
               control={form.control}
               name="language"
               render={({ field }) => (
-                <TextField {...field} select fullWidth margin="normal" label={t("profile.labels.preferredLanguage")} disabled={saving}>
+                <TextField
+                  {...field}
+                  select
+                  fullWidth
+                  margin="normal"
+                  label={t("profile.labels.preferredLanguage")}
+                  disabled={saving}
+                >
                   <MenuItem value="">{t("profile.values.noPreference")}</MenuItem>
                   {SUPPORTED_LANGS.map((language) => (
                     <MenuItem key={language} value={language}>
@@ -630,7 +760,14 @@ function EditableProfileCard({
               control={form.control}
               name="timezone"
               render={({ field }) => (
-                <TextField {...field} select fullWidth margin="normal" label={t("profile.labels.timezone")} disabled={saving}>
+                <TextField
+                  {...field}
+                  select
+                  fullWidth
+                  margin="normal"
+                  label={t("profile.labels.timezone")}
+                  disabled={saving}
+                >
                   <MenuItem value="">{t("profile.values.noPreference")}</MenuItem>
                   {TIMEZONE_OPTIONS.map((timezone) => (
                     <MenuItem key={timezone.value} value={timezone.value}>
@@ -643,14 +780,31 @@ function EditableProfileCard({
           </Grid>
 
           <Grid size={{ xs: 12 }}>
-            <ControlledTextField form={form} name="bio" label={t("profile.labels.bio")} disabled={saving} multiline minRows={3} />
+            <ControlledTextField
+              form={form}
+              name="bio"
+              label={t("profile.labels.bio")}
+              disabled={saving}
+              multiline
+              minRows={3}
+            />
           </Grid>
 
           <Grid size={{ xs: 12, md: 6 }}>
-            <ControlledTextField form={form} name="avatar_url" label={t("profile.labels.avatarUrl")} disabled={saving} />
+            <ControlledTextField
+              form={form}
+              name="avatar_url"
+              label={t("profile.labels.avatarUrl")}
+              disabled={saving}
+            />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
-            <ControlledTextField form={form} name="linkedin" label={t("profile.labels.linkedinUrl")} disabled={saving} />
+            <ControlledTextField
+              form={form}
+              name="linkedin"
+              label={t("profile.labels.linkedinUrl")}
+              disabled={saving}
+            />
           </Grid>
 
           <Grid size={{ xs: 12, md: 3 }}>
@@ -671,7 +825,14 @@ function EditableProfileCard({
               control={form.control}
               name="theme"
               render={({ field }) => (
-                <TextField {...field} select fullWidth margin="normal" label={t("profile.labels.theme")} disabled={saving}>
+                <TextField
+                  {...field}
+                  select
+                  fullWidth
+                  margin="normal"
+                  label={t("profile.labels.theme")}
+                  disabled={saving}
+                >
                   <MenuItem value="system">{t("theme.system")}</MenuItem>
                   <MenuItem value="light">{t("theme.light")}</MenuItem>
                   <MenuItem value="dark">{t("theme.dark")}</MenuItem>
@@ -684,7 +845,14 @@ function EditableProfileCard({
               control={form.control}
               name="email_privacy"
               render={({ field }) => (
-                <TextField {...field} select fullWidth margin="normal" label={t("profile.labels.emailPrivacy")} disabled={saving}>
+                <TextField
+                  {...field}
+                  select
+                  fullWidth
+                  margin="normal"
+                  label={t("profile.labels.emailPrivacy")}
+                  disabled={saving}
+                >
                   <MenuItem value="private">{t("profile.privacy.private")}</MenuItem>
                   <MenuItem value="workspace">{t("profile.privacy.workspace")}</MenuItem>
                   <MenuItem value="public">{t("profile.privacy.public")}</MenuItem>
@@ -700,7 +868,13 @@ function EditableProfileCard({
                 name="notify_email"
                 render={({ field }) => (
                   <FormControlLabel
-                    control={<Switch checked={field.value} onChange={(_, checked) => field.onChange(checked)} disabled={saving} />}
+                    control={
+                      <Switch
+                        checked={field.value}
+                        onChange={(_, checked) => field.onChange(checked)}
+                        disabled={saving}
+                      />
+                    }
                     label={t("profile.labels.emailNotifications")}
                   />
                 )}
@@ -710,7 +884,13 @@ function EditableProfileCard({
                 name="notify_sms"
                 render={({ field }) => (
                   <FormControlLabel
-                    control={<Switch checked={field.value} onChange={(_, checked) => field.onChange(checked)} disabled={saving} />}
+                    control={
+                      <Switch
+                        checked={field.value}
+                        onChange={(_, checked) => field.onChange(checked)}
+                        disabled={saving}
+                      />
+                    }
                     label={t("profile.labels.smsNotifications")}
                   />
                 )}
@@ -720,7 +900,13 @@ function EditableProfileCard({
                 name="notify_marketing"
                 render={({ field }) => (
                   <FormControlLabel
-                    control={<Switch checked={field.value} onChange={(_, checked) => field.onChange(checked)} disabled={saving} />}
+                    control={
+                      <Switch
+                        checked={field.value}
+                        onChange={(_, checked) => field.onChange(checked)}
+                        disabled={saving}
+                      />
+                    }
                     label={t("profile.labels.marketing")}
                   />
                 )}
@@ -786,7 +972,13 @@ function StatusChip({ status = "active", t }: { status?: UserStatus; t: TFunctio
   const color: "default" | "error" | "success" | "warning" =
     status === "active" ? "success" : status === "pending_verification" ? "warning" : "error";
 
-  return <Chip size="small" color={color} label={t(`users.statuses.${status}`, { defaultValue: titleCase(status.replaceAll("_", " ")) })} />;
+  return (
+    <Chip
+      size="small"
+      color={color}
+      label={t(`users.statuses.${status}`, { defaultValue: titleCase(status.replaceAll("_", " ")) })}
+    />
+  );
 }
 
 function ChipList({ values }: { values: string[] }): JSX.Element {
@@ -817,7 +1009,11 @@ function booleanChip(value: boolean | undefined, trueLabel: string, falseLabel: 
   return <Chip size="small" color={value ? "success" : "default"} label={value ? trueLabel : falseLabel} />;
 }
 
-function withVerification(value: string | null | undefined, verified: boolean | undefined, t: TFunction<"common">): JSX.Element {
+function withVerification(
+  value: string | null | undefined,
+  verified: boolean | undefined,
+  t: TFunction<"common">,
+): JSX.Element {
   return (
     <Stack direction="row" spacing={1} useFlexGap sx={{ alignItems: "center", flexWrap: "wrap" }}>
       <Typography variant="body2">{value ?? t("profile.values.unknown")}</Typography>

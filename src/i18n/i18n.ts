@@ -13,11 +13,11 @@ void i18n
     resources: {
       en: { common: en },
       ru: { common: ru },
-      pl: { common: pl }
+      pl: { common: pl },
     },
     fallbackLng: "en",
     defaultNS: "common",
-    interpolation: { escapeValue: false }
+    interpolation: { escapeValue: false },
   });
 
 export default i18n;
