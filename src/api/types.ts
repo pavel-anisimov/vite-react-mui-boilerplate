@@ -118,15 +118,33 @@ export type PaginatedResponse<T> = {
 /** The authenticated user returned by the gateway (login response / GET /auth/me). */
 export type CurrentUser = User;
 
+/** Shared acknowledgement shape returned by gateway auth endpoints. */
+export type MessageResponse = {
+  ok: true;
+  message: string;
+};
+
+/** Error body the gateway may return on auth failures. */
+export type ApiErrorBody = {
+  error?: string;
+  message?: string;
+  detail?: string;
+};
+
 export type RegisterPayload = {
   email: string;
   password: string;
 };
 
-export type RegisterResponse = {
-  ok: true;
-  message: string;
+export type RegisterResponse = MessageResponse;
+
+export type VerifyEmailResponse = MessageResponse;
+
+export type ResendVerificationPayload = {
+  email: string;
 };
+
+export type ResendVerificationResponse = MessageResponse;
 
 export type LoginPayload = {
   email: string;

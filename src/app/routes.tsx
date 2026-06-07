@@ -12,7 +12,7 @@ const SignIn = lazy(() => import("@/app/pages/auth/SignIn"));
 const SignUp = lazy(() => import("@/app/pages/auth/SignUp"));
 const ForgotPassword = lazy(() => import("@/app/pages/auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("@/app/pages/auth/ResetPassword"));
-// const VerifyEmail = lazy(() => import("@/app/pages/auth/VerifyEmail"));
+const VerifyEmail = lazy(() => import("@/app/pages/auth/VerifyEmail"));
 
 // 📌 lazy imports of your current pages
 const Home = lazy(() => import("@/app/pages/Home"));
@@ -41,6 +41,7 @@ const NotFound = lazy(() => import("@/app/pages/NotFound"));
  *    - "/auth/sign-up": SignUp component
  *    - "/auth/forgot": ForgotPassword component
  *    - "/auth/reset": ResetPassword component
+ *    - "/auth/verify": VerifyEmail component (reads ?token=...)
  *
  * 2. Private routes with layout:
  *    - "/": Protected route with Layout as the top-level component
@@ -58,6 +59,7 @@ export const routes: RouteObject[] = [
   { path: "/auth/sign-up", element: <SignUp /> },
   { path: "/auth/forgot", element: <ForgotPassword /> },
   { path: "/auth/reset", element: <ResetPassword /> },
+  { path: "/auth/verify", element: <VerifyEmail /> },
 
   // private + layout by one node
   {

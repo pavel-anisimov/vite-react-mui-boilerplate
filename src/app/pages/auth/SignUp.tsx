@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import type { JSX } from "react";
 
-import { register as apiRegister } from "@/api/auth";
+import { register as apiRegister, resendVerification } from "@/api/auth";
 import AuthLayout from "@/components/AuthLayout";
 import ControlledTextField from "@/components/form/ControlledTextField";
 
@@ -65,7 +65,10 @@ export default function SignUp(): JSX.Element {
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [registered, setRegistered] = useState(false);
+  // Email the user registered with — kept for the resend-verification action.
+  const [registeredEmail, setRegisteredEmail] = useState<string | null>(null);
+  const [resendLoading, setResendLoading] = useState(false);
+  const [resendResult, setResendResult] = useState<{ severity: "success" | "error"; text: string } | null>(null);
 
   /**
    * A function variable assigned to handle the form submission event. This function triggers
@@ -87,7 +90,7 @@ export default function SignUp(): JSX.Element {
 
     try {
       await apiRegister({ email: values.email, password: values.password });
-      setRegistered(true);
+      setRegisteredEmail(values.email);
     } catch (caught: unknown) {
       setError(caught instanceof Error ? caught.message : "Failed to sign up");
     } finally {
@@ -95,15 +98,50 @@ export default function SignUp(): JSX.Element {
     }
   });
 
-  if (registered) {
+  /**
+   * Requests another verification email for the address the user registered with.
+   *
+   * The gateway always answers with the same neutral message regardless of
+   * whether the account exists, and that message is shown as-is — the UI must
+   * not reveal account existence.
+   */
+  const handleResend = async (): Promise<void> => {
+    if (!registeredEmail || resendLoading) return;
+    setResendResult(null);
+    setResendLoading(true);
+
+    try {
+      const { message } = await resendVerification({ email: registeredEmail });
+      setResendResult({ severity: "success", text: message });
+    } catch (caught: unknown) {
+      setResendResult({
+        severity: "error",
+        text: caught instanceof Error ? caught.message : "Failed to resend verification email",
+      });
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
+  if (registeredEmail) {
     return (
       <AuthLayout title="Check your email" subtitle="One more step">
         <Alert severity="success" sx={{ mt: 1 }}>
           Registration accepted. Please check your email to verify your account.
         </Alert>
+        {resendResult && (
+          <Alert severity={resendResult.severity} sx={{ mt: 2 }}>
+            {resendResult.text}
+          </Alert>
+        )}
         <Box sx={{ mt: 2 }}>
           <Button href="/auth/sign-in" fullWidth variant="contained">
             Go to Sign In
+          </Button>
+        </Box>
+        <Box sx={{ mt: 1 }}>
+          <Button fullWidth variant="text" onClick={handleResend} loading={resendLoading}>
+            Resend verification email
           </Button>
         </Box>
       </AuthLayout>

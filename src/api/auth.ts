@@ -8,12 +8,26 @@ import type {
   LoginResponse,
   RegisterPayload,
   RegisterResponse,
+  ResendVerificationPayload,
+  ResendVerificationResponse,
   User,
+  VerifyEmailResponse,
 } from "@/api/types";
 
 export type LoginDto = LoginPayload;
 export type Tokens = Pick<LoginResponse, "accessToken" | "refreshToken">;
-export type { AuthRefreshResponse, CurrentUser, LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, User };
+export type {
+  AuthRefreshResponse,
+  CurrentUser,
+  LoginPayload,
+  LoginResponse,
+  RegisterPayload,
+  RegisterResponse,
+  ResendVerificationPayload,
+  ResendVerificationResponse,
+  User,
+  VerifyEmailResponse,
+};
 
 /**
  * Registers a new user account.
@@ -27,6 +41,32 @@ export type { AuthRefreshResponse, CurrentUser, LoginPayload, LoginResponse, Reg
  */
 export async function register(dto: RegisterPayload): Promise<RegisterResponse> {
   return http.post<RegisterResponse>("/auth/register", dto).then(({ data }) => data);
+}
+
+/**
+ * Verifies a user's email address using the token from the verification link.
+ *
+ * Verification does not log the user in — after a successful call the user
+ * still has to sign in explicitly.
+ *
+ * @param {string} token - The verification token from the emailed link.
+ * @return {Promise<VerifyEmailResponse>} A promise that resolves with the acknowledgement message.
+ */
+export async function verifyEmail(token: string): Promise<VerifyEmailResponse> {
+  return http.get<VerifyEmailResponse>("/auth/verify", { params: { token } }).then(({ data }) => data);
+}
+
+/**
+ * Requests a new verification email.
+ *
+ * The gateway responds with the same neutral message whether or not the
+ * account exists, so the response must be shown as-is.
+ *
+ * @param {ResendVerificationPayload} dto - The email to resend the verification link to.
+ * @return {Promise<ResendVerificationResponse>} A promise that resolves with the acknowledgement message.
+ */
+export async function resendVerification(dto: ResendVerificationPayload): Promise<ResendVerificationResponse> {
+  return http.post<ResendVerificationResponse>("/auth/resend-verification", dto).then(({ data }) => data);
 }
 
 /**
