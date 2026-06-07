@@ -331,6 +331,13 @@
     "title": "Profil",
     "editProfile": "Edytuj profil",
     "personalInfo": "Dane osobowe",
+    "comingSoon": "Wkrótce",
+    "comingSoonDescription": "Preferencje, ustawienia bezpieczeństwa i połączone konta będą tu wkrótce dostępne.",
+    "setup": {
+      "title": "Uzupełnij swój profil",
+      "subtitle": "Opowiedz nam coś o sobie",
+      "saved": "Profil zapisany."
+    },
     "changePassword": "Zmień hasło",
     "avatar": "Avatar",
     "uploadNew": "Prześlij nowy",
@@ -373,6 +380,7 @@
       "emailPrivacy": "Prywatność e-maila",
       "featureGates": "Flagi funkcji",
       "firstName": "Imię",
+      "fullName": "Imię i nazwisko",
       "gender": "Płeć",
       "language": "Język",
       "lastFailedLogin": "Ostatnie nieudane logowanie",

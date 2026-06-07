@@ -17,6 +17,8 @@ export type User = {
   is_deleted?: boolean;
   suspended?: boolean;
   is_suspended?: boolean;
+  /** False until the user fills in the required profile basics (displayName). Absent on older backends. */
+  profileCompleted?: boolean;
 };
 
 export type PublicUserProfile = {
@@ -107,6 +109,54 @@ export type AdminUserProfile = User & {
 
 export type OwnUserProfile = AdminUserProfile;
 export type UserProfile = AdminUserProfile;
+
+export type MyProfileLocation = {
+  city: string | null;
+  state: string | null;
+  country: string | null;
+  zip: string | null;
+};
+
+/** User-editable profile data owned by the Python service, adapted by the gateway (camelCase). */
+export type MyProfileData = {
+  displayName: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  bio: string | null;
+  avatarUrl: string | null;
+  phoneNumber: string | null;
+  dateOfBirth: string | null;
+  location: MyProfileLocation;
+  language: string | null;
+  timezone: string | null;
+};
+
+/** Response of GET/PATCH /auth/me/profile. */
+export type MyProfile = {
+  id: string | number;
+  email: string;
+  profileCompleted: boolean;
+  profile: MyProfileData;
+};
+
+/** PATCH /auth/me/profile payload — all fields optional, camelCase. */
+export type UpdateMyProfilePayload = {
+  displayName?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  bio?: string | null;
+  avatarUrl?: string | null;
+  phoneNumber?: string | null;
+  dateOfBirth?: string | null;
+  location?: {
+    city?: string | null;
+    state?: string | null;
+    country?: string | null;
+    zip?: string | null;
+  };
+  language?: string | null;
+  timezone?: string | null;
+};
 
 export type PaginatedResponse<T> = {
   items: T[];

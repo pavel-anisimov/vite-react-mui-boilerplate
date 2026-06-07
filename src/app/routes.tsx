@@ -19,6 +19,7 @@ const Home = lazy(() => import("@/app/pages/Home"));
 const Users = lazy(() => import("@/app/pages/Users"));
 const Forum = lazy(() => import("@/app/pages/Forum"));
 const MyProfilePage = lazy(() => import("@/app/pages/profile/Profile"));
+const ProfileSetupPage = lazy(() => import("@/app/pages/profile/ProfileSetupPage"));
 const PublicUserProfilePage = lazy(() => import("@/app/pages/profile/PublicUserProfilePage"));
 const AdminUserProfilePage = lazy(() => import("@/app/pages/profile/AdminUserProfilePage"));
 const NotFound = lazy(() => import("@/app/pages/NotFound"));
@@ -89,6 +90,14 @@ export const routes: RouteObject[] = [
       {
         path: "profile",
         element: <Navigate to="/me/profile" replace />,
+      },
+      {
+        path: "profile/setup",
+        element: (
+          <ProtectedRoute>
+            <ProfileSetupPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "me/profile",

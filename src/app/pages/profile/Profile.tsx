@@ -54,7 +54,13 @@ import { useTranslation } from "react-i18next";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
 import { useAuth } from "@/app/providers/AuthProvider";
-import { deleteMyAccount, getAdminUserProfile, getCurrentUserProfile, updateCurrentUserProfile } from "@/api/profile";
+import {
+  deleteMyAccount,
+  getAdminUserProfile,
+  getCurrentUserProfile,
+  getMyProfile,
+  updateCurrentUserProfile,
+} from "@/api/profile";
 import PageContainer from "@/components/PageContainer";
 import ControlledTextField from "@/components/form/ControlledTextField";
 import { LANG_LABELS, SUPPORTED_LANGS } from "@/i18n/langConfig";
@@ -65,7 +71,7 @@ import { useEffect, useState } from "react";
 import type { JSX, ReactNode } from "react";
 import type { TFunction } from "i18next";
 import type { UseFormReturn } from "react-hook-form";
-import type { UpdateMyProfilePayload, UserProfile, UserStatus } from "@/api/profile";
+import type { LegacyUpdateProfilePayload as UpdateMyProfilePayload, UserProfile, UserStatus } from "@/api/profile";
 
 type GenderValue = "" | "male" | "female" | "other" | "prefer_not_to_say";
 type PreferredLanguageValue = "" | "en" | "ru" | "pl";
@@ -118,8 +124,132 @@ const EMPTY_FORM_VALUES: ProfileFormValues = {
 
 type FullProfileMode = "own" | "admin";
 
+/**
+ * Compact "My profile" page backed by the new gateway contracts.
+ *
+ * Shows only what the backend actually supports today:
+ * - account basics from /auth/me (id, email, roles);
+ * - the user-editable personal profile from /auth/me/profile.
+ *
+ * Editing happens on /profile/setup (same form as the first-login setup).
+ * Preferences, security settings, connected accounts etc. are not yet
+ * exposed by the gateway and are summarized in a single "Coming soon" card
+ * instead of rendering empty values. The legacy full page below
+ * (FullUserProfilePage) remains for the admin view, which still uses the
+ * admin endpoints.
+ */
 export default function MyProfilePage(): JSX.Element {
-  return <FullUserProfilePage mode="own" />;
+  const { t } = useTranslation("common");
+  const { user: authUser } = useAuth();
+
+  const { data, error, isError, isPending } = useQuery({
+    queryKey: ["my-profile"],
+    queryFn: getMyProfile,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: false,
+  });
+
+  const profile = data?.profile;
+  const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(" ");
+  const locationText = [
+    profile?.location.city,
+    profile?.location.state,
+    profile?.location.country,
+    profile?.location.zip,
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const languageLabel = profile?.language
+    ? (LANG_LABELS[profile.language as keyof typeof LANG_LABELS] ?? profile.language)
+    : "";
+
+  return (
+    <PageContainer>
+      <Stack spacing={3}>
+        {isError && <Alert severity="error">{(error as Error)?.message ?? t("profile.errors.load")}</Alert>}
+        {isPending && <Alert severity="info">{t("profile.loadingOwn")}</Alert>}
+
+        <Card>
+          <CardContent>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ alignItems: { sm: "center" } }}>
+              <Avatar sx={{ width: 72, height: 72, bgcolor: "primary.main", fontSize: 28 }}>
+                {(profile?.displayName ?? data?.email ?? "?").charAt(0).toUpperCase()}
+              </Avatar>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography variant="h5" sx={{ fontWeight: 700 }}>
+                  {profile?.displayName || fullName || data?.email || ""}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {data?.email ?? authUser?.email ?? ""}
+                </Typography>
+              </Box>
+              <Button variant="outlined" startIcon={<EditOutlined />} href="/profile/setup">
+                {t("profile.editProfile")}
+              </Button>
+            </Stack>
+          </CardContent>
+        </Card>
+
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <InfoCard icon={<AccountCircleOutlined />} title={t("profile.sections.account")}>
+              <DetailRow
+                icon={<FingerprintOutlined />}
+                label={t("profile.labels.userId")}
+                value={String(data?.id ?? authUser?.id ?? "—")}
+              />
+              <DetailRow icon={<EmailOutlined />} label={t("profile.labels.email")} value={data?.email ?? "—"} />
+              <DetailRow
+                icon={<VerifiedUserOutlined />}
+                label={t("profile.labels.roles")}
+                value={authUser?.roles?.length ? <ChipList values={authUser.roles} /> : "—"}
+              />
+            </InfoCard>
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <InfoCard icon={<BadgeOutlined />} title={t("profile.sections.profile")}>
+              <DetailRow icon={<BadgeOutlined />} label={t("profile.labels.fullName")} value={fullName || "—"} />
+              <DetailRow icon={<AccountCircleOutlined />} label={t("profile.labels.bio")} value={profile?.bio || "—"} />
+              <DetailRow
+                icon={<PhoneOutlined />}
+                label={t("profile.labels.phone")}
+                value={profile?.phoneNumber || "—"}
+              />
+              <DetailRow
+                icon={<CalendarMonthOutlined />}
+                label={t("profile.labels.dateOfBirth")}
+                value={profile?.dateOfBirth ? formatDate(profile.dateOfBirth) : "—"}
+              />
+              <DetailRow
+                icon={<LocationOnOutlined />}
+                label={t("profile.labels.location")}
+                value={locationText || "—"}
+              />
+              <DetailRow
+                icon={<LanguageOutlined />}
+                label={t("profile.labels.language")}
+                value={languageLabel || "—"}
+              />
+              <DetailRow
+                icon={<PublicOutlined />}
+                label={t("profile.labels.timezone")}
+                value={profile?.timezone ? formatTimezoneLabel(profile.timezone) : "—"}
+              />
+            </InfoCard>
+          </Grid>
+        </Grid>
+
+        <Card>
+          <CardHeader title={t("profile.comingSoon")} slotProps={{ title: { variant: "h6" } }} />
+          <CardContent sx={{ pt: 0 }}>
+            <Typography variant="body2" color="text.secondary">
+              {t("profile.comingSoonDescription")}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Stack>
+    </PageContainer>
+  );
 }
 
 export function FullUserProfilePage({ mode }: { mode: FullProfileMode }): JSX.Element {

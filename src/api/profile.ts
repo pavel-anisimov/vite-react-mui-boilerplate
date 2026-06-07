@@ -1,10 +1,34 @@
 import http from "@/api/http";
 
-import type { AdminUserProfile, OwnUserProfile, PublicUserProfile, UserProfile, UserStatus } from "@/api/types";
+import type {
+  AdminUserProfile,
+  MyProfile,
+  MyProfileData,
+  MyProfileLocation,
+  OwnUserProfile,
+  PublicUserProfile,
+  UpdateMyProfilePayload,
+  UserProfile,
+  UserStatus,
+} from "@/api/types";
 
-export type { AdminUserProfile, OwnUserProfile, PublicUserProfile, UserProfile, UserStatus };
+export type {
+  AdminUserProfile,
+  MyProfile,
+  MyProfileData,
+  MyProfileLocation,
+  OwnUserProfile,
+  PublicUserProfile,
+  UpdateMyProfilePayload,
+  UserProfile,
+  UserStatus,
+};
 
-export type UpdateMyProfilePayload = {
+/**
+ * @deprecated Old snake_case payload kept for the legacy full-profile page
+ * (admin view). New code must use UpdateMyProfilePayload (camelCase).
+ */
+export type LegacyUpdateProfilePayload = {
   display_name?: string;
   first_name?: string;
   last_name?: string;
@@ -41,7 +65,8 @@ export async function getCurrentUserProfile(): Promise<OwnUserProfile> {
   return http.get<OwnUserProfile>("/auth/me").then(({ data }) => data);
 }
 
-export async function updateCurrentUserProfile(payload: UpdateMyProfilePayload): Promise<OwnUserProfile> {
+/** @deprecated Legacy snake_case update kept for the old full-profile page. Use updateMyProfile. */
+export async function updateCurrentUserProfile(payload: LegacyUpdateProfilePayload): Promise<OwnUserProfile> {
   return http.patch<OwnUserProfile>("/auth/me/profile", payload).then(({ data }) => data);
 }
 
@@ -57,12 +82,19 @@ export async function getUserProfile(userId: string): Promise<UserProfile> {
   return getAdminUserProfile(userId);
 }
 
-export async function getMyProfile(): Promise<OwnUserProfile> {
-  return getCurrentUserProfile();
+/**
+ * Fetches the current user's editable profile (camelCase gateway contract).
+ */
+export async function getMyProfile(): Promise<MyProfile> {
+  return http.get<MyProfile>("/auth/me/profile").then(({ data }) => data);
 }
 
-export async function updateMyProfile(payload: UpdateMyProfilePayload): Promise<OwnUserProfile> {
-  return updateCurrentUserProfile(payload);
+/**
+ * Partially updates the current user's editable profile.
+ * The gateway responds with the same shape as GET /auth/me/profile.
+ */
+export async function updateMyProfile(payload: UpdateMyProfilePayload): Promise<MyProfile> {
+  return http.patch<MyProfile>("/auth/me/profile", payload).then(({ data }) => data);
 }
 
 export async function deleteMyAccount(userId: string): Promise<UserProfile> {

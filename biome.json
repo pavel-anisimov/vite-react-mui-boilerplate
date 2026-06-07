@@ -9,6 +9,6 @@
   "linter": { "enabled": false },
   "assist": { "actions": { "source": { "organizeImports": "off" } } },
   "files": {
-    "includes": ["**", "!**/dist", "!**/coverage", "!**/node_modules", "!**/.husky"]
+    "includes": ["**", "!**/dist", "!**/coverage", "!**/node_modules", "!**/.husky", "!**/.claude"]
   }
 }

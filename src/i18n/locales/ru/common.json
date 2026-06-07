@@ -331,6 +331,13 @@
     "title": "Профиль",
     "editProfile": "Редактировать профиль",
     "personalInfo": "Персональные данные",
+    "comingSoon": "Скоро",
+    "comingSoonDescription": "Предпочтения, настройки безопасности и привязанные аккаунты появятся здесь позже.",
+    "setup": {
+      "title": "Заполните профиль",
+      "subtitle": "Расскажите немного о себе",
+      "saved": "Профиль сохранён."
+    },
     "changePassword": "Сменить пароль",
     "avatar": "Аватар",
     "uploadNew": "Загрузить новый",
@@ -373,6 +380,7 @@
       "emailPrivacy": "Приватность e-mail",
       "featureGates": "Фичи",
       "firstName": "Имя",
+      "fullName": "Полное имя",
       "gender": "Пол",
       "language": "Язык",
       "lastFailedLogin": "Последняя неудачная попытка входа",

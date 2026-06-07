@@ -347,6 +347,13 @@
     "title": "Profile",
     "editProfile": "Edit profile",
     "personalInfo": "Personal information",
+    "comingSoon": "Coming soon",
+    "comingSoonDescription": "Preferences, security settings and connected accounts will be available here soon.",
+    "setup": {
+      "title": "Set up your profile",
+      "subtitle": "Tell us a bit about yourself",
+      "saved": "Profile saved."
+    },
     "changePassword": "Change password",
     "avatar": "Avatar",
     "uploadNew": "Upload new",
@@ -389,6 +396,7 @@
       "emailPrivacy": "Email privacy",
       "featureGates": "Feature gates",
       "firstName": "First name",
+      "fullName": "Full name",
       "gender": "Gender",
       "language": "Language",
       "lastFailedLogin": "Last failed login",
