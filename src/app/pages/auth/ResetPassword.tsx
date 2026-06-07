@@ -1,11 +1,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Alert, Box, Button } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
 
 import type { JSX } from "react";
 
+import { resetPassword } from "@/api/auth";
 import AuthLayout from "@/components/AuthLayout";
 import ControlledTextField from "@/components/form/ControlledTextField";
 
@@ -43,63 +45,98 @@ const schema = z
 type Form = z.infer<typeof schema>;
 
 /**
- * Handles the password reset functionality by validating input, interacting with the form,
- * and redirecting the user upon successful update. Displays an alert for missing tokens
- * or any errors that may occur during the process. This function uses a token from
- * the URL query parameters for authorization.
+ * Extracts a human-readable message from a gateway error response.
+ * The gateway may populate any of `message`, `error`, or `detail`.
+ */
+function getErrorMessage(error: unknown): string {
+  if (typeof error === "object" && error !== null) {
+    type MaybeAxios = {
+      response?: { data?: { message?: unknown; error?: unknown; detail?: unknown } };
+      message?: unknown;
+    };
+    const e = error as MaybeAxios;
+    const data = e.response?.data;
+    const message =
+      (typeof data?.message === "string" && data.message) ||
+      (typeof data?.error === "string" && data.error) ||
+      (typeof data?.detail === "string" && data.detail) ||
+      (typeof e.message === "string" && e.message) ||
+      null;
+    if (message && message.trim()) return message;
+  }
+  return "Failed to reset password";
+}
+
+/**
+ * Handles the password reset functionality reached from the link in the reset email.
+ *
+ * The page reads the `token` query parameter and submits `{ token, password }`
+ * to POST /auth/reset-password on the gateway. Resetting never logs the user
+ * in — after success the form is replaced with a confirmation and a link to
+ * the Sign In page.
  *
  * @constructor
  * @return {JSX.Element} A React component that renders the password reset form including
  * fields for new password, confirm password, and appropriate error or loading states.
  */
 export default function ResetPassword(): JSX.Element {
-  const token = useMemo(() => new URL(window.location.href).searchParams.get("token") || "", []);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token") ?? "";
   const form = useForm<Form>({
     resolver: zodResolver(schema),
     defaultValues: { password: "", confirmPassword: "" },
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
 
   const tokenMissing = token.length === 0;
 
   /**
    * Event handler function for form submission.
    *
-   * This variable represents a submission handler for a form. When triggered,
-   * it executes an asynchronous function designed for handling form submission,
-   * including resetting application state, performing simulated operations, and
-   * finally redirecting upon success or showing error messages upon failure.
-   *
-   * Functional Details:
-   * - Clears any previous error state by setting error to null.
+   * This function:
+   * - Clears any previous error state.
    * - Sets a loading state to true to indicate processing.
-   * - Executes a simulated asynchronous operation with a delay of 400ms.
-   * - On successful operation, redirects the user to a specified URL (/auth/sign-in)
-   *   with a success message.
-   * - On error, captures and sets the caught error message; defaults to a specific
-   *   message if not an instance of Error.
-   * - Ensures that the loading state is reset to false after the operation is completed.
+   * - Submits the reset token and the new password to the gateway.
+   * - On success, switches the page to a confirmation state with a Sign In
+   *   link (no automatic sign-in is performed).
+   * - On error, shows the gateway error message when available.
+   * - Ensures that the loading state is reset after the operation is completed.
    */
-  const onSubmit = form.handleSubmit(async () => {
+  const onSubmit = form.handleSubmit(async (values) => {
     setError(null);
     setLoading(true);
 
     try {
-      // simulation
-      await new Promise((resolve) => setTimeout(resolve, 400));
-      window.location.replace("/auth/sign-in?msg=reset-success");
+      await resetPassword({ token, password: values.password });
+      setResetDone(true);
     } catch (caught: unknown) {
-      setError(caught instanceof Error ? caught.message : "Failed to reset password");
+      setError(getErrorMessage(caught));
     } finally {
       setLoading(false);
     }
   });
 
+  if (resetDone) {
+    return (
+      <AuthLayout title="Password reset" subtitle="All set">
+        <Alert severity="success" sx={{ mt: 1 }}>
+          Password has been reset. You can now sign in.
+        </Alert>
+        <Box sx={{ mt: 2 }}>
+          <Button href="/auth/sign-in" fullWidth variant="contained">
+            Go to Sign In
+          </Button>
+        </Box>
+      </AuthLayout>
+    );
+  }
+
   return (
     <AuthLayout title="Reset password" subtitle="Choose a new password">
       {tokenMissing && (
-        <Alert severity="warning" sx={{ mb: 2 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
           Missing or invalid token. Please use the link from your email.
         </Alert>
       )}

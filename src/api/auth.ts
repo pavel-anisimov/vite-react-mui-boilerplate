@@ -2,14 +2,19 @@
 import http from "@/api/http";
 
 import type {
-  AuthRefreshResponse,
   CurrentUser,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
   LoginPayload,
   LoginResponse,
+  RefreshPayload,
+  RefreshResponse,
   RegisterPayload,
   RegisterResponse,
   ResendVerificationPayload,
   ResendVerificationResponse,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
   User,
   VerifyEmailResponse,
 } from "@/api/types";
@@ -17,14 +22,19 @@ import type {
 export type LoginDto = LoginPayload;
 export type Tokens = Pick<LoginResponse, "accessToken" | "refreshToken">;
 export type {
-  AuthRefreshResponse,
   CurrentUser,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
   LoginPayload,
   LoginResponse,
+  RefreshPayload,
+  RefreshResponse,
   RegisterPayload,
   RegisterResponse,
   ResendVerificationPayload,
   ResendVerificationResponse,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
   User,
   VerifyEmailResponse,
 };
@@ -92,12 +102,41 @@ export async function me(): Promise<User> {
 }
 
 /**
+ * Requests a password reset email.
+ *
+ * The gateway responds with the same neutral message whether or not the
+ * account exists, so the response must be shown as-is.
+ *
+ * @param {ForgotPasswordPayload} dto - The email to send the reset link to.
+ * @return {Promise<ForgotPasswordResponse>} A promise that resolves with the acknowledgement message.
+ */
+export async function forgotPassword(dto: ForgotPasswordPayload): Promise<ForgotPasswordResponse> {
+  return http.post<ForgotPasswordResponse>("/auth/forgot-password", dto).then(({ data }) => data);
+}
+
+/**
+ * Resets the user's password using the token from the reset link.
+ *
+ * Resetting does not log the user in — after a successful call the user
+ * still has to sign in explicitly.
+ *
+ * @param {ResetPasswordPayload} dto - The reset token and the new password.
+ * @return {Promise<ResetPasswordResponse>} A promise that resolves with the acknowledgement message.
+ */
+export async function resetPassword(dto: ResetPasswordPayload): Promise<ResetPasswordResponse> {
+  return http.post<ResetPasswordResponse>("/auth/reset-password", dto).then(({ data }) => data);
+}
+
+/**
  * Refreshes the access token using the provided refresh token.
  *
- * @param {string} refreshToken - The refresh token used to get new access
- * */
-export async function refresh(refreshToken: string): Promise<AuthRefreshResponse> {
-  return http.post<AuthRefreshResponse>("/auth/refresh", { refreshToken }).then(({ data }) => data);
+ * Only a new access token is returned — the refresh token stays the same.
+ *
+ * @param {RefreshPayload} dto - The refresh token used to get a new access token.
+ * @return {Promise<RefreshResponse>} A promise that resolves with the new access token.
+ */
+export async function refreshAccessToken(dto: RefreshPayload): Promise<RefreshResponse> {
+  return http.post<RefreshResponse>("/auth/refresh", dto).then(({ data }) => data);
 }
 
 /**

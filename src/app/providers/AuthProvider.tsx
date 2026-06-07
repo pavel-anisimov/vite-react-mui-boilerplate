@@ -1,7 +1,7 @@
 // src/app/providers/AuthProvider.tsx
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
-import { login as apiLogin, logout as apiLogout, me as apiMe, refresh as apiRefresh } from "@/api/auth";
+import { login as apiLogin, logout as apiLogout, me as apiMe, refreshAccessToken as apiRefresh } from "@/api/auth";
 import { getAuthTokens, setAuthTokens } from "@/api/http";
 
 import type { User } from "@/api/types";
@@ -163,7 +163,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refreshAccessToken = useCallback(async () => {
     if (!refreshToken) return null;
 
-    const { accessToken } = await apiRefresh(refreshToken);
+    const { accessToken } = await apiRefresh({ refreshToken });
     persistTokens(accessToken);
 
     return accessToken;

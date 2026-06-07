@@ -1,6 +1,6 @@
 import axios, { AxiosResponse, InternalAxiosRequestConfig, AxiosError, AxiosHeaders } from "axios";
 
-import type { AuthRefreshResponse } from "@/api/types";
+import type { RefreshResponse } from "@/api/types";
 
 const TOKENS_KEY = "auth.tokens";
 const LEGACY_TOKENS_KEY = "auth";
@@ -111,7 +111,7 @@ http.interceptors.response.use(
       originalConfig._retry = true;
 
       try {
-        const { data } = await axios.post<AuthRefreshResponse>(
+        const { data } = await axios.post<RefreshResponse>(
           "/auth/refresh",
           { refreshToken },
           { baseURL: API_BASE_URL, withCredentials: true },

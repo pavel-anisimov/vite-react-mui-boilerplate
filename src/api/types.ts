@@ -146,6 +146,28 @@ export type ResendVerificationPayload = {
 
 export type ResendVerificationResponse = MessageResponse;
 
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type ForgotPasswordResponse = MessageResponse;
+
+export type ResetPasswordPayload = {
+  token: string;
+  password: string;
+};
+
+export type ResetPasswordResponse = MessageResponse;
+
+export type RefreshPayload = {
+  refreshToken: string;
+};
+
+export type RefreshResponse = {
+  accessToken: string;
+  tokenType: "bearer";
+};
+
 export type LoginPayload = {
   email: string;
   password: string;
@@ -163,6 +185,5 @@ export type AuthLoginPayload = LoginPayload;
 /** @deprecated Use LoginResponse. */
 export type AuthLoginResponse = LoginResponse;
 
-export type AuthRefreshResponse = {
-  accessToken: string;
-};
+/** @deprecated Use RefreshResponse. */
+export type AuthRefreshResponse = RefreshResponse;
